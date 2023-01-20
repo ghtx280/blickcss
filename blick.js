@@ -14,8 +14,6 @@ const flex_items_values = {
 	e: 'flex-end',
 	st: 'stretch',
 }
-
-
 const blick = {
 	class: {
 		m: {
@@ -723,73 +721,6 @@ const blick = {
 		flex: 'flex',
 		grid: 'grid'
 	},
-	colors:{
-		black:{ def:'#000' },
-		white:{ def:'#fff' },
-		gray:{
-			def:'#888',
-			1:'#dbdbdb',
-			2:'#b8b8b8',
-			3:'#585858',
-			4:'#353535'
-		},
-		red:{
-			def:'#f03333',
-			1:'#ebb1b1',
-			2:'#e69292',
-			3:'#e77171',
-			4:'#e34949'
-		},
-		green:{
-			def:'#2ab72a',
-			1:'#a7eea7',
-			2:'#71cf71',
-			3:'#5ec65e',
-			4:'#44c044'
-		},
-		blue:{
-			def:'#0077ff',
-			1:'#a1c5ee',
-			2:'#70a9ea',
-			3:'#539bed',
-			4:'#338aef'
-		},
-		yellow:{
-			def:'#efef21',
-			1:'#efefb3',
-			2:'#efef8c',
-			3:'#e8e84c',
-			4:'#c7c720'
-		},
-		orange:{
-			def:'#febd44',
-			1:'#ffebc6',
-			2:'#ffdd9f',
-			3:'#ffd483',
-			4:'#ffc861'
-		},
-		pink:{
-			def:'#f1aab6',
-			1:'#f0cad0',
-			2:'#e0a6b0',
-			3:'#d47b8a',
-			4:'#c45265'
-		},
-		purple:{
-			def:'#9d319d',
-			1:'#efafef',
-			2:'#d87ed8',
-			3:'#c76bc7',
-			4:'#b351b3'
-		}
-	},
-	font:{
-		main:'system-ui,-apple-system,sans-serif',
-		serif:'serif',
-		mono:'monospace',
-		sans:'sans-serif'
-	},
-
 	autoTheme: false,
 	layers(e) {
 		this.cmps = e
@@ -814,12 +745,12 @@ const blick = {
 		} else console.error('BlickCSS. The blick.add function must contain an object.')
 	}
 };
+
 (() => {
 	const B_STYLE_TAG = document.createElement('style')
 	B_STYLE_TAG.id = 'blick-styles'
 	document.head.append(B_STYLE_TAG)
 
-	let B_RESET_CSS = "*,::after,::before{text-decoration:none;object-fit:cover;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-feature-settings:'pnum' on,'lnum' on;outline:0;border:0;margin:0;padding:0;border-style:solid;line-height:1.35em}body,button,input,textarea,select{font-family:var(--font-main)}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}"
 	let B_STYLE_STRING = ''
   let B_ATTRS_STORE = []
 	let B_STYLE_STORE = {}
@@ -951,14 +882,12 @@ const blick = {
 
 	function B_UPD_STYLE(str, mq) {
 		B_STYLE_TAG.textContent =
-		B_RESET_CSS + B_GET_ROOT() +
-		`[${blick.attr.flex}]:not([${blick.attr.flex}~=off]){display:flex}[${blick.attr.grid}]:not([${blick.attr.grid}~=off]){display:grid}.wrapper{margin:auto}` + str +
+		`[${blick.attr.flex}]:not([${blick.attr.flex}~=off]){display:flex}[${blick.attr.grid}]:not([${blick.attr.grid}~=off]){display:grid}.wrapper{width:100%;margin:auto;padding-left:var(--wrapper-padding, 10px);padding-right:var(--wrapper-padding, 10px)}` + str +
 		`@media(max-width:${blick.screen.min}){.wrapper{width:100%}${mq.m}${mq['m-t']}${mq['m-d']}}` +
 		`@media(min-width:${blick.screen.min}) and (max-width:${blick.screen.max}){.wrapper{width:${blick.screen.min}}${mq.t}${mq['m-t']}${mq['t-d']}}` +
 		`@media(min-width:${blick.screen.max}){.wrapper{width:${blick.screen.max}}${mq.d}${mq['m-d']}${mq['t-d']}}` +
 		(blick.autoTheme ? "@media(prefers-color-scheme:dark){" + mq.dark + "}" : (document.body?.classList.contains('theme-dark') ? mq.dark : ''))
 	} 
-	B_UPD_STYLE(B_STYLE_STRING, B_MQ_STR)
 
 	function B_CHECK_ELEM(t){
     return !!t?.getAttribute
@@ -991,10 +920,18 @@ const blick = {
   }
   
   function B_RENDER(record) {
-    
+		let isAddedText 
     if (document.body) {
       if (B_GET_REC(record)) {
-        // console.log(record);
+				if (record.length <= 10) {
+					record.forEach(e=>{
+						isAddedText = e.addedNodes.length === 1 
+						&& e.addedNodes[0].nodeName === '#text'
+					})
+				}
+        
+				if (isAddedText) return;
+
         console.time('blick. styles upd')
 				let prevAttr 
 				let query     = `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
