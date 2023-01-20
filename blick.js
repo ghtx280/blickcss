@@ -864,21 +864,6 @@ const blick = {
 		return str.trim().split(' ').filter(el => el)
 	}
 
-	function B_GET_ROOT() {
-		let fonts = ''
-		let colors = ''
-
-		for (const [type, val] of Object.entries(blick.font)) {
-			fonts += `--font-${type}:${val};`
-		}
-		for (const [color, obj] of Object.entries(blick.colors)) {
-			for (const [num, code] of Object.entries(obj)) {
-				colors += `--${color+(num==='def'?'':'-'+num)}:${code};`
-			}
-		}
-
-		return `:root{${ colors + fonts }}`
-	}
 
 	function B_UPD_STYLE(str, mq) {
 		B_STYLE_TAG.textContent =
