@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q4C2FJD8NE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Q4C2FJD8NE');
+  </script>
+  <link rel="stylesheet" href="./2.css">
+  <script src="./4.js"></script>
+  <script src="https://remjs.netlify.app/app.js"></script>
+  <style>
+    /* :root {
+      --red:rgb(92, 18, 18);
+    } */
+    /* .sw-1{
+      --slider-size:1.1
+    } */
+    input[type="checkbox"]{
+      margin: 10px 20px;
+    }
+  </style>
+  <script>
+    RemJs.data({
+      live:'switcher mat',
+      st:'--mat-color:red'
+    })
+  </script>
+</head>
+<body>
+
+    
+    <br>
+    <input type="checkbox" class="switcher ios">
+    <p class="select-all m-0+20">&lt;input type="checkbox" class="switcher ios"></p>
+    <br>
+    <input type="checkbox" class="switcher mat">
+    <p class="select-all m-0+20">&lt;input type="checkbox" class="switcher mat"></p>
+    <br>
+    <input type="checkbox" class="switcher c-$red fsz-24">
+    <p class="select-all m-0+20">&lt;input type="checkbox" class="switcher c-$red fsz-24"></p>
+    <br>
+    <input type="checkbox" class="switcher c-$blue size-5" >
+    <p class="select-all m-0+20">&lt;input type="checkbox" class="switcher c-$blue size-5"></p>
+    <br>
+    <input type="checkbox" class="switcher c-$red fsz-24 round-0">
+    <p class="select-all m-0+20">&lt;input type="checkbox" class="switcher c-$red fsz-24 round-0"></p>
+    <br>
+
+    <hr>
+    <p class="select-none m-0+20">Це живий приклад. спробуй змінити клас та стиль</p>
+
+    <input type="checkbox" checked bind:class="live" bind:style="st">
+    <p class="select-all m-0+20">&lt;input type="checkbox" class="
+      <input class="fsz-16 border" bind="value:live" >
+    "></p>
+
+   <p class="select-all m-0+20">style</p> <input class="select-all m-0+20" type="text" bind="value:st">
+
+
+  
+
+</body>
+</html>
