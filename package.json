@@ -1,0 +1,28 @@
+{
+  "name": "blickcss",
+  "version": "1.0.0",
+  "description": "A simple CSS library for styling web pages",
+  "main": "blick.min.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghtx280/Blick_Css.git"
+  },
+  "keywords": [
+    "css",
+    "library",
+    "web",
+    "styling"
+  ],
+  "author": "ghtx280",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ghtx280/Blick_Css/issues"
+  },
+  "homepage": "https://blick.netlify.app/"
+}
