@@ -9,7 +9,7 @@ const flex_content_values = {
 }
 const flex_items_values = {
 	c: 'center',
-	bl: 'baseline',
+	bl: 'baseline', 
 	s: 'flex-start',
 	e: 'flex-end',
 	st: 'stretch',
