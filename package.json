@@ -1,6 +1,6 @@
 {
   "name": "blickcss",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "A simple CSS library for styling web pages",
   "main": "dist/blick.js",
   "directories": {

@@ -32,11 +32,18 @@ export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
     model = blick.attr[model] || 'class'
     
     if (state) {
+      
       for (const st of state) { 
+        
         if (B_MQ_ARR.includes(st)) {
           B_MQ_STORE[st][B_FROMATED(prStr,model)] = create
         } else {
-          B_STYLE_STORE[B_FROMATED(prStr,model) + blick.states[st] ?? st] = create
+          if (st.includes('&')) { 
+            B_STYLE_STORE[B_FROMATED(prStr,model) + st.replaceAll("_", " ").replace("&",'')] = create
+          }
+          else {
+            B_STYLE_STORE[B_FROMATED(prStr,model) + blick.states[st] ?? st] = create
+          }
         }
       }
     } 
