@@ -403,7 +403,7 @@ export default {
     prop: "object-fit:$"
   },
   bg: {
-    prop: "background-color:$",
+    prop: "background:$",
     _vals: {
       tp: "background-color:transparent",
       cc: "background-color:currentcolor",

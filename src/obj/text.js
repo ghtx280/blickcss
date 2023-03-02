@@ -1,10 +1,10 @@
 export default {
   tp: { one: 'color:transparent!important' },
   cols: { prop: 'columns:$' },
-  lh: { prop: 'line-height:$' },
+  lh: { prop: 'line-height:$', def:"" },
   bold: { one: 'font-weight:bold' },
   bolder: { one: 'font-weight:bolder' },
-  wg: { prop: 'font-weight:$' },
+  wg: { prop: 'font-weight:$', def:"" },
   thin: { one: 'font-weight:lighter' },
   normal: { one: 'font-weight:normal' },
   italic: { one: 'font-style: italic' },
