@@ -28,7 +28,6 @@ export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
             return (B_FROMAT(prStr,model) + st.replaceAll("_", " ").replace("&",'')) + `{${create}}` 
           }
           else {
-            console.log();
             B_STYLE_STORE[B_FROMAT(prStr,model) + (blick.states[st] ?? ":"+st)] = create
             return (B_FROMAT(prStr,model) + (blick.states[st] ?? ":"+st)) + `{${create}}` 
           }
