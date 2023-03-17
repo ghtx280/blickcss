@@ -25,7 +25,8 @@ let B_MQ_STR_COPY = {...B_MQ_STR}
 export default function(record, B_STYLE_TAG){
 
   if (document.body) {
-    if (B_CHECK_REC(record)) {
+    if (B_CHECK_REC(record) || !B_STYLE_TAG.textContent) { 
+      // console.log(record); 
 
       let nodes = document.querySelectorAll(
         `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
@@ -48,15 +49,11 @@ export default function(record, B_STYLE_TAG){
           }
         } 
 
-        function getBeautify(a,b) {
-          `${a} {\n  ${b}\n}\n`
-        }
-
+  
         B_MQ_STR = {...B_MQ_STR_COPY}
 
         for (const key in B_MQ_STORE) {
           for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-            getBeautify(a,b);
             B_MQ_STR[key] += (blick.beautify ? `\n${a} {${b}}` : `${a}{${b}}`)
           }
         }
@@ -65,7 +62,6 @@ export default function(record, B_STYLE_TAG){
 
         for (const [a, b] of Object.entries(B_STYLE_STORE)) {
           B_STYLE_STRING += (blick.beautify ? `\n${a} {${b}}` : `${a}{${b}}`)
-
         }
 
         B_UPD_STYLE(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE)
