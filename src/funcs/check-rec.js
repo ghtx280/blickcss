@@ -1,18 +1,18 @@
-export default (r, B_STYLE_TAG) => {
-  const B_CHECK_ELEM = t => !!t?.getAttribute 
-  && !(
-    t === B_STYLE_TAG 
-    || t === document.head 
-    || "script" === t.localName
-  );
+export default (rec) => {
+  const elems = ["STYLE","SCRIPT","HEAD","#text"]
 
-  if (r?.length === 1) {
-    if (!B_CHECK_ELEM(r[0].target)) {
-      if (r[0].addedNodes.length <= 1) {
-        if (!B_CHECK_ELEM(r[0].addedNodes[0]) || r[0].addedNodes[0]) {
-          return false
-        } else return true
-      } else return true
-    } else return true
-  } else return true
+  function B_CHECK_ELEM(el) {
+    if (!elems.includes(el.nodeName)) {
+      return !(el.getAttribute('class') ||
+      el.getAttribute(blick.attr.flex)  ||
+      el.getAttribute(blick.attr.text)  ||
+      el.getAttribute(blick.attr.grid))
+    } else return false
+  } 
+
+  if (rec.length !== 1) return true
+  else if (B_CHECK_ELEM(rec[0].target)) return true 
+  else if (rec[0].addedNodes.length !== 1) return true 
+  else if (B_CHECK_ELEM(rec[0].addedNodes[0])) return true 
+  else return false
 }

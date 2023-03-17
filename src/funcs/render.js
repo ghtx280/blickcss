@@ -4,10 +4,10 @@ import B_UPD_STYLE from "./upd-style.js"
 import blick from "../blick-obj.js"
 
 const B_ATTRS_STORE = {
-  class: new Set(),
-  flex:  new Set(),
-  text:  new Set(),
-  grid:  new Set(),
+  class: [],
+  flex:  [],
+  text:  [],
+  grid:  [],  
 } 
 
 let B_STYLE_STORE = {}
@@ -18,16 +18,20 @@ Object.fromEntries([
   ...(Object.keys(blick.screen).map(e=>['m-'+e,{}])),
   ["dark",{}]
 ])
-let B_MQ_STR   = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
-let B_MQ_ARR   = Object.keys(B_MQ_STORE)
+let B_MQ_STR = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
+let B_MQ_ARR = Object.keys(B_MQ_STORE)
 let B_MQ_STR_COPY = {...B_MQ_STR} 
 
 export default function(record, B_STYLE_TAG){
+
   if (document.body) {
-    if (B_CHECK_REC(record, B_STYLE_TAG) || !B_STYLE_TAG.textContent) {
+    if (B_CHECK_REC(record)) {
 
       let nodes = document.querySelectorAll(
-        `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
+        `[class],
+         [${blick.attr.flex}],
+         [${blick.attr.text}],
+         [${blick.attr.grid}]`
       )
 
       if (nodes.length) {
@@ -38,9 +42,9 @@ export default function(record, B_STYLE_TAG){
             let attr = blick.attr[model] || 'class'
             if (elem.hasAttribute(attr)) {
               for (const str of elem.getAttribute(attr).trim().split(' ').filter(el => el)){
-                if (!B_ATTRS_STORE[model].has(str)) {
+                if (!B_ATTRS_STORE[model].includes(str)) {
                   B_CREATE_CSS_STR(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR)
-                  B_ATTRS_STORE[model].add(str)
+                  B_ATTRS_STORE[model].push(str)
                 }
               }
             }

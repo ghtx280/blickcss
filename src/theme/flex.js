@@ -34,13 +34,13 @@ export default {
       rev: 'flex-direction:row-reverse'
     }
   },
-  order: { prop: 'order:$' },
+  order: { prop: 'order:$',def:'' },
   basis: { prop: 'flex-basis:$' },
-  center: { one: 'justify-content:center;align-items:center' },
-  space: { one: 'justify-content:space-between;align-items:center' },
-  stretch: { one: 'align-items:stretch' },
-  grow: { one: 'flex-grow:1', prop: 'flex-grow:$' },
-  shrink: { one: 'flex-shrink:1', prop: 'flex-shrink:$' },
+  center: 'justify-content:center;align-items:center' ,
+  space: 'justify-content:space-between;align-items:center' ,
+  stretch: 'align-items:stretch' ,
+  grow: { one: 'flex-grow:1', prop: 'flex-grow:$',def:'' },
+  shrink: { one: 'flex-shrink:1', prop: 'flex-shrink:$',def:'' },
   wrap: {
     one: 'flex-wrap:wrap',
     prop: 'flex-wrap:$',

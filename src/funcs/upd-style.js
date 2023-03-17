@@ -4,7 +4,7 @@ import B_GET_MQ from "./get-mq.js"
 import B_GET_ROOT from "./get-root.js"
 
 
-const B_VERSION = '1.0.6' 
+const B_VERSION = '1.0.7' 
 
 
 export default (B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE) => {

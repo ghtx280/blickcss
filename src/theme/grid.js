@@ -18,9 +18,11 @@ const i_vals = {
 export default {
   cols: {
     prop: 'grid-template-columns:repeat($,1fr)',
+    def:''
   },
   rows: {
     prop: 'grid-template-rows:repeat($,1fr)',
+    def:''
   },
   jc: {
     prop: 'justify-content:$',

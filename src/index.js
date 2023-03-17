@@ -14,7 +14,7 @@ const B_STYLE_TAG = document.createElement('style')
 B_STYLE_TAG.id = 'blick-styles'
 document.head.append(B_STYLE_TAG)
 
-new MutationObserver(rec => B_RENDER(rec, B_STYLE_TAG) )
+new MutationObserver(rec => B_RENDER(rec, B_STYLE_TAG))
 .observe(document.documentElement, {
 	attributeFilter: [
 		'class',

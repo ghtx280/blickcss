@@ -60,9 +60,7 @@ export default {
     prop: "margin-left:$",
     def: "px"
   },
-  center: {
-    one: "margin:auto"
-  },
+  center: "margin:auto",
   p: {
     prop: "padding:$",
     def: "px"
@@ -150,9 +148,7 @@ export default {
       cc: "currentcolor"
     }
   },
-  unappearance: {
-    one: "appearance:none"
-  },
+  unappearance: "appearance:none",
   scale: {
     prop: "scale:$"
   },
@@ -315,67 +311,31 @@ export default {
     prop: "display:$",
     vals: {
       inblock: "inline-block",
-      inflex: "display:inline-flex",
-      ingrid: "display:inline-grid"
+      inflex:  "inline-flex",
+      ingrid:  "inline-grid"
     }
   },
-  inline: {
-    one: "display:inline"
-  },
-  block: {
-    one: "display:block"
-  },
-  inblock: {
-    one: "display:inline-block"
-  },
-  inflex: {
-    one: "display:inline-flex"
-  },
-  ingrid: {
-    one: "display:inline-grid"
-  },
-  hide: {
-    one: "display:none"
-  },
-  upper: {
-    one: "text-transform:uppercase"
-  },
-  uppercase: {
-    one: "text-transform:uppercase"
-  },
-  lower: {
-    one: "text-transform:lowercase"
-  },
-  lowercase: {
-    one: "text-transform:lowercase"
-  },
-  capit: {
-    one: "text-transform:capitalize"
-  },
-  capitalize: {
-    one: "text-transform:capitalize"
-  },
+  inline: "display:inline",
+  block: "display:block",
+  inblock: "display:inline-block",
+  inflex: "display:inline-flex",
+  ingrid: "display:inline-grid",
+  hide: "display:none",
+  upper: "text-transform:uppercase",
+  uppercase: "text-transform:uppercase",
+  lower: "text-transform:lowercase",
+  lowercase: "text-transform:lowercase",
+  capit: "text-transform:capitalize",
+  capitalize: "text-transform:capitalize",
   pos: {
     prop: "position:$"
   },
-  abs: {
-    one: "position:absolute"
-  },
-  absolute: {
-    one: "position:absolute"
-  },
-  rel: {
-    one: "position:relative"
-  },
-  relative: {
-    one: "position:relative"
-  },
-  sticky: {
-    one: "position:sticky"
-  },
-  fixed: {
-    one: "position:fixed"
-  },
+  abs: "position:absolute",
+  absolute: "position:absolute",
+  rel: "position:relative",
+  relative: "position:relative",
+  sticky: "position:sticky",
+  fixed: "position:fixed",
   r: {
     prop: "border-radius:$",
     def: "px"
@@ -385,9 +345,7 @@ export default {
     prop: "border-radius:$",
     def: "px"
   },
-  sharp: {
-    one: "border-radius:0"
-  },
+  sharp: "border-radius:0",
   transition: {
     prop: "transition:$",
     def: "ms"
@@ -404,21 +362,26 @@ export default {
   },
   bg: {
     prop: "background:$",
-    _vals: {
-      tp: "background-color:transparent",
-      cc: "background-color:currentcolor",
-      f: "background-color:#fff",
-      0: "background-color:#000",
-      fixed: "background-attachment:fixed",
-      local: "background-attachment:local",
-      scroll: "background-attachment:scroll",
-      "clip-border": "background-clip:border-box",
-      "clip-padding": "background-clip:padding-box",
-      "clip-content": "background-clip:content-box",
-      "clip-text": "background-clip:text",
-      "origin-border": "background-origin:border-box",
-      "origin-padding": "background-origin:padding-box",
-      "origin-content": "background-origin:content-box"
+
+    tp: "background-color:transparent",
+    cc: "background-color:currentcolor",
+    f: "background-color:#fff",
+    0: "background-color:#000",
+    fixed: "background-attachment:fixed",
+    local: "background-attachment:local",
+    scroll: "background-attachment:scroll",
+
+    clip: {
+      border: "background-clip:border-box",
+      padding: "background-clip:padding-box",
+      content: "background-clip:content-box",
+      text: "background-clip:text",
+
+    },
+    origin: {
+      border: "background-origin:border-box",
+      padding: "background-origin:padding-box",
+      content: "background-origin:content-box"
     }
   },
   c: {
@@ -427,12 +390,16 @@ export default {
       f: "#fff",
       0: "#000",
       tp: "transparent",
-      cc: "currentcolor"
-    }
+      cc: "currentcolor",
+      
+    },
+    
   },
   accent: {
     prop: "accent-color:$",
     vals: {
+      f: "#fff",
+      0: "#000",
       tp: "transparent",
       cc: "currentcolor"
     }
@@ -440,6 +407,8 @@ export default {
   caret: {
     prop: "caret-color:$",
     vals: {
+      f: "#fff",
+      0: "#000",
       tp: "transparent",
       cc: "currentcolor"
     }
@@ -454,14 +423,12 @@ export default {
     }
   },
   snap: {
-    vals: {
-      x: "scroll-snap-type:x mandatory",
-      y: "scroll-snap-type:y mandatory",
-      start: "scroll-snap-align:start",
-      center: "scroll-snap-align:center",
-      end: "scroll-snap-align:end",
-      stop: "scroll-snap-stop: always"
-    }
+    x: "scroll-snap-type:x mandatory",
+    y: "scroll-snap-type:y mandatory",
+    start: "scroll-snap-align:start",
+    center: "scroll-snap-align:center",
+    end: "scroll-snap-align:end",
+    stop: "scroll-snap-stop: always"
   },
   shadow: {
     box: {
@@ -528,15 +495,9 @@ export default {
   z: {
     prop: "z-index:$"
   },
-  visible: {
-    one: "visibility:visible"
-  },
-  invisible: {
-    one: "visibility:hidden"
-  },
-  collapse: {
-    one: "visibility:collapse"
-  },
+  visible:"visibility:visible",
+  invisible: "visibility:hidden",
+  collapse: "visibility:collapse",
   opacity: {
     prop: "opacity:$"
   },
@@ -575,9 +536,7 @@ export default {
     prop: "filter:sepia($)",
     def: "%"
   },
-  pointer: {
-    one: "cursor:pointer"
-  },
+  pointer: "cursor:pointer",
   ws: {
     prop: "white-space:$"
   },
@@ -601,18 +560,10 @@ export default {
   fw: {
     prop: "font-weight:$"
   },
-  medium: {
-    one: "font-weight:500"
-  },
-  semibold: {
-    one: "font-weight:600"
-  },
-  bold: {
-    one: "font-weight:700"
-  },
-  extrabold: {
-    one: "font-weight:800"
-  },
+  medium: "font-weight:500",
+  semibold: "font-weight:600",
+  bold: "font-weight:700",
+  extrabold: "font-weight:800",
   fv: {
     prop: "font-variant:$"
   },
@@ -656,35 +607,35 @@ export default {
     def: "deg",
     join: ","
   },
-  fullscreen: {
-    one: "position:absolute;left:0;top:0;width:100%;height:100%"
-  },
+  fullscreen: "position:absolute;left:0;top:0;width:100%;height:100%",
   flex: {
     one: "display:flex",
-    vals: {
-      center: "justify-content:center;align-items:center",
-      col: "flex-direction:column",
-      "col-rev": "flex-direction:column-reverse",
-      row: "flex-direction:row",
-      "row-rev": "flex-direction:row-reverse",
-      space: "justify-content:space-between;align-items:center",
-      wrap: "flex-wrap:wrap",
-      "wrap-rev": "flex-wrap:wrap-reverse",
-      nowrap: "flex-wrap:nowrap",
-      stretch: "align-items:stretch"
-    }
+    prop:"flex:$",
+    center: "justify-content:center;align-items:center",
+    col:{
+      one:"flex-direction:column",
+      rev:"flex-direction:column-reverse"
+    },
+    row:{
+      one: "flex-direction:row",
+      rev: "flex-direction:row-reverse",
+    },
+    space: "justify-content:space-between;align-items:center",
+    wrap:{
+      one: "flex-wrap:wrap",
+      rev: "flex-wrap:wrap-reverse",
+    },
+    nowrap: "flex-wrap:nowrap",
+    stretch: "align-items:stretch"
+
   },
   col: {
     one: "flex-direction:column",
-    vals: {
-      rev: "flex-direction:column-reverse"
-    }
+    rev: "flex-direction:column-reverse"
   },
   row: {
     one: "flex-direction:row",
-    vals: {
-      rev: "flex-direction:row-reverse"
-    }
+    rev: "flex-direction:row-reverse"
   },
   gap: {
     prop: "gap:$",

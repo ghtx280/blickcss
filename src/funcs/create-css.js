@@ -9,7 +9,7 @@ export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
   let splited = str.split(':')  
   let state   = splited.length !== 1 ? splited.slice(0,splited.length - 1) : false  
   let sel     = B_VAL_PATH(blick[model], splited[splited.length - 1])
-  let create  = B_CREATE_VAL(sel, model)
+  let create  = B_CREATE_VAL(sel, model, str)
 
   if (create) {
     if (imp) create += '!important' 

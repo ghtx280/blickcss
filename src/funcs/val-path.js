@@ -1,19 +1,20 @@
 export default (obj, path) => {
   let parts = path.split("-");
   let value = obj;
-  let prevVal
-  let valPath
+  let prop
+  let prevProp
 
-  for (let i = 0; i < parts.length; i++) {
+  for (const i in parts) {
     const part = parts[i];
     value = value[part]
-    
-    if (value === undefined) {
-      valPath = parts.slice(i).join("-");
-      return { p: prevVal, v: valPath };
-    }
-    prevVal = value
-  }
 
-  return { p: prevVal, v: valPath };
+    if (!value) {
+      let val = parts.slice(i).join("-");
+      return {p:prop, v:val, s:prevProp} 
+    }
+
+    prevProp = prop
+    prop = value
+  }
+  return { p: prop, v: false };
 }

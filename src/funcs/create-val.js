@@ -1,22 +1,29 @@
 import B_CALC_VAL from "./calc-val.js"
 
-export default (sel, model) => {
+export default (sel, model, str) => {
+
+  // console.log(sel, model, str);
   
   if (!sel.v) {
-    return sel.p.one
-  }
-  else if (sel.p?._vals) {
-    // return sel.p._vals[sel.v] 
-
-    if (sel.p.prop) {
-      return sel.p.prop.replaceAll("$", sel.p.vals?.[sel.v] ?? B_CALC_VAL(sel.v, sel, model)) 
+    if (typeof sel.p == "string") {
+      return sel.p
     }
-    else {
-      return sel.p_.vals[sel.v]
+    else if(typeof sel.p == "function") {
+      return sel.p()
     }
+    else return sel.p?.one
   }
-  else if (sel.p?.vals || sel.p?.prop) {
-    if (sel.p.prop) {
+  else if (sel.p) {
+    // console.log(sel);
+    if(typeof sel.p == "function") {
+      // console.log(sel);
+      return sel.p({
+        prop:sel.s?.prop,
+        val:sel.v,
+        sel:sel.s,
+      })  
+    }
+    else if (sel.p.prop) {
       return sel.p.prop.replaceAll("$", sel.p.vals?.[sel.v] ?? B_CALC_VAL(sel.v, sel, model)) 
     }
     else {
