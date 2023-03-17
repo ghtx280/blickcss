@@ -1,8 +1,6 @@
 export default (rec) => {
   const elems = ["STYLE","SCRIPT","HEAD","#text"]
 
-  // console.log(rec[0]);
-
   function B_CHECK_ELEM(el){
     return !elems.includes(el?.nodeName) && !!(
       el?.getAttribute("class") 
@@ -11,7 +9,6 @@ export default (rec) => {
       ||el?.getAttribute(blick.attr.grid) 
     )
   }
-
 
   if (rec.length !== 1) return true
   if (B_CHECK_ELEM(rec[0].target) && !rec[0].addedNodes) return true 

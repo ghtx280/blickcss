@@ -1,13 +1,7 @@
-// import blick from "../blick-obj";
-
 export default (mq, B_MQ_STORE) => {
   let str = ""
 
-
   for (const k in B_MQ_STORE) {
-
-
-
     if (k.startsWith(blick.maxPrefix+'-')) {
       if (mq[k]) {
         str += (
@@ -30,15 +24,9 @@ export default (mq, B_MQ_STORE) => {
               blick.wrapper ? `.wrapper{max-width:${blick.screen[k]}}` : ""
             }${mq[k]}}`
           )
-          
-          // `@media(min-width:${blick.screen[k]}){${
-          //   blick.wrapper ? `.wrapper{max-width:${blick.screen[k]}}` : ""
-          // }${mq[k]}}`
         }
-        
       }
     }
   }
-
   return str
 }

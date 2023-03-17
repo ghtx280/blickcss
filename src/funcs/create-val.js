@@ -1,9 +1,6 @@
 import B_CALC_VAL from "./calc-val.js"
 
-export default (sel, model, str) => {
-
-  // console.log(sel, model, str);
-  
+export default (sel, model) => {  
   if (!sel.v) {
     if (typeof sel.p == "string") {
       return sel.p
@@ -14,9 +11,7 @@ export default (sel, model, str) => {
     else return sel.p?.one
   }
   else if (sel.p) {
-    // console.log(sel);
     if(typeof sel.p == "function") {
-      // console.log(sel);
       return sel.p({
         prop:sel.s?.prop,
         val:sel.v,

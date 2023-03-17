@@ -1,20 +1,18 @@
-import blick from "../blick-obj.js"
+import blick       from "../blick-obj.js"
 import B_CSS_RESET from "../reset.js" 
-import B_GET_MQ from "./get-mq.js"
-import B_GET_ROOT from "./get-root.js"
-
+import B_GET_MQ    from "./get-mq.js"
+import B_GET_ROOT  from "./get-root.js"
 
 const B_VERSION = '1.0.7' 
-
+const B_ROOT = B_GET_ROOT(blick)
 
 export default (B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE) => {
 
   B_STYLE_TAG.textContent =
-
   `/* ! blickcss v${B_VERSION} | MIT License | https://blick.netlify.app */\n` +
 
-  (blick.reset ? B_CSS_RESET       : "") +
-  (blick.root  ? B_GET_ROOT(blick) : "") +
+  (blick.reset ? B_CSS_RESET : "") +
+  (blick.root  ? B_ROOT      : "") +
   (
     blick.useAttr 
     ? `[${blick.attr.flex}]:not([${blick.attr.flex}~=off]){display:flex}`

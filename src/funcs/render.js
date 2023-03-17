@@ -1,7 +1,7 @@
-import B_CREATE_CSS_STR from "./create-css.js"
-import B_CHECK_REC from "./check-rec.js"
-import B_UPD_STYLE from "./upd-style.js"
-import blick from "../blick-obj.js"
+import blick        from "../blick-obj.js"
+import B_CREATE_CSS from "./create-css.js"
+import B_UPD_STYLE  from "./upd-style.js"
+import B_CHECK_REC  from "./check-rec.js"
 
 const B_ATTRS_STORE = {
   class: [],
@@ -23,10 +23,8 @@ let B_MQ_ARR = Object.keys(B_MQ_STORE)
 let B_MQ_STR_COPY = {...B_MQ_STR} 
 
 export default function(record, B_STYLE_TAG){
-
   if (document.body) {
     if (B_CHECK_REC(record) || !B_STYLE_TAG.textContent) { 
-      // console.log(record); 
 
       let nodes = document.querySelectorAll(
         `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
@@ -41,7 +39,7 @@ export default function(record, B_STYLE_TAG){
             if (elem.hasAttribute(attr)) {
               for (const str of elem.getAttribute(attr).trim().split(' ').filter(el => el)){
                 if (!B_ATTRS_STORE[model].includes(str)) {
-                  B_CREATE_CSS_STR(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR)
+                  B_CREATE_CSS(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR)
                   B_ATTRS_STORE[model].push(str)
                 }
               }
@@ -49,7 +47,6 @@ export default function(record, B_STYLE_TAG){
           }
         } 
 
-  
         B_MQ_STR = {...B_MQ_STR_COPY}
 
         for (const key in B_MQ_STORE) {

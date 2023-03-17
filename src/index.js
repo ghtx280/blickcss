@@ -1,4 +1,4 @@
-import blick from "./blick-obj.js"
+import blick    from "./blick-obj.js"
 import B_RENDER from "./funcs/render.js";
 
 window.blick = blick
