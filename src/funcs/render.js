@@ -15,7 +15,7 @@ let B_STYLE_STRING = ""
 let B_MQ_STORE = 
 Object.fromEntries([
   ...(Object.keys(blick.screen).map(e=>[e,{}])),
-  ...(Object.keys(blick.screen).map(e=>['m-'+e,{}])),
+  ...(Object.keys(blick.screen).map(e=>[blick.maxPrefix+'-'+e,{}])),
   ["dark",{}]
 ])
 let B_MQ_STR = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
@@ -28,10 +28,7 @@ export default function(record, B_STYLE_TAG){
     if (B_CHECK_REC(record)) {
 
       let nodes = document.querySelectorAll(
-        `[class],
-         [${blick.attr.flex}],
-         [${blick.attr.text}],
-         [${blick.attr.grid}]`
+        `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
       )
 
       if (nodes.length) {
@@ -51,18 +48,24 @@ export default function(record, B_STYLE_TAG){
           }
         } 
 
+        function getBeautify(a,b) {
+          `${a} {\n  ${b}\n}\n`
+        }
+
         B_MQ_STR = {...B_MQ_STR_COPY}
 
         for (const key in B_MQ_STORE) {
           for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-            B_MQ_STR[key] += `${a}{${b}}`;
+            getBeautify(a,b);
+            B_MQ_STR[key] += (blick.beautify ? `\n${a} {${b}}` : `${a}{${b}}`)
           }
         }
   
         B_STYLE_STRING = ''
 
-        for (const [key, val] of Object.entries(B_STYLE_STORE)) {
-          B_STYLE_STRING += `${key}{${val}}`
+        for (const [a, b] of Object.entries(B_STYLE_STORE)) {
+          B_STYLE_STRING += (blick.beautify ? `\n${a} {${b}}` : `${a}{${b}}`)
+
         }
 
         B_UPD_STYLE(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE)

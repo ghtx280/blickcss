@@ -23,6 +23,10 @@ export default {
   reset: true,
   root: true,
   time: false,
+  wrapper:true,
+  useAttr:true,
+  beautify:false,
+  maxPrefix:'m',
   add,
   config
 };

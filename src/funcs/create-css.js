@@ -35,7 +35,10 @@ export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
       }
     }
     else B_STYLE_STORE[B_FROMAT(prStr,model)] = create
-    return B_FROMAT(prStr,model) + `{${create}}`
+
+
+    return B_FROMAT(prStr,model) + `{${create}}` 
+    
   }
   else return false
 }
