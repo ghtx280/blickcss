@@ -6,35 +6,44 @@ import B_VAL_PATH   from "./val-path.js"
 export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
   let prStr   = str
   let imp     = str.includes('!') ? str = str.replaceAll('!', '') : false
-  let splited = str.split(':')  
-  let state   = splited.length !== 1 ? splited.slice(0,splited.length - 1) : false  
-  let sel     = B_VAL_PATH(blick[model], splited[splited.length - 1])
-  let create  = B_CREATE_VAL(sel, model, str)
+  let sp      = str.split(':')  
+  let state   = sp.length !== 1 ? sp.slice(0,sp.length - 1) : false 
+  
+  let dec = sp[sp.length - 1].split(';').map(el=>{
+    return B_CREATE_VAL(
+      B_VAL_PATH(blick[model], el),
+      model, str
+    )
+  }).join(";")
 
-  if (create) {
-    if (imp) create += '!important' 
-    model = blick.attr[model] || 'class'
+  if (dec === "false") return false
+  if (imp) dec += '!important' 
+
+  const selector = B_FROMAT(prStr, blick.attr[model] || 'class')
+
+  if (state) {
+    const mq_states = []
+    const ps_states = []
+
+    for (const st of state) { 
+      if (B_MQ_ARR.includes(st)) {
+        mq_states.push(st)
+      }
+      else ps_states.push(st)
+    }
+
+    const str_state = ps_states.map(st => 
+      (st.startsWith("&") ? st.slice(1).replaceAll("_", " ") : false)
+      || blick.states[st] 
+      || ":" + st
+    ).join("")
     
-    if (state) {
-      for (const st of state) { 
-        if (B_MQ_ARR.includes(st)) {
-          B_MQ_STORE[st][B_FROMAT(prStr,model)] = create
-          return (B_FROMAT(prStr,model)) + `{${create}}` 
-        }
-        else {
-          if (st.includes('&')) { 
-            B_STYLE_STORE[B_FROMAT(prStr,model) + st.replaceAll("_", " ").replace("&",'')] = create
-            return (B_FROMAT(prStr,model) + st.replaceAll("_", " ").replace("&",'')) + `{${create}}` 
-          }
-          else {
-            B_STYLE_STORE[B_FROMAT(prStr,model) + (blick.states[st] ?? ":"+st)] = create
-            return (B_FROMAT(prStr,model) + (blick.states[st] ?? ":"+st)) + `{${create}}` 
-          }
-        }
+    if (mq_states.length) {
+      for (const sc of mq_states) {
+        B_MQ_STORE[sc][((sc === "dark" && !blick.autoTheme) ? blick.dark + " " : "") + selector + str_state] = dec
       }
     }
-    else B_STYLE_STORE[B_FROMAT(prStr,model)] = create
-    return B_FROMAT(prStr,model) + `{${create}}` 
+    else B_STYLE_STORE[selector + str_state] = dec
   }
-  else return false
+  else B_STYLE_STORE[selector] = dec 
 }

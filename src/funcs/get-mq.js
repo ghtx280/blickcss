@@ -16,10 +16,9 @@ export default (mq, B_MQ_STORE) => {
         if (mq[k] || blick.wrapper) {
           str += (
             blick.beautify
-            ? `\n\n@media(min-width:${blick.screen[k]}){${
+            ? `\n@media(min-width:${blick.screen[k]}){${
               blick.wrapper ? `\n.wrapper {max-width:${blick.screen[k]}}` : ""
             }${mq[k]}\n}`
-
             : `@media(min-width:${blick.screen[k]}){${
               blick.wrapper ? `.wrapper{max-width:${blick.screen[k]}}` : ""
             }${mq[k]}}`

@@ -27,6 +27,7 @@ export default {
   useAttr:true,
   beautify:false,
   maxPrefix:'m',
+  dark:".theme-dark",
   add,
   config
 };
