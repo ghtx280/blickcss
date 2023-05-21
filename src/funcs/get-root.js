@@ -1,4 +1,4 @@
-export default (blick) => {
+export default function(blick) {
   let fonts = ''
   let colors = ''
 

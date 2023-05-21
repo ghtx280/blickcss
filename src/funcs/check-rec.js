@@ -1,4 +1,4 @@
-export default (rec) => {
+export default function(rec) {
   const elems = ["STYLE","SCRIPT","HEAD","#text"]
 
   function B_CHECK_ELEM(el){

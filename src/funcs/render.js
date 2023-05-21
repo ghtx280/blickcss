@@ -2,15 +2,24 @@ import blick        from "../blick-obj.js"
 import B_CREATE_CSS from "./create-css.js"
 import B_UPD_STYLE  from "./upd-style.js"
 import B_CHECK_REC  from "./check-rec.js"
+// import {
+//   B_MQ_ARR,
+//   B_MQ_STORE,
+//   B_MQ_STR,
+//   B_MQ_STR_COPY,
+//   B_STYLE_STORE,
+//   B_STYLE_STRING,
+//   B_ATTRS_STORE
+// } from "../store.js"
 
-const B_ATTRS_STORE = {
+let B_ATTRS_STORE = {
   class: [],
   flex:  [],
   text:  [],
   grid:  [],  
-} 
+}
 
-let B_STYLE_STORE = {}
+let B_STYLE_STORE = Object.create(null)
 let B_STYLE_STRING = ""
 let B_MQ_STORE = 
 Object.fromEntries([
@@ -22,7 +31,20 @@ let B_MQ_STR = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
 let B_MQ_ARR = Object.keys(B_MQ_STORE)
 let B_MQ_STR_COPY = {...B_MQ_STR} 
 
-export default function(record, B_STYLE_TAG){
+
+function timer(label) {
+  const startTime = performance.now();
+  return {
+    stop: function () {
+      const endTime = performance.now();
+      const elapsedTime = endTime - startTime;
+      console.log(`${label}: ${elapsedTime.toFixed(1)}ms`);
+    },
+  };
+}
+
+
+export default function(record, B_STYLE_TAG) {
   if (document.body) {
     if (B_CHECK_REC(record) || !B_STYLE_TAG.textContent) { 
 
@@ -30,8 +52,10 @@ export default function(record, B_STYLE_TAG){
         `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
       )
 
+      let timr 
+
       if (nodes.length) {
-        if (blick.time) console.time('blick. styles upd')
+        if (blick.time) timr = timer('blick. styles upd')
       
         for (const elem of nodes) {
           for (const model in B_ATTRS_STORE) {
@@ -51,19 +75,19 @@ export default function(record, B_STYLE_TAG){
 
         for (const key in B_MQ_STORE) {
           for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-            B_MQ_STR[key] += (blick.beautify ? `\n${a} {${b}}` : `${a}{${b}}`)
+            B_MQ_STR[key] += `${a}{${b}}`
           }
         }
   
         B_STYLE_STRING = ''
 
         for (const [a, b] of Object.entries(B_STYLE_STORE)) {
-          B_STYLE_STRING += (blick.beautify ? `\n${a} {${b}}` : `${a}{${b}}`)
+          B_STYLE_STRING += `${a}{${b}}`
         }
 
-        B_UPD_STYLE(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE)
+        let isUpd = B_UPD_STYLE(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE)
 
-        if (blick.time) console.timeEnd('blick. styles upd')
+        if (blick.time && isUpd) timr.stop()
       }
     }
   }

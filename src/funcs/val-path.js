@@ -1,6 +1,8 @@
-export default (obj, path) => {
+import blick from "../blick-obj.js";
+
+export default function(obj, path) {
   let parts = path.split("-");
-  let value = obj;
+  let value = obj || blick.class;
   let prop
   let prevProp
 
@@ -10,7 +12,7 @@ export default (obj, path) => {
 
     if (!value) {
       let val = parts.slice(i).join("-");
-      return {p:prop, v:val, s:prevProp} 
+      return { p: prop, v: val, s: prevProp } 
     }
 
     prevProp = prop

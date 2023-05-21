@@ -1,11 +1,12 @@
-import blick    from "./blick-obj.js"
-import B_RENDER from "./funcs/render.js";
+import blick        from "./blick-obj.js"
+import B_RENDER     from "./funcs/render.js";
 
 window.blick = blick
 
 const B_SCRIPT_TAG = document.currentScript
 if (B_SCRIPT_TAG?.src.includes('?')) {
-	new URLSearchParams(B_SCRIPT_TAG.src).forEach((a,b)=>{
+	new URLSearchParams(B_SCRIPT_TAG.src)
+	.forEach((a,b)=>{
 		let num = parseFloat(a)
 		blick[b.split('?')[1] ?? b] = isNaN(num) ? a : num
 	})

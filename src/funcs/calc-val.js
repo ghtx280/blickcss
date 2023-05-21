@@ -1,16 +1,30 @@
-export default (val, sel, model) => {
+export default function(val, sel = {}, model = "class") {
+  if (!sel.p && typeof sel === "object") {
+    sel.p = sel;
+  }
+
   if (val) {
-    return val.split('+').map(i => {
-      if (i.includes('/')) {
-        return parseFloat((i.split("/")[0] / i.split("/")[1] * 100).toFixed(2)) + '%'
+    return val
+    .split(/(?<!\\)\+/g)
+    .map(item => {
+      item = item.replaceAll("\\", "");
+
+      if (item.includes('/')) {
+        const [n1, n2] = item.split("/");
+        return parseFloat((n1 / n2 * 100).toFixed(2)) + '%';
       }
-      else if (i.includes('$')) {
-        return `var(--${i.slice(1)})`
+      else if (item.startsWith('$')) {
+        return `var(--${item.substring(1)})`;
       }
       else {
-        return !isNaN(i) ? i + (sel.p?.def ?? (model !== "class" ? 'px' : '')) : i
+        const defaultValue = sel.p?.def ?? (model !== "class" ? 'px' : '');
+        return !isNaN(item) ? item + defaultValue : item;
       }
-    }).join(sel.p?.join ?? ' ').replaceAll("_", " ")
+    })
+    .join(sel.p?.join ?? ' ')
+    .replaceAll(/(?<!\\)_/g, " ");
   }
-  else return '' 
+  else {
+    return '';
+  }
 }

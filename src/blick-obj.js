@@ -1,4 +1,4 @@
-import { add, config } from "./theme/funcs.js"
+import { add, config, calcVal, css, format } from "./theme/funcs.js"
 import colors from "./theme/colors.js";
 import attr   from "./theme/attr.js";
 import states from "./theme/states.js";
@@ -24,11 +24,18 @@ export default {
   root: true,
   time: false,
   wrapper:true,
+  wrapperName:'wrapper',
   useAttr:true,
   beautify:false,
+  beautifyOption:{},
   maxPrefix:'m',
   dark:".theme-dark",
+  autoFlex:false,
+  
   add,
-  config
+  config,
+  calcVal,
+  css,
+  format
 };
 

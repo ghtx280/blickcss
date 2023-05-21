@@ -1,12 +1,28 @@
-export default (str, model) => {
-  let format = str
-  Array.from(new Set(
-    format.match(/[^\w-_]/g)
-  ))?.forEach(e => format = format.replaceAll(e, `\\${e}`))
+export default function(str, model = "class") {
+  let format = str;
+  
+  format = format
+  .split("\\")
+  .map(sp => {
+    const uniq = Array.from(new Set(sp.match(/[^\w-_]/g)));
+
+    if (!uniq) {
+      return false
+    }
+    for (const char of uniq) {
+      sp = sp.replaceAll(char, `\\${char}`);
+    }
+    return sp
+  })
+  .join("\\\\")
+
+  if (model === "raw") {
+    return format
+  }
+
   if (model === 'class') {
-    return `.${format}`
+    return `.${format}`;
+  } else {
+    return `[${model}~="${str}"]`;
   }
-  else {
-    return `[${model}~="${str}"]`
-  }
-}
+};

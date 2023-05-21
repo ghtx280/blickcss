@@ -149,6 +149,7 @@ export default {
     }
   },
   unappearance: "appearance:none",
+  unapp: "appearance:none",
   scale: {
     prop: "scale:$"
   },
@@ -362,7 +363,6 @@ export default {
   },
   bg: {
     prop: "background:$",
-
     tp: "background-color:transparent",
     cc: "background-color:currentcolor",
     f: "background-color:#fff",
@@ -370,19 +370,22 @@ export default {
     fixed: "background-attachment:fixed",
     local: "background-attachment:local",
     scroll: "background-attachment:scroll",
-
     clip: {
       border: "background-clip:border-box",
       padding: "background-clip:padding-box",
       content: "background-clip:content-box",
       text: "background-clip:text",
-
     },
     origin: {
       border: "background-origin:border-box",
       padding: "background-origin:padding-box",
       content: "background-origin:content-box"
     }
+  },
+  bgp: {
+    prop:"background-position:$",
+    x: { prop:"background-position-x:$" },
+    y: { prop:"background-position-y:$" }
   },
   c: {
     prop: "color:$",
@@ -469,7 +472,7 @@ export default {
     def: "px"
   },
   ratio: {
-    prop: "aspect-ratio:$",
+    prop: ({val}) => `aspect-ratio:${val}`,
     vals: {
       sqr: "1 / 1",
       vid: "16 / 9"
@@ -546,6 +549,10 @@ export default {
   list: {
     prop: "list-style:$"
   },
+  spacing:{
+    prop:'letter-spacing:$',
+    def:'px'
+  },
   fs: {
     prop: "font-size:$",
     def: "px"
@@ -560,6 +567,8 @@ export default {
   fw: {
     prop: "font-weight:$"
   },
+  light:"font-weight:300",
+  regular:"font-weight:400",
   medium: "font-weight:500",
   semibold: "font-weight:600",
   bold: "font-weight:700",

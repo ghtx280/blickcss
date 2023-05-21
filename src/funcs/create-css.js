@@ -3,21 +3,28 @@ import B_CREATE_VAL from "./create-val.js"
 import B_FROMAT     from "./format.js"
 import B_VAL_PATH   from "./val-path.js"
 
-export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
+export default function(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) {
   let prStr   = str
   let imp     = str.includes('!') ? str = str.replaceAll('!', '') : false
   let sp      = str.split(':')  
   let state   = sp.length !== 1 ? sp.slice(0,sp.length - 1) : false 
   
-  let dec = sp[sp.length - 1].split(';').map(el=>{
-    return B_CREATE_VAL(
-      B_VAL_PATH(blick[model], el),
-      model, str
-    )
-  }).join(";")
+  let dec = sp[sp.length - 1]
+  .split(';')
+  .map(el => B_CREATE_VAL(B_VAL_PATH(blick[model], el), model, str))
+  .join(";")
 
-  if (dec === "false") return false
-  if (imp) dec += '!important' 
+  if (!B_STYLE_STORE && !B_MQ_STORE && !B_MQ_ARR) {
+    return dec;
+  }
+
+  if (dec === "false") {
+    return false;
+  }
+
+  if (imp) {
+    dec += '!important';
+  }
 
   const selector = B_FROMAT(prStr, blick.attr[model] || 'class')
 
@@ -25,15 +32,16 @@ export default (str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) => {
     const mq_states = []
     const ps_states = []
 
-    for (const st of state) { 
+    for (const st of state) {
       if (B_MQ_ARR.includes(st)) {
-        mq_states.push(st)
+        mq_states.push(st);
+      } else {
+        ps_states.push(st);
       }
-      else ps_states.push(st)
     }
 
     const str_state = ps_states.map(st => 
-      (st.startsWith("&") ? st.slice(1).replaceAll("_", " ") : false)
+      (st.startsWith("&") ? st.slice(1).replaceAll(/(?<!\\)_/g, " ") : false)
       || blick.states[st] 
       || ":" + st
     ).join("")
