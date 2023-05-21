@@ -24,7 +24,7 @@ export default {
   root: true,
   time: false,
   wrapper:true,
-  wrapperName:'wrapper',
+  wrapperName:'.wrapper',
   useAttr:true,
   beautify:false,
   beautifyOption:{},

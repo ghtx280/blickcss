@@ -3,7 +3,7 @@ import B_CSS_RESET from "../reset.js"
 import B_GET_MQ    from "./get-mq.js"
 import B_GET_ROOT  from "./get-root.js"
 
-const B_VERSION = '1.2.0' 
+const B_VERSION = '1.2.1' 
 const B_ROOT = B_GET_ROOT(blick)
 
 export default function(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE) {
