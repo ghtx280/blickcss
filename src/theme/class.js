@@ -31,7 +31,7 @@ const i_vals = {
   st: "stretch"
 }
 
-export default {
+const classes = {
   m: {
     prop: "margin:$",
     def: "px"
@@ -58,6 +58,14 @@ export default {
   },
   ml: {
     prop: "margin-left:$",
+    def: "px"
+  },
+  ms: {
+    prop: "margin-inline-start:$",
+    def: "px"
+  },
+  me: {
+    prop: "margin-inline-end:$",
     def: "px"
   },
   center: "margin:auto",
@@ -88,6 +96,19 @@ export default {
   pl: {
     prop: "padding-left:$",
     def: "px"
+  },
+  ps: {
+    prop: "padding-inline-start:$",
+    def: "px"
+  },
+  pe: {
+    prop: "padding-inline-end:$",
+    def: "px"
+  },
+  space:{
+    prop:"margin-left:$", _s:">*+*", def:"px",
+    x:{ prop:"margin-left:$", _s:">*+*", def:"px" },
+    y:{ prop:"margin-top:$",  _s:">*+*", def:"px" },
   },
   b: {
     prop: "border-width:$",
@@ -182,6 +203,16 @@ export default {
       y: "1 -1"
     }
   },
+  clamp: {
+    prop: "overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:$"
+  },
+  inset: {
+    prop:  "inset:$",
+    x: { prop:"left:$;right:$"},
+    y: { prop:"top:$;bottom:$"},
+  },
+  start: {prop:"inset-inline-start:$"},
+  end: {prop:"inset-inline-end:$"},
   tf: {
     prop: "transform:$",
     sc: {
@@ -316,12 +347,17 @@ export default {
       ingrid:  "inline-grid"
     }
   },
+  table:{
+    one: 'display:table',
+    prop:"display:table-$"
+  },
   inline: "display:inline",
   block: "display:block",
   inblock: "display:inline-block",
   inflex: "display:inline-flex",
   ingrid: "display:inline-grid",
   hide: "display:none",
+  hidden: "display:none",
   upper: "text-transform:uppercase",
   uppercase: "text-transform:uppercase",
   lower: "text-transform:lowercase",
@@ -331,6 +367,7 @@ export default {
   pos: {
     prop: "position:$"
   },
+  static: "position:static",
   abs: "position:absolute",
   absolute: "position:absolute",
   rel: "position:relative",
@@ -359,7 +396,18 @@ export default {
     prop: "user-select:$"
   },
   fit: {
-    prop: "object-fit:$"
+    prop: "object-fit:$",
+    top:	'object-position:top',
+    bottom:	'object-position:bottom',
+    center:	'object-position:center',
+    left:	{
+      one:'object-position:left',
+      prop:"object-position:left $"
+    },
+    right:	{
+      one:'object-position:right',
+      prop:"object-position:right $"
+    },
   },
   bg: {
     prop: "background:$",
@@ -483,8 +531,10 @@ export default {
     vals: {
       content: "content-box",
       border: "border-box"
-    }
+    },
+    decoration: { prop:"box-decoration-break:$" },
   },
+  
   float: {
     prop: "float:$"
   },
@@ -539,15 +589,15 @@ export default {
     prop: "filter:sepia($)",
     def: "%"
   },
+  isolate: "isolation:isolate",
+  isolation: { prop:"isolation:$" },
   pointer: "cursor:pointer",
   ws: {
     prop: "white-space:$"
   },
-  space: {
-    prop: "white-space:$"
-  },
   list: {
-    prop: "list-style:$"
+    prop: "list-style:$",
+    item: 'display:list-item'
   },
   spacing:{
     prop:'letter-spacing:$',
@@ -564,6 +614,7 @@ export default {
   fst: {
     prop: "font-style:$"
   },
+  italic:"font-style:italic",
   fw: {
     prop: "font-weight:$"
   },
@@ -590,6 +641,7 @@ export default {
   ta: {
     prop: "text-align:$"
   },
+  underline: "text-decoration:underline",
   td: {
     prop: "text-decoration:$",
     vals: {
@@ -609,7 +661,11 @@ export default {
     vals: {
       all: "break-all",
       keep: "keep-all"
-    }
+    },
+    after:  { prop: "break-after:$"  },
+    before: { prop: "break-before:$" },
+    inside: { prop: "break-inside:$" },
+
   },
   grad: {
     prop: "background:linear-gradient($)",
@@ -620,6 +676,11 @@ export default {
   flex: {
     one: "display:flex",
     prop:"flex:$",
+    vals:{
+      1: "1 1 0%",
+      auto: "1 1 auto",
+      initial: "0 1 auto",
+    },
     center: "justify-content:center;align-items:center",
     col:{
       one:"flex-direction:column",
@@ -640,11 +701,52 @@ export default {
   },
   col: {
     one: "flex-direction:column",
-    rev: "flex-direction:column-reverse"
+    rev: "flex-direction:column-reverse",
+    prop:'grid-column:$',
+    span: {
+      prop:"grid-column:span $ / span $",
+      full:"grid-column:1 / -1"
+    },
+    start: { prop:"grid-column-start:$" },
+    end:   { prop:"grid-column-end:$" },
+    
   },
   row: {
     one: "flex-direction:row",
-    rev: "flex-direction:row-reverse"
+    rev: "flex-direction:row-reverse",
+    prop:'grid-row:$',
+    span: {
+      prop:"grid-row:span $ / span $",
+      full:"grid-row:1 / -1"
+    },
+    start: { prop:"grid-row-start:$" },
+    end:   { prop:"grid-row-end:$" },
+  },
+  flow:{
+    prop:"grid-auto-flow:$",
+    vals:{
+      col:"column",
+      "col-dense":'column dense',
+      "row dense":'row dense'
+    }
+  },
+  auto:{
+    cols:{
+      prop:"grid-auto-columns:$",
+      vals:{
+        min: "min-content",
+        max: "max-content",
+        fr:	 "minmax(0,1fr)",
+      }
+    },
+    rows:{
+      prop:"grid-auto-rows:$",
+      vals:{
+        min: "min-content",
+        max: "max-content",
+        fr:	 "minmax(0,1fr)",
+      }
+    }
   },
   gap: {
     prop: "gap:$",
@@ -675,7 +777,12 @@ export default {
     vals: i_vals
   },
   order: {
-    prop: "order:$"
+    prop: "order:$",
+    vals:{
+      first: "-9999",
+      last: "9999",
+      none: "0",
+    }
   },
   basis: {
     prop: "flex-basis:$"
@@ -698,3 +805,8 @@ export default {
     }
   }
 };
+
+classes.object   = classes.fit
+classes.overflow = classes.over
+
+export default classes

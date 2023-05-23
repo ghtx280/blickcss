@@ -1,17 +1,17 @@
 import blick       from "../blick-obj.js"
-import B_CSS_RESET from "../reset.js" 
 import B_GET_MQ    from "./get-mq.js"
 import B_GET_ROOT  from "./get-root.js"
+// import B_CSS_RESET from "../theme/reset.js" 
 
-const B_VERSION = '1.2.1' 
+const B_VERSION = '1.2.2' 
 const B_ROOT = B_GET_ROOT(blick)
 
 export default function(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE) {
 
   const B_CSS_RESULT =
   `/* ! blickcss v${B_VERSION} | MIT License | https://blick.netlify.app */\n` +
-  (blick.reset ? B_CSS_RESET : "") +
-  (blick.root  ? B_ROOT      : "") +
+  (blick.reset ? blick.resetContent : "") +
+  (blick.root  ? B_ROOT             : "") +
   (
     blick.useAttr 
     ? `[${blick.attr.flex}]:not([${blick.attr.flex}~=off]){display:flex}`
@@ -36,7 +36,10 @@ export default function(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE) {
     : B_MQ_STR.dark
   )
 
-  let prevContext = B_STYLE_TAG.textContent
+  let prevContext
+  if (blick.time) {
+    prevContext = B_STYLE_TAG.textContent
+  }
 
   if (blick.beautify) { 
     if (!window.css_beautify) {
@@ -48,6 +51,8 @@ export default function(B_STYLE_STRING, B_MQ_STR, B_STYLE_TAG, B_MQ_STORE) {
     B_STYLE_TAG.textContent = B_CSS_RESULT
   }
 
-  return prevContext !== B_STYLE_TAG.textContent
+  if (blick.time) {
+    return prevContext !== B_STYLE_TAG.textContent
+  }
  
 }
