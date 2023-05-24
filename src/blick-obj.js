@@ -32,7 +32,7 @@ export default {
   beautifyOption:{},
   maxPrefix:'m',
   dark:".theme-dark",
-  autoFlex:false,
+  autoFlex:true,
   resetContent,
 
   config,
