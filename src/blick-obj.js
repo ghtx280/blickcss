@@ -7,7 +7,7 @@ import states from "./theme/states.js";
 import attr   from "./theme/attr.js";
 import colors from "./theme/colors.js";
 import font   from "./theme/font.js";
-import resetContent from "./theme/reset.js";
+import reset  from "./theme/reset.js";
 import { config, calcVal, css, format } from "./theme/funcs.js"
 
 
@@ -22,18 +22,16 @@ export default {
   colors,
   font,
   autoTheme: false,
-  reset: true,
+  reset,
   root: true,
   time: false,
-  wrapper:true,
-  wrapperName:'.wrapper',
+  wrapper:'.wrapper',
   useAttr:true,
   beautify:false,
   beautifyOption:{},
   maxPrefix:'m',
   dark:".theme-dark",
   autoFlex:true,
-  resetContent,
 
   config,
   calcVal,

@@ -9,10 +9,11 @@ export default function(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) {
   let sp      = str.split(':')  
   let state   = sp.length !== 1 ? sp.slice(0,sp.length - 1) : false 
   let autoState  
-  let dec = sp[sp.length - 1]
-  .split(';')
-  .map(el => B_CREATE_VAL(autoState = B_VAL_PATH(blick[model], el), model, str))
-  .join(";")
+  let dec = sp
+    .at(-1)
+    .split(';')
+    .map(el => B_CREATE_VAL(autoState = B_VAL_PATH(blick[model], el), model, str))
+    .join(";")
 
   autoState = autoState.p?._s || ""
 
@@ -29,7 +30,6 @@ export default function(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) {
   }
 
   const selector = B_FROMAT(prStr, blick.attr[model] || 'class') + autoState
-
 
   if (state) {
     const mq_states = []

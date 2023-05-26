@@ -1,8 +1,8 @@
 {
   "name": "blickcss",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A simple CSS library for styling web pages",
-  "main": "dist/blick.js",
+  "main": "dist/blick.min.js",
   "directories": {
     "doc": "docs"
   },
@@ -24,5 +24,15 @@
   "bugs": {
     "url": "https://github.com/ghtx280/blickcss/issues"
   },
-  "homepage": "https://blick.netlify.app/"
+  "homepage": "https://blick.netlify.app/",
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.1",
+    "babel-loader": "^9.1.2",
+    "terser-webpack-plugin": "^5.3.9",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1",
+    "webpack-sources": "^3.2.3"
+  }
 }

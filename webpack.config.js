@@ -1,21 +1,21 @@
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require("path");
 
 module.exports = {
   mode: "production",
-  entry: "./src/index.js",
+  entry: {
+    "blick": "./src/index.js",
+    "blick.min": "./src/index.js",
+  },
+  devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "blick.js"
+    filename: "[name].js"
   },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
-      }
-    ]
-  }
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      include: /\.min\.js$/,
+    })],
+  },
 };
