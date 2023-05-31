@@ -36,7 +36,12 @@ To apply styles with BlickCSS, simply add class names to your HTML elements. Eac
 ```html
 <div class="m-20 bg-red c-white">Hello, BlickCSS!</div>
 ```
-
+CSS output:
+```css
+.m-20 { margin: 20px }
+.bg-red { background: red }
+.c-white { color: white }
+```
 In the example above, the class name `m-20` sets the margin to `20px`, `bg-red` sets the background to `red`, and `c-white` sets the text color to `white`.
 
 ### Conversion Object
