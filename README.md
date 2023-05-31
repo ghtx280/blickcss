@@ -61,7 +61,7 @@ Here's an example of the conversion object:
 In this example, the `m` property represents margin, and the `p` property represents padding. Each property has a `prop` key that defines the CSS property using placeholders represented by `$`. The `def` key provides the default unit (`px` in this case) to be added if a number value is used.
 
 ---
-#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/){:target="_blank"} 
+#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/)
 ---
 
 ### Special Attributes
