@@ -1,4 +1,3 @@
-
 #### BlickCSS is a small library (~20kb) for quick styling by converting class names into CSS properties. It provides a simple and intuitive way to apply styles using familiar class names. An alternative to Tailwind. for those who do not want to use prepared templates, but write their own property values.
   
 #### Visit [this site](https://blick.netlify.app) for more info.
@@ -72,12 +71,13 @@ BlickCSS supports special attributes to enhance styling and semantics of your co
 
 The `flex` attribute is used for flexbox styling. It accepts two values: a dynamic value and a constant value. The dynamic value can be any number, representing the gap, while the constant value represents the flex-direction.
 flex="15 col" would translate to gap: 15px; flex-direction: column. Here, `col` is a predefined value, while `15` represents a dynamic value (any digit represents `gap`).
+```html
+<div flex="15 col">...</div>
+```
 ```css
-html:
-  <div flex="15 col">...</div>
-css:
-  [flex~="15"]{ gap: 15px }
-  [flex~="col"]{ flex-direction: column }
+output
+[flex~="15"]{ gap: 15px }
+[flex~="col"]{ flex-direction: column }
 ```
 
 <!-- Example: `flex="15 col"` sets the gap to `15px` and the flex-direction to `column`. -->
@@ -85,13 +85,14 @@ css:
 #### Text Attribute
 
 The `text` attribute is used for font styling. It allows you to specify multiple font properties within a single attribute. Each property is separated by a space. The values 24 and red are not predefined properties; if the algorithm does not find a matching property, it checks if the first character is a digit (indicating a font size) or a non-digit character (indicating a color). This applies only within the text="" attribute.
+```html
+<div text="24 #f00 bold">...</div>
+```
 ```css
-html:
-  <div text="24 #f00 bold">...</div>
-css:
-  [text~="24"]{ font-size: 24px }
-  [text~="#f00"]{ color: #f00 }
-  [text~="bold"]{ font-weight: bold }
+output
+[text~="24"]{ font-size: 24px }
+[text~="#f00"]{ color: #f00 }
+[text~="bold"]{ font-weight: bold }
 ```
 
 <!-- Example: `text="24 red bold"` sets the font-size to `24px`, color to `red`, and font-weight to `bold`. -->
@@ -99,12 +100,13 @@ css:
 #### Grid Attribute
 
 The `grid` attribute is used for CSS grid styling. It allows you to define multiple grid properties using a single attribute.
+```html
+<div grid="12 cols-3">...</div>
+```
 ```css
-html:
-  <div grid="12 cols-3">...</div>
-css:
-  [grid~="12"]{ gap: 12px }
-  [grid~="cols-3"]{ grid-template-columns: repeat(3, 1fr) }
+output
+[grid~="12"]{ gap: 12px }
+[grid~="cols-3"]{ grid-template-columns: repeat(3, 1fr) }
 ```
 
 <!-- Example: `grid="12 cols-3"` sets the gap to `12px`, and the grid-template-columns to `repeat(3, 1fr)`. -->
@@ -128,24 +130,29 @@ Example: `md:bg-orange` sets the background color to `orange` for screens larger
 BlickCSS allows you to customize values and modifiers for more flexibility in styling.
 
 - Numbers: If a class name contains a number value (e.g., `m-20`), the default unit specified in the conversion object (`px` in this case) will be added to the value. However, if the number ends with a non-numeric character (e.g., `m-20%`), the default unit will not be added.
-```css
-r-123 -> border-radius: 123px
+```http
+input:  r-123
+output: border-radius: 123px
 ```
 - CSS Variables: You can use the `$` symbol before a value to indicate that it should be treated as a CSS variable. For example, `c-$foo` sets the color to the CSS variable `--foo`.
-```css
-fs-$some-var -> font-size: var(--some-var)
+```http
+input:  fs-$var
+output: font-size: var(--var) 
 ```
 - Percentages: If the value contains a slash (`/`), it will be treated as a percentage. i.n. the JS expression `num1 / num2 * 100` is executed. For example, `w-1/2` sets the width to `50%`.
-```css
-h-1/4 -> height: 25%
+```http
+input:  h-1/4
+output: height: 25%
 ```
 - Multiple Values: You can use the plus symbol (`+`) to combine multiple values. For example, `m-10+20` sets the margin to `10px` on the top and bottom and `20px` on the left and right.
-```css
-p-0+30 -> padding: 0px 30px
+```http
+input:  p-0+30
+output: padding: 0px 30px
 ```
 - Combination with Other Types: You can combine values with other types of values using the plus symbol (`+`). For example, `b-2+solid+$baz` sets the border width to `2px`, the border style to `solid`, and the border color to the CSS variable `--baz`.
-```css
-outline-3+dashed+$bar -> outline: 3px dashed var(--bar)
+```http
+input:  outline-3+dashed+$bar
+output: outline: 3px dashed var(--bar)
 ```
 
 ### Configuration
