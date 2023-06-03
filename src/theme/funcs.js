@@ -6,7 +6,7 @@ export function config(updates, source = this, isFirstCall = true) {
   if (typeof updates !== 'object') throw new Error('BlickCSS. The blick.config function must contain an object.');
   for (let key in updates) {
     if (typeof updates[key] === 'object' && updates[key] !== null && !Array.isArray(updates[key])) {
-      if (!source[key]) {
+      if (!source[key] || typeof source[key] == "string") {
         source[key] = {};
       }
       this.config(updates[key], source[key], false);

@@ -1234,7 +1234,7 @@ function config(updates, source = this, isFirstCall = true) {
   if (typeof updates !== 'object') throw new Error('BlickCSS. The blick.config function must contain an object.');
   for (let key in updates) {
     if (typeof updates[key] === 'object' && updates[key] !== null && !Array.isArray(updates[key])) {
-      if (!source[key]) {
+      if (!source[key] || typeof source[key] == "string") {
         source[key] = {};
       }
       this.config(updates[key], source[key], false);
@@ -1321,19 +1321,39 @@ document.head.append(B_STYLE_TAG)
 ;// CONCATENATED MODULE: ./src/store.js
 
 
+let B_MQ_ARR
+let B_MQ_STORE
+let B_MQ_STRING
+let B_MQ_STR_COPY
+
+
 let B_STYLE_STORE = Object.create(null)
-
-let B_MQ_STORE = Object.fromEntries([
-  ...(Object.keys(blick_obj?.screen).map(e=>[e,{}])),
-  ...(Object.keys(blick_obj?.screen).map(e=>[blick_obj.maxPrefix+'-'+e,{}])),
-  ["dark",{}]
-])
-
-let B_MQ_ARR = Object.keys(B_MQ_STORE)
-
 let B_ATTRS_STORE = {
-  class: [], flex:  [], text:  [], grid:  [],  
-} 
+    class: [],
+    flex:  [], 
+    text:  [],
+    grid:  [],  
+  }
+
+function F_SET_STORES() {
+	F_SET_STORES = false
+
+
+	B_MQ_STORE = Object.fromEntries([
+		...(Object.keys(blick_obj?.screen).map(e=>[e,{}])),
+		...(Object.keys(blick_obj?.screen).map(e=>[blick_obj.maxPrefix+'-'+e,{}])),
+		["dark",{}]
+	])
+	
+	B_MQ_ARR = Object.keys(B_MQ_STORE)
+	B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
+	B_MQ_STR_COPY = {...B_MQ_STRING} 
+}
+
+
+
+
+
 ;// CONCATENATED MODULE: ./src/funcs/get-mq.js
 
 
@@ -1382,7 +1402,7 @@ let B_ATTRS_STORE = {
 
 
 
-const B_VERSION = '1.2.4' 
+const B_VERSION = '1.2.5' 
 let B_ROOT
 let B_KEYFRAMES
 
@@ -1465,8 +1485,6 @@ let B_KEYFRAMES
 
 
 let B_STYLE_STRING = ""
-let B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
-let B_MQ_STR_COPY = {...B_MQ_STRING} 
 
 function timer(label) {
   const startTime = performance.now();
@@ -1483,6 +1501,7 @@ function timer(label) {
 /* harmony default export */ function render(record) {
   if (!document.body) return
   if (!(check_rec(record) || !style_tag.textContent)) return
+  if (F_SET_STORES) F_SET_STORES()
   
   let nodes = document.querySelectorAll(
   `[class],[${blick_obj.attr.flex}],[${blick_obj.attr.text}],[${blick_obj.attr.grid}]`

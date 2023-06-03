@@ -8,12 +8,13 @@ import {
   B_MQ_ARR,
   B_MQ_STORE,
   B_STYLE_STORE,
-  B_ATTRS_STORE
+  B_ATTRS_STORE,
+  B_MQ_STR_COPY,
+  B_MQ_STRING,
+  F_SET_STORES
 } from "../store.js"
 
 let B_STYLE_STRING = ""
-let B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
-let B_MQ_STR_COPY = {...B_MQ_STRING} 
 
 function timer(label) {
   const startTime = performance.now();
@@ -30,6 +31,7 @@ function timer(label) {
 export default function(record) {
   if (!document.body) return
   if (!(B_CHECK_REC(record) || !B_STYLE_TAG.textContent)) return
+  if (F_SET_STORES) F_SET_STORES()
   
   let nodes = document.querySelectorAll(
   `[class],[${blick.attr.flex}],[${blick.attr.text}],[${blick.attr.grid}]`
