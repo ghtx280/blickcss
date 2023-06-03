@@ -2,19 +2,8 @@ export default function(str, model = "class") {
   let format = str;
   
   format = format
-  .split("\\")
-  .map(sp => {
-    const uniq = Array.from(new Set(sp.match(/[^\w-_]/g)));
-
-    if (!uniq) {
-      return false
-    }
-    for (const char of uniq) {
-      sp = sp.replaceAll(char, `\\${char}`);
-    }
-    return sp
-  })
-  .join("\\\\")
+  .replace(/[^\w-_]/g, '\\$&')
+  .replace(/^\d/, '\\3$& ')
 
   if (model === "raw") {
     return format
