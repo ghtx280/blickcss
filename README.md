@@ -118,7 +118,7 @@ class="over-hide"     // overflow: hide
 class="over-y-hide"   // overflow-y: hidden
 ```
 
-### Property as a function
+### (NEW) Property as a function
 
 Functions in `prop` give you complete control over the output of the generated CSS. Using functions, you can define dynamic styles based on specific conditions or calculations.
   The function takes a parameter (often called "val") that represents the value passed to the function.
