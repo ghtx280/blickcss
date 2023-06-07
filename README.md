@@ -81,11 +81,11 @@ it is possible to create chains of classes from nested objects, you can combine 
 
 ```js
 {
-    foo: {
-      bar: {
-        qux: { prop:"something:$" }
-      }
+  foo: {
+    bar: {
+      qux: { prop:"something:$" }
     }
+  }
 }
 ```
 ```html
