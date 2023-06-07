@@ -68,12 +68,25 @@ Here's an example of the conversion object:
       max: "max-content",
       screen: "100vw"
     }
+  },
+  flex: {
+    one: "display:flex",
+    prop: "flex:$",
+    ...
   }
   // ... other properties ...
 }
 ```
 
-In this object, the key means the property `m` is `margin`, `p` is `padding`. `prop`, defines a CSS property using placeholders represented by `$`. Instead of `$`, your value will be inserted, if the value is only a number, a `def` will be added at the end which gives the default unit (`px` in this case) (`m-5 -> margin:5px`). `vals` are prepared values that will be substituted instead of `$` (`w-full -> width:100%`)
+- key - means the first part of the class is separated by a dash (`m` - `margin`, `p` - `padding`).
+
+- prop - defines a CSS property using the `$` character, your value will be inserted instead of `$` (`m-20 -> margin: 20px`).
+
+- def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added (`p-2em -> margin: 2em`).
+
+- vals - prepared values that will be substituted for `$` (`w-full -> width:100%`).
+
+- one - means one css class without a value (`flex -> display:flex`).
 
 ### Combining classes with nested objects
 
@@ -96,19 +109,20 @@ Based on this capability, you can create complex class structures.
 
 ```js
 {
-   over: {
-     prop: "overflow:$",
-     x: {
-       prop:"overflow-x:$"
-       hide:"overflow-x:hidden"
-     },
-     y: {
-       prop:"overflow-y:$",
-       vals:{
-         hide:"hidden"
-       }
-     }
-   }
+  over: {
+    one: "overflow:auto"
+    prop: "overflow:$",
+    x: {
+      prop:"overflow-x:$"
+      hide:"overflow-x:hidden"
+    },
+    y: {
+      prop:"overflow-y:$",
+      vals:{
+       hide:"hidden"
+      }
+    }
+  }
 }
 ```
 ```js
@@ -116,6 +130,7 @@ class="over-scroll"   // overflow: scroll
 class="over-x-scroll" // overflow-x: scroll
 class="over-hide"     // overflow: hide
 class="over-y-hide"   // overflow-y: hidden
+class="over"          // overflow: auto
 ```
 
 ### (NEW) Property as a function
@@ -202,7 +217,7 @@ output
 
 ### Pseudo-classes
 
-BlickCSS supports pseudo-classes like `hover`, `active`, and `focus`. To use a pseudo-class, prefix the class name with the pseudo-class followed by a colon.
+BlickCSS supports any pseudo-classes (`hover`, `active`, `focus`, ...). To use a pseudo-class, prefix the class name with the pseudo-class followed by a colon.
 
 Example: `class="hover:bg-blue"` sets the background to `blue` when hovering over the element.
 
@@ -218,15 +233,19 @@ Example: `md:bg-orange` sets the background color to `orange` for screens larger
 
 BlickCSS allows you to customize values and modifiers for more flexibility in styling.
 
-- Numbers: If a class name contains a number value (e.g., `m-20`), the default unit specified in the conversion object (`px` in this case) will be added to the value. However, if the number ends with a non-numeric character (e.g., `m-20%`), the default unit will not be added.
+- Numbers: If a class name contains a number value (e.g., `m-20`), the default unit specified in the conversion object (`def: "px"` in this case) will be added to the value. However, if the number ends with a non-numeric character (e.g., `m-20%`), the default unit will not be added.
 ```http
 input:  r-123
 output: border-radius: 123px
 ```
+```http
+input:  r-5em
+output: border-radius: 5em
+```
 - CSS Variables: You can use the `$` symbol before a value to indicate that it should be treated as a CSS variable. For example, `c-$foo` sets the color to the CSS variable `--foo`.
 ```http
-input:  fs-$var
-output: font-size: var(--var) 
+input:  fs-$my-var
+output: font-size: var(--my-var) 
 ```
 - Percentages: If the value contains a slash (`/`), it will be treated as a percentage. i.n. the JS expression `num1 / num2 * 100` is executed. For example, `w-1/2` sets the width to `50%`.
 ```http
@@ -253,15 +272,33 @@ Example:
 ```javascript
 blick.config({
   class:{
-    // Add or modify properties
+    // Add 
+    color:{ prop:"color:$" }
+    // Modify
     p: { prop: "padding:$", def: "em" },
-    // Remove a property
+    // Or remove a property
     m: null
+  },
+  screen:{
+    sm:"480px"
+  },
+  states:{
+    sel:":selection"
   }
 });
 ```
 
-In this example, we added the `p` property and removed the `m` property from the conversion object.
+or can be changed directly via the object chain
+
+```js
+blick.class.color = { prop: "color:$" }
+blick.class.p.def = "em"
+blick.class.m = null
+blick.screen.sm = "480px"
+blick.states.sel =":selection"
+```
+
+In this example, we added the `color` property, modified `p` property and removed the `m` property from the conversion object, also changed some other settings.
 
 ## Conclusion
 
