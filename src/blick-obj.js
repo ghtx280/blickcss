@@ -8,7 +8,7 @@ import attr   from "./theme/attr.js";
 import colors from "./theme/colors.js";
 import font   from "./theme/font.js";
 import reset  from "./theme/reset.js";
-import { config, calcVal, css, format } from "./theme/funcs.js"
+import  * as funcs  from "./theme/funcs.js"
 
 
 export default {
@@ -33,9 +33,6 @@ export default {
   dark:".theme-dark",
   autoFlex:true,
 
-  config,
-  calcVal,
-  css,
-  format
+  ...funcs
 };
 

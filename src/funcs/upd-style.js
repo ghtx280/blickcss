@@ -4,7 +4,7 @@ import B_GET_KF    from "./get-kf.js"
 import B_GET_MQ    from "./get-mq.js"
 import B_GET_ROOT  from "./get-root.js"
 
-const B_VERSION = '1.2.5' 
+const B_VERSION = '1.2.6' 
 let B_ROOT
 let B_KEYFRAMES
 

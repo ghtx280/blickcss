@@ -20,6 +20,35 @@ export function config(updates, source = this, isFirstCall = true) {
   return source;
 }
 
+export function hex(str){
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = str;
+  const color = ctx.fillStyle
+  canvas.remove()
+  return color
+}
+
+export function getColor(str) {
+  const [colorName, shade] = str.split('-');
+
+  if (shade !== undefined) {
+    if (colors.hasOwnProperty(colorName) && colors[colorName].hasOwnProperty(shade)) {
+      return colors[colorName][shade];
+    }
+  }
+
+  return colors[colorName]?.["def" || "DEFAULT"];
+}
+
+export function getShade(str) {
+  let shade = Math.round(+str / 100 * 255).toString(16);
+  if (shade.length === 1) {
+    shade = "0" + shade
+  }
+  return shade
+}
+
 export const calcVal = B_CALC_VAL
 export const css = B_CREATE_CSS
 export const format = B_FROMAT

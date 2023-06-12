@@ -15,6 +15,7 @@ import {
 } from "../store.js"
 
 let B_STYLE_STRING = ""
+let B_MQ_STR = B_MQ_STRING
 
 function timer(label) {
   const startTime = performance.now();
@@ -57,11 +58,11 @@ export default function(record) {
     }
   } 
 
-  B_MQ_STRING = {...B_MQ_STR_COPY}
+  B_MQ_STR = {...B_MQ_STR_COPY}
 
   for (const key in B_MQ_STORE) {
     for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-      B_MQ_STRING[key] += `${a}{${b}}`
+      B_MQ_STR[key] += `${a}{${b}}`
     }
   }
 
@@ -71,7 +72,7 @@ export default function(record) {
     B_STYLE_STRING += `${a}{${b}}`
   }
 
-  let isUpd = B_UPD_STYLE(B_STYLE_STRING, B_MQ_STRING, B_MQ_STORE)
+  let isUpd = B_UPD_STYLE(B_STYLE_STRING, B_MQ_STR, B_MQ_STORE)
 
   if (blick.time && isUpd) consoleTimer.stop()
 }

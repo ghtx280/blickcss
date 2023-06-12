@@ -768,12 +768,20 @@ const classes = {
     prop: "justify-items:$",
     vals: i_vals
   },
+  js: {
+    prop: "justify-self:$",
+    vals: i_vals
+  },
   ac: {
     prop: "align-content:$",
     vals: c_vals
   },
   ai: {
     prop: "align-items:$",
+    vals: i_vals
+  },
+  as: {
+    prop: "align-self:$",
     vals: i_vals
   },
   order: {

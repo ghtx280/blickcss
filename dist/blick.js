@@ -1,6 +1,52 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
+
+// NAMESPACE OBJECT: ./src/theme/funcs.js
+var funcs_namespaceObject = {};
+__webpack_require__.r(funcs_namespaceObject);
+__webpack_require__.d(funcs_namespaceObject, {
+  calcVal: () => (calcVal),
+  config: () => (config),
+  css: () => (css),
+  format: () => (funcs_format),
+  getColor: () => (getColor),
+  getShade: () => (getShade),
+  hex: () => (hex)
+});
 
 ;// CONCATENATED MODULE: ./src/theme/class.js
 const w_vals = {
@@ -773,12 +819,20 @@ const classes = {
     prop: "justify-items:$",
     vals: i_vals
   },
+  js: {
+    prop: "justify-self:$",
+    vals: i_vals
+  },
   ac: {
     prop: "align-content:$",
     vals: c_vals
   },
   ai: {
     prop: "align-items:$",
+    vals: i_vals
+  },
+  as: {
+    prop: "align-self:$",
     vals: i_vals
   },
   order: {
@@ -1003,7 +1057,7 @@ const grid_i_vals = {
   grid: "grid"
 });
 ;// CONCATENATED MODULE: ./src/theme/colors.js
-/* harmony default export */ const colors = ({
+/* harmony default export */ const theme_colors = ({
   black:  { def: "#000" },
   white:  { def: "#fff" },
   gray:   { def: "#6b7280", 1: "#f3f4f6", 2: "#d1d5db", 3: "#374151", 4: "#111827" }, 
@@ -1026,12 +1080,19 @@ const grid_i_vals = {
   sans: "sans-serif"
 });
 ;// CONCATENATED MODULE: ./src/theme/reset.js
-/* harmony default export */ const theme_reset = (`*,::after,::before{text-decoration:none;object-fit:cover;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{color:var(--blue)}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;virtical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
+/* harmony default export */ const theme_reset = (`*,::after,::before{text-decoration:none;object-fit:cover;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{color:var(--blue)}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
  
 // normalize_css
 //export default `html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}details,main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline dotted}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{color:inherit;display:table;max-width:100%;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio],legend{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}`
 
 ;// CONCATENATED MODULE: ./src/funcs/calc-val.js
+// import blick from "../blick-obj.js";
+
+
+
+
+
+
 /* harmony default export */ function calc_val(val, sel = {}, model = "class") {
   if (!sel.p && typeof sel === "object") {
     sel.p = sel;
@@ -1045,10 +1106,25 @@ const grid_i_vals = {
 
         if (item.includes("/")) {
           const [n1, n2] = item.split("/");
-          return parseFloat(((n1 / n2) * 100).toFixed(2)) + "%";
-        } else if (item.startsWith("$")) {
-          return `var(--${item.substring(1)})`;
-        } else {
+          if (isNaN(n1[0])) {
+            if (/^(\w|rgb|#)/.test(n1)) {
+              return hex(n1) + getShade(n2)
+            }
+            else if(n1.startsWith("$")){
+              let color = getColor(n1.slice(1))
+              if (color) {
+                return hex(color) + getShade(n2)
+              }
+              else return `var(--${n1.slice(1)});opacity:${n2}`;
+            }
+            else return `${n1};opacity:${n2}`
+          }
+          else return parseFloat(((n1 / n2) * 100).toFixed(2)) + "%";
+        }
+        else if (item.startsWith("$")) {
+          return `var(--${item.slice(1)})`;
+        }
+        else {
           const defaultValue = sel.p?.def ?? (model !== "class" ? "px" : "");
           return !isNaN(item) ? item + defaultValue : item;
         }
@@ -1116,19 +1192,8 @@ const grid_i_vals = {
   let format = str;
   
   format = format
-  .split("\\")
-  .map(sp => {
-    const uniq = Array.from(new Set(sp.match(/[^\w-_]/g)));
-
-    if (!uniq) {
-      return false
-    }
-    for (const char of uniq) {
-      sp = sp.replaceAll(char, `\\${char}`);
-    }
-    return sp
-  })
-  .join("\\\\")
+  .replace(/[^\w-_]/g, '\\$&')
+  .replace(/^\d/, '\\3$& ')
 
   if (model === "raw") {
     return format
@@ -1248,6 +1313,35 @@ function config(updates, source = this, isFirstCall = true) {
   return source;
 }
 
+function hex(str){
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = str;
+  const color = ctx.fillStyle
+  canvas.remove()
+  return color
+}
+
+function getColor(str) {
+  const [colorName, shade] = str.split('-');
+
+  if (shade !== undefined) {
+    if (colors.hasOwnProperty(colorName) && colors[colorName].hasOwnProperty(shade)) {
+      return colors[colorName][shade];
+    }
+  }
+
+  return colors[colorName]?.["def" || 0];
+}
+
+function getShade(str) {
+  let shade = Math.round(+str / 100 * 255).toString(16);
+  if (shade.length === 1) {
+    shade = "0" + shade
+  }
+  return shade
+}
+
 const calcVal = calc_val
 const css = create_css
 const funcs_format = format
@@ -1273,7 +1367,7 @@ const funcs_format = format
   screen: screen,
   states: states,
   attr: attr,
-  colors: colors,
+  colors: theme_colors,
   font: font,
   autoTheme: false,
   reset: theme_reset,
@@ -1287,10 +1381,7 @@ const funcs_format = format
   dark:".theme-dark",
   autoFlex:true,
 
-  config: config,
-  calcVal: calcVal,
-  css: css,
-  format: funcs_format
+  ...funcs_namespaceObject
 });
 
 
@@ -1402,7 +1493,7 @@ function F_SET_STORES() {
 
 
 
-const B_VERSION = '1.2.5' 
+const B_VERSION = '1.2.6' 
 let B_ROOT
 let B_KEYFRAMES
 
@@ -1485,6 +1576,7 @@ let B_KEYFRAMES
 
 
 let B_STYLE_STRING = ""
+let B_MQ_STR = B_MQ_STRING
 
 function timer(label) {
   const startTime = performance.now();
@@ -1527,11 +1619,11 @@ function timer(label) {
     }
   } 
 
-  B_MQ_STRING = {...B_MQ_STR_COPY}
+  B_MQ_STR = {...B_MQ_STR_COPY}
 
   for (const key in B_MQ_STORE) {
     for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-      B_MQ_STRING[key] += `${a}{${b}}`
+      B_MQ_STR[key] += `${a}{${b}}`
     }
   }
 
@@ -1541,7 +1633,7 @@ function timer(label) {
     B_STYLE_STRING += `${a}{${b}}`
   }
 
-  let isUpd = upd_style(B_STYLE_STRING, B_MQ_STRING, B_MQ_STORE)
+  let isUpd = upd_style(B_STYLE_STRING, B_MQ_STR, B_MQ_STORE)
 
   if (blick_obj.time && isUpd) consoleTimer.stop()
 }
