@@ -43,6 +43,10 @@ CSS output:
 ```
 In the example above, the class name `m-20` sets the margin to `20px`, `bg-red` sets the background to `red`, and `c-white` sets the text color to `white`.
 
+---
+#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/)
+---
+
 ### Conversion Object
 
 BlickCSS uses a conversion object called `blick`, which contains CSS properties and their corresponding class names. You can modify this object to add, change, or remove properties.
@@ -53,15 +57,115 @@ Here's an example of the conversion object:
 {
   m: { prop: "margin:$", def: "px" },
   p: { prop: "padding:$", def: "px" },
+  w: {
+    prop:"width:$",
+    def:"px",
+    vals: {
+      full: "100%",
+      half: "50%",
+      min: "min-content",
+      fit: "fit-content",
+      max: "max-content",
+      screen: "100vw"
+    }
+  },
+  flex: {
+    one: "display:flex",
+    prop: "flex:$",
+    ...
+  }
   // ... other properties ...
 }
 ```
 
-In this example, the `m` property represents margin, and the `p` property represents padding. Each property has a `prop` key that defines the CSS property using placeholders represented by `$`. The `def` key provides the default unit (`px` in this case) to be added if a number value is used.
+- key - means the first part of the class is separated by a dash (`m` - `margin`, `p` - `padding`).
 
----
-#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/)
----
+- prop - defines a CSS property using the `$` character, your value will be inserted instead of `$` (`m-20 -> margin: 20px`).
+
+- def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added (`p-2em -> margin: 2em`).
+
+- vals - prepared values that will be substituted for `$` (`w-full -> width:100%`).
+
+- one - means one css class without a value (`flex -> display:flex`).
+
+### Combining classes with nested objects
+
+it is possible to create chains of classes from nested objects, you can combine levels with hyphens (`-`). In this example, `foo-bar-qux-...` represents a chain of classes derived from the nested object structure.
+
+```js
+{
+  foo: {
+    bar: {
+      qux: { prop:"something:$" }
+    }
+  }
+}
+```
+```html
+<div class="foo-bar-qux-10"></div>
+```
+
+Based on this capability, you can create complex class structures.
+
+```js
+{
+  over: {
+    one: "overflow:auto"
+    prop: "overflow:$",
+    x: {
+      prop:"overflow-x:$"
+      hide:"overflow-x:hidden"
+    },
+    y: {
+      prop:"overflow-y:$",
+      vals:{
+       hide:"hidden"
+      }
+    }
+  }
+}
+```
+```js
+class="over-scroll"   // overflow: scroll
+class="over-x-scroll" // overflow-x: scroll
+class="over-hide"     // overflow: hide
+class="over-y-hide"   // overflow-y: hidden
+class="over"          // overflow: auto
+```
+
+### (NEW) Property as a function
+
+Functions in `prop` give you complete control over the output of the generated CSS. Using functions, you can define dynamic styles based on specific conditions or calculations.
+  The function takes a parameter (often called "val") that represents the value passed to the function.
+
+Here are some examples to demonstrate the use of functions for class properties:
+
+```js
+{
+     text: {
+       prop: ({ val }) => isNaN(val) ? `color:${val}` : `font-size:${val}px`,
+     },
+     // you can also write it in a key if you only use `prop`
+     text: ({ val }) => isNaN(val) ? `color:${val}` : `font-size:${val}px`,
+     fs: {
+       rand: {
+         one: () => `font-size:${Math.floor(Math.random() * 64)}px`
+       }
+     }
+}
+```
+
+In the first example, the `text` property is assigned a function as its `prop`. The function checks if the value is a number. If it's a number, it generates a CSS property for the font size; otherwise it generates a CSS property for the color.
+```html
+<div class="text-24">Element with font size: 24px</div>
+<div class="text-red">Element with color: red</div>
+```
+In the second example, the `fs` property includes a nested `rand` object that contains the `one` property as a function ("one" means no value is required). The function generates a random font size value between 0 and 64 pixels.
+```html
+<div class="fs-rand">Element with random font size</div>
+```
+In this case, each time the page is loaded the `fs-rand` class will apply a different font size value.
+
 
 ### Special Attributes
 
@@ -113,7 +217,7 @@ output
 
 ### Pseudo-classes
 
-BlickCSS supports pseudo-classes like `hover`, `active`, and `focus`. To use a pseudo-class, prefix the class name with the pseudo-class followed by a colon.
+BlickCSS supports any pseudo-classes (`hover`, `active`, `focus`, ...). To use a pseudo-class, prefix the class name with the pseudo-class followed by a colon.
 
 Example: `class="hover:bg-blue"` sets the background to `blue` when hovering over the element.
 
@@ -129,15 +233,19 @@ Example: `md:bg-orange` sets the background color to `orange` for screens larger
 
 BlickCSS allows you to customize values and modifiers for more flexibility in styling.
 
-- Numbers: If a class name contains a number value (e.g., `m-20`), the default unit specified in the conversion object (`px` in this case) will be added to the value. However, if the number ends with a non-numeric character (e.g., `m-20%`), the default unit will not be added.
+- Numbers: If a class name contains a number value (e.g., `m-20`), the default unit specified in the conversion object (`def: "px"` in this case) will be added to the value. However, if the number ends with a non-numeric character (e.g., `m-20%`), the default unit will not be added.
 ```http
 input:  r-123
 output: border-radius: 123px
 ```
+```http
+input:  r-5em
+output: border-radius: 5em
+```
 - CSS Variables: You can use the `$` symbol before a value to indicate that it should be treated as a CSS variable. For example, `c-$foo` sets the color to the CSS variable `--foo`.
 ```http
-input:  fs-$var
-output: font-size: var(--var) 
+input:  fs-$my-var
+output: font-size: var(--my-var) 
 ```
 - Percentages: If the value contains a slash (`/`), it will be treated as a percentage. i.n. the JS expression `num1 / num2 * 100` is executed. For example, `w-1/2` sets the width to `50%`.
 ```http
@@ -164,15 +272,33 @@ Example:
 ```javascript
 blick.config({
   class:{
-    // Add or modify properties
+    // Add 
+    color:{ prop:"color:$" }
+    // Modify
     p: { prop: "padding:$", def: "em" },
-    // Remove a property
+    // Or remove a property
     m: null
+  },
+  screen:{
+    sm:"480px"
+  },
+  states:{
+    sel:":selection"
   }
 });
 ```
 
-In this example, we added the `p` property and removed the `m` property from the conversion object.
+or can be changed directly via the object chain
+
+```js
+blick.class.color = { prop: "color:$" }
+blick.class.p.def = "em"
+blick.class.m = null
+blick.screen.sm = "480px"
+blick.states.sel =":selection"
+```
+
+In this example, we added the `color` property, modified `p` property and removed the `m` property from the conversion object, also changed some other settings.
 
 ## Conclusion
 
