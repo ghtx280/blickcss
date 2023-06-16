@@ -21,8 +21,9 @@ export default {
   attr,
   colors,
   font,
-  autoTheme: false,
   reset,
+  
+  autoTheme: false,
   root: true,
   time: false,
   wrapper:'.wrapper',

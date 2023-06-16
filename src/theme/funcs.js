@@ -1,6 +1,8 @@
 import B_CALC_VAL   from "../funcs/calc-val.js";
 import B_CREATE_CSS from "../funcs/create-css.js";
 import B_FROMAT     from "../funcs/format.js";
+import colors       from "./colors.js";
+
 
 export function config(updates, source = this, isFirstCall = true) {
   if (typeof updates !== 'object') throw new Error('BlickCSS. The blick.config function must contain an object.');
@@ -31,6 +33,10 @@ export function hex(str){
 
 export function getColor(str) {
   const [colorName, shade] = str.split('-');
+
+  if (colors == undefined) {
+    colors
+  }
 
   if (shade !== undefined) {
     if (colors.hasOwnProperty(colorName) && colors[colorName].hasOwnProperty(shade)) {

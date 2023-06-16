@@ -19,7 +19,7 @@ export default function (val, sel = {}, model = "class") {
         if (item.includes("/")) {
           const [n1, n2] = item.split("/");
           if (isNaN(n1[0])) {
-            if (/^(\w|rgb|#)/.test(n1)) {
+            if (/^(\w|#)/.test(n1)) {
               return hex(n1) + getShade(n2)
             }
             else if(n1.startsWith("$")){

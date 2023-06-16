@@ -346,6 +346,10 @@ const classes = {
     vals: h_vals,
     def: "px"
   },
+  sq: {
+    prop:"width:$;height:$",
+    def:"px"
+  },
   max: {
     w: {
       prop: "max-width:$",
@@ -1020,10 +1024,10 @@ const grid_i_vals = {
 });
 ;// CONCATENATED MODULE: ./src/theme/screen.js
 /* harmony default export */ const screen = ({
-  sm: "576px",
-  md: "768px",
-  lg: "992px",
-  xl: "1200px"
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200
 });
 ;// CONCATENATED MODULE: ./src/theme/states.js
 /* harmony default export */ const states = ({
@@ -1057,7 +1061,7 @@ const grid_i_vals = {
   grid: "grid"
 });
 ;// CONCATENATED MODULE: ./src/theme/colors.js
-/* harmony default export */ const theme_colors = ({
+/* harmony default export */ const colors = ({
   black:  { def: "#000" },
   white:  { def: "#fff" },
   gray:   { def: "#6b7280", 1: "#f3f4f6", 2: "#d1d5db", 3: "#374151", 4: "#111827" }, 
@@ -1080,7 +1084,7 @@ const grid_i_vals = {
   sans: "sans-serif"
 });
 ;// CONCATENATED MODULE: ./src/theme/reset.js
-/* harmony default export */ const theme_reset = (`*,::after,::before{text-decoration:none;object-fit:cover;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{color:var(--blue)}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
+/* harmony default export */ const theme_reset = (`*,::after,::before{text-decoration:none;object-fit:cover;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{color:inherit}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
  
 // normalize_css
 //export default `html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}details,main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline dotted}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{color:inherit;display:table;max-width:100%;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio],legend{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}`
@@ -1107,7 +1111,7 @@ const grid_i_vals = {
         if (item.includes("/")) {
           const [n1, n2] = item.split("/");
           if (isNaN(n1[0])) {
-            if (/^(\w|rgb|#)/.test(n1)) {
+            if (/^(\w|#)/.test(n1)) {
               return hex(n1) + getShade(n2)
             }
             else if(n1.startsWith("$")){
@@ -1295,6 +1299,8 @@ const grid_i_vals = {
 
 
 
+
+
 function config(updates, source = this, isFirstCall = true) {
   if (typeof updates !== 'object') throw new Error('BlickCSS. The blick.config function must contain an object.');
   for (let key in updates) {
@@ -1324,6 +1330,10 @@ function hex(str){
 
 function getColor(str) {
   const [colorName, shade] = str.split('-');
+
+  if (colors == undefined) {
+    colors
+  }
 
   if (shade !== undefined) {
     if (colors.hasOwnProperty(colorName) && colors[colorName].hasOwnProperty(shade)) {
@@ -1367,10 +1377,11 @@ const funcs_format = format
   screen: screen,
   states: states,
   attr: attr,
-  colors: theme_colors,
+  colors: colors,
   font: font,
-  autoTheme: false,
   reset: theme_reset,
+  
+  autoTheme: false,
   root: true,
   time: false,
   wrapper:'.wrapper',
@@ -1452,17 +1463,38 @@ function F_SET_STORES() {
 /* harmony default export */ function get_mq(mq) {
   let str = ""
 
+  const getScr = (scr, raw) => {
+    const f = (str, st) => isNaN((str+"")[0]) ? str : `${st}-width:${str}`;
+    const u = num => isNaN(+num) ? num : `${num}px`
+
+    if (typeof scr === "object") {
+      const [min, max] = scr
+      if (raw) {
+        return u(max || min)
+      }
+      return `(${f(u(min),"min")})${max ? ` and (${f(u(max),"max")})` : ""}`
+    }
+    else {
+      if (raw) {
+        return (scr+"").split(":").at(-1)
+      }
+      return scr[0] === "(" ? scr : `(${f(u(scr),"min")})`
+    }
+  }
+
   for (const k in B_MQ_STORE) {
     if (k.startsWith(blick_obj.maxPrefix + '-')) {
       if (mq[k]) {
-        str += `@media(max-width:${blick_obj.screen[k.slice(blick_obj.maxPrefix.length + 1)]}){${mq[k]}}`
+        const scr = blick_obj.screen[k.slice(blick_obj.maxPrefix.length + 1)]
+        str += `@media (max-width:${getScr(scr, true)}){${mq[k]}}`
       }
     }
     else {
       if (blick_obj.screen[k]) {
         if (mq[k] || blick_obj.wrapper) {
-          str += `@media(min-width:${blick_obj.screen[k]}){${
-            blick_obj.wrapper ? `${blick_obj.wrapper}{max-width:${blick_obj.screen[k]}}` : ""
+          const scr = blick_obj.screen[k]
+          str += `@media ${getScr(scr)}{${
+            blick_obj.wrapper ? `${blick_obj.wrapper}{max-width:${getScr(scr, true)}}` : ""
           }${mq[k]}}`
         }
       }
@@ -1493,7 +1525,7 @@ function F_SET_STORES() {
 
 
 
-const B_VERSION = '1.2.6' 
+const B_VERSION = '1.2.7' 
 let B_ROOT
 let B_KEYFRAMES
 

@@ -295,6 +295,10 @@ const classes = {
     vals: h_vals,
     def: "px"
   },
+  sq: {
+    prop:"width:$;height:$",
+    def:"px"
+  },
   max: {
     w: {
       prop: "max-width:$",
