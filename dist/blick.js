@@ -1476,7 +1476,7 @@ function F_SET_STORES() {
     }
     else {
       if (raw) {
-        return (scr+"").split(":").at(-1)
+        return  u((scr+"").replaceAll(/[()]/g, "").split(":").at(-1))
       }
       return scr[0] === "(" ? scr : `(${f(u(scr),"min")})`
     }
@@ -1525,7 +1525,7 @@ function F_SET_STORES() {
 
 
 
-const B_VERSION = '1.2.7' 
+const B_VERSION = '1.2.8' 
 let B_ROOT
 let B_KEYFRAMES
 

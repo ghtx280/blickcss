@@ -4,7 +4,7 @@ import B_GET_KF    from "./get-kf.js"
 import B_GET_MQ    from "./get-mq.js"
 import B_GET_ROOT  from "./get-root.js"
 
-const B_VERSION = '1.2.7' 
+const B_VERSION = '1.2.8' 
 let B_ROOT
 let B_KEYFRAMES
 
@@ -25,7 +25,7 @@ export default function(B_STYLE_STRING, B_MQ_STRING) {
   + (blick.autoFlex ? '[class*="flex-"],[class*="jc-"],[class*="ai-"],[class*="gap-"]{display:flex}' : "")
   + (
     blick.wrapper 
-    ? `${blick.wrapper}{width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
+    ? `${blick.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
     : ""
   )
   + B_STYLE_STRING

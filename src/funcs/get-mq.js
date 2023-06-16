@@ -17,7 +17,7 @@ export default function(mq) {
     }
     else {
       if (raw) {
-        return (scr+"").split(":").at(-1)
+        return  u((scr+"").replaceAll(/[()]/g, "").split(":").at(-1))
       }
       return scr[0] === "(" ? scr : `(${f(u(scr),"min")})`
     }
