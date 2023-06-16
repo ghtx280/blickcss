@@ -24,6 +24,26 @@ The keys of the `screen` object can be custom, you can write any prefix of your 
 <div class="c-$green/34"> -> color:#22c55e57
 <div class="bc-#00f/86">  -> border-color:#0000ffdb
 ```
+You can use any color format, verbal, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal hex, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
+```js
+blick.config({
+  color: {
+    teal: {
+      def:"#078989" // default color ( $teal )
+      1: "#16bfbf"  // using numbers you can write shades ( $teal-1 )
+    },
+    // other colors
+  }
+})
+```
+You can then use this color in your markup, for example `bg-$teal/25` -> `background:#07898940`.   
+[Here you can read more about colors](https://developer.mozilla.org/docs/Web/CSS/color_value).
+
+3. Added a new class to the standard theme:
+  - `sq-*` -> `width: *; height: *` - creates a square, * this is your value, the default unit is `px`
+
+4. Performance has been improved
+
 ***
 
 #### BlickCSS is a small library (~20kb) for quick styling by converting class names into CSS properties. It provides a simple and intuitive way to apply styles using familiar class names. An alternative to Tailwind. for those who do not want to use prepared templates, but write their own property values.
