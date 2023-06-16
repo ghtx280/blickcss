@@ -1,3 +1,31 @@
+### Update 1.2.8
+1. Now you can flexibly configure states for media queries using an **array** or a **raw string** that will be inserted after `@media`.
+```js
+// use an array for the range of min, max values
+blick.config({
+  screen: {
+    sm: ['screen', 500], // (screen) and (max-width: 500px)
+    md: [500, 1000], // (min-width: 500px) and (max-width: 1000px)
+    lg: 1000 // (min-width: 1000px)
+  }
+})
+```
+The `screen` object defines states that are written to the class before `:`, for example `md:bg-red`. The syntax is very versatile, that is, you can write the value in any way convenient for you, everything will work properly. 
+- `md: [min, max]` - will be converted to the string `(min-width: {min}px) and (max-width: {min}px)`.
+- `md: [min]` - one value in the array will mean `(min-width: {min}px)`
+- `md: ['20rem', 640]` - the array can have a value as a string to set the value with the unit you need `(min-width: 20rem) and (max-width: 640px)`
+- `md: 460`, `md: '20rem'` - the value can be written directly, the same logic will be used as in the array `(min-width: 460px)`, `(min-width: 20rem)`
+- `md: '(min-width: 20rem) and (max-width: 640px)'` - you can also write a raw string that will be inserted directly into the  media queries.
+The keys of the `screen` object can be custom, you can write any prefix of your own that will define your own  media queries parameters.
+---
+2. Added the ability to easily set transparency for a color using `/`.
+```html
+<div class="bg-red/50">   -> background:#ff000080
+<div class="c-$green/34"> -> color:#22c55e57
+<div class="bc-#00f/86">  -> border-color:#0000ffdb
+```
+***
+
 #### BlickCSS is a small library (~20kb) for quick styling by converting class names into CSS properties. It provides a simple and intuitive way to apply styles using familiar class names. An alternative to Tailwind. for those who do not want to use prepared templates, but write their own property values.
   
 #### Visit [this site](https://blick.netlify.app) for more info.
