@@ -27,7 +27,7 @@ The keys of the `screen` object can be custom, you can write any prefix of your 
 You can use any color format, verbal, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal hex, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
 ```js
 blick.config({
-  color: {
+  colors: {
     teal: {
       def:"#078989" // default color ( $teal )
       1: "#16bfbf"  // using numbers you can write shades ( $teal-1 )
