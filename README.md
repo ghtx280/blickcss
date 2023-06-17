@@ -348,6 +348,63 @@ blick.states.sel =":selection"
 
 In this example, we added the `color` property, modified `p` property and removed the `m` property from the conversion object, also changed some other settings.
 
+## BlickCss vs Tailwind
+
+```http
+tailwind: m-[25px]
+
+blickcss: m-25
+
+
+
+tailwind: text-[2em]
+
+blickcss: fs-2em
+
+
+
+tailwind: text-[#629fea]
+
+blickcss: c-#629fea
+
+
+
+tailwind: py-[30px] px-[10px]
+
+blickcss: p-30+10
+
+
+
+tailwind: bg-[var(--foo)]
+
+blickcss: bg-$foo
+
+
+
+tailwind: w-[calc(23_/_85_*_100%)]
+
+blickcss: w-23/85
+
+
+
+tailwind: bg-gradient-to-r from-[#54bd59] to-[#629fea]
+
+blickcss: grad-0+#54bd59+#629fea
+
+
+---: using attributes :---
+
+tailwind: class="text-[23px] text-[#629fea] font-bold text-center"
+
+blickcss: text="23 #f2d5b6 bold center"
+
+
+
+tailwind: class="flex flex-col md:flex-row justify-center align-center gap-[15px]"
+
+blickcss: flex="col md:row jc-c ai-c 15"
+```
+
 ## Conclusion
 
 BlickCSS is a beginner-friendly JavaScript library that simplifies applying CSS styles using class names. With its intuitive syntax and support for special attributes, pseudo-classes, and media queries, BlickCSS empowers developers to easily create stylish and responsive web designs.
