@@ -66,15 +66,11 @@ You can then use this color in your markup, for example `bg-$teal/25` -> `backgr
 
 ### Installation
 
-To use BlickCSS in your project, you have two options:
-
-1. CDN: Add the following script tag in the head section of your HTML file.
+To use BlickCSS in your project, you need add the following script tag in the head section of your HTML file.
 
 ```html
 <script src="https://unpkg.com/blickcss"></script>
 ```
-
-2. Manual: Copy the code from the `dist` folder and include it in your project.
 
 ### Usage
 
