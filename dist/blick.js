@@ -279,7 +279,8 @@ const classes = {
   tf: {
     prop: "transform:$",
     sc: {
-      prop: "transform:scale($)"
+      prop: "transform:scale($)",
+      join: ","
     },
     sc3d: {
       prop: "transform:scale3d($)",
@@ -316,7 +317,8 @@ const classes = {
     },
     tl: {
       prop: "transform:translate($)",
-      def: "px"
+      def: "px",
+      join: ","
     },
     tl3d: {
       prop: "transform:translate3d($)",
@@ -1470,7 +1472,7 @@ const blick_obj_blick = {
   dark:".theme-dark",
   autoFlex:true,
 
-  version: '1.3.1',
+  version: '1.3.3',
 
   ...funcs_namespaceObject
 }

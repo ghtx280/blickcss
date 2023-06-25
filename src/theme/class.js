@@ -216,7 +216,8 @@ const classes = {
   tf: {
     prop: "transform:$",
     sc: {
-      prop: "transform:scale($)"
+      prop: "transform:scale($)",
+      join: ","
     },
     sc3d: {
       prop: "transform:scale3d($)",
@@ -253,7 +254,8 @@ const classes = {
     },
     tl: {
       prop: "transform:translate($)",
-      def: "px"
+      def: "px",
+      join: ","
     },
     tl3d: {
       prop: "transform:translate3d($)",

@@ -53,14 +53,16 @@ const outputPath = config.output || './src/output.css';
 
 blick.config(config)
 
-const ls = liveServer.start({
-  port: config?.server?.port ?? 3500,
-  host: config?.server?.host ?? "0.0.0.0",
-  root: config?.server?.root ?? (fs.existsSync(`${root}/src`) ? `${root}/src` : root),
-  open: config?.server?.open ?? true,
-  logLevel: config?.server?.logLevel ?? 0,
-  wait: config?.server?.wait ?? 0
-});
+if (config.server) {
+  liveServer.start({
+    port: config.server?.port ?? 3500,
+    host: config.server?.host ?? "0.0.0.0",
+    root: config.server?.root ?? (fs.existsSync(`${root}/src`) ? `${root}/src` : root),
+    open: config.server?.open ?? true,
+    logLevel: config.server?.logLevel ?? 0,
+    wait: config.server?.wait ?? 0
+  });
+}
 
 let filesText = {};
 
@@ -78,11 +80,13 @@ async function processHTMLFiles(updatedFile) {
 
     const attrsValue = {};
 
+    const f_regex_attr = e => new RegExp(`\\s${blick.attr[e] || "class"}\\s*=\\s*["'\`](.*?)["'\`]`,"g") 
+
     const regexParser = {
-      class: /\sclass\s*=\s*["'`](.*?)["'`]/g,
-      text:  /\stext\s*=\s*["'`](.*?)["'`]/g,
-      flex:  /\sflex\s*=\s*["'`](.*?)["'`]/g,
-      grid:  /\sgrid\s*=\s*["'`](.*?)["'`]/g,
+      class: f_regex_attr("class"),
+      text:  f_regex_attr("text"),
+      flex:  f_regex_attr("flex"),
+      grid:  f_regex_attr("grid"),
     }
 
     for (const attr in regexParser) {
