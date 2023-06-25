@@ -54,12 +54,12 @@ const outputPath = config.output || './src/output.css';
 blick.config(config)
 
 const ls = liveServer.start({
-  port: 3500,
-  host: "0.0.0.0",
-  root: fs.existsSync(`${root}/src`) ? `${root}/src` : root,
-  open: true,
-  logLevel: 0,
-  wait:0
+  port: config?.server?.port || 3500,
+  host: config?.server?.host || "0.0.0.0",
+  root: config?.server?.root || (fs.existsSync(`${root}/src`) ? `${root}/src` : root),
+  open: config?.server?.open || true,
+  logLevel: config?.server?.logLevel || 0,
+  wait: config?.server?.wait || 0
 });
 
 let filesText = {};

@@ -1470,7 +1470,7 @@ const blick_obj_blick = {
   dark:".theme-dark",
   autoFlex:true,
 
-  version: '1.2.9',
+  version: '1.3.1',
 
   ...funcs_namespaceObject
 }

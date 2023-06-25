@@ -33,7 +33,7 @@ const blick = {
   dark:".theme-dark",
   autoFlex:true,
 
-  version: '1.3.0',
+  version: '1.3.1',
 
   ...funcs
 }
