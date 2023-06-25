@@ -1,8 +1,13 @@
-import blick    from "./blick-obj.js"
+import blick from "./blick-obj.js"
 import B_RENDER from "./funcs/render.js";
+import * as _STORE_ from "./store.js";
+
+
+blick._STORE_ = _STORE_
 
 window.blick = blick
 window.blickcss = blick
+
 
 const B_SCRIPT_TAG = document.currentScript
 

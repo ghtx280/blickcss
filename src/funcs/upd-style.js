@@ -4,7 +4,6 @@ import B_GET_KF    from "./get-kf.js"
 import B_GET_MQ    from "./get-mq.js"
 import B_GET_ROOT  from "./get-root.js"
 
-const B_VERSION = '1.2.8' 
 let B_ROOT
 let B_KEYFRAMES
 
@@ -13,7 +12,7 @@ export default function(B_STYLE_STRING, B_MQ_STRING) {
   B_KEYFRAMES ||= B_GET_KF(blick)
 
   const B_CSS_RESULT =
-  `/* ! blickcss v${B_VERSION} | MIT License | https://blick.netlify.app */\n`
+  `/* ! blickcss v${blick.version} | MIT License | https://blick.netlify.app */\n`
   + (blick.reset || "") 
   + (blick.root  ? B_ROOT : "")
   + (
@@ -35,11 +34,15 @@ export default function(B_STYLE_STRING, B_MQ_STRING) {
 
   let prevContext
 
+  if (typeof window === "undefined") {
+    return B_CSS_RESULT
+  }
+
   if (blick.time) {
     prevContext = B_STYLE_TAG.textContent
   }
 
-  if (blick.beautify) { 
+  if (blick.beautify && typeof window !== "undefined") { 
     if (!window.css_beautify) {
       throw new Error("BlickCSS. css_beautify is not defined. Make sure the 'css-beautify' is connected. Read docs for more info https://blick.netlify.app/docs/beautify")
     }
@@ -50,6 +53,11 @@ export default function(B_STYLE_STRING, B_MQ_STRING) {
   }
 
   if (blick.time) {
-    return prevContext !== B_STYLE_TAG.textContent
+    if (prevContext !== B_STYLE_TAG.textContent) {
+      return B_STYLE_TAG.textContent
+    }
+    else return false
   }
+
+  return B_STYLE_TAG.textContent
 }

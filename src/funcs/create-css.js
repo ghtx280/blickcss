@@ -1,60 +1,95 @@
 import blick        from "../blick-obj.js";
 import B_CREATE_VAL from "./create-val.js"
 import B_FROMAT     from "./format.js"
+import gmqw         from "./get-mq-width.js";
 import B_VAL_PATH   from "./val-path.js"
 
-export default function(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) {
-  let prStr   = str
-  let imp     = str.includes('!') ? str = str.replaceAll('!', '') : false
-  let sp      = str.split(':')  
-  let state   = sp.length !== 1 ? sp.slice(0,sp.length - 1) : false 
-  let autoState  
-  let dec = sp
-    .at(-1)
+
+export default function(str, params, _STORE_) {
+  
+  let { B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR } = _STORE_ || blick._STORE_ || {}
+
+  let prev_str = str
+  let auto_state = ""
+  
+  const model = (typeof params === "object" ? params.model : params)  || "class"
+
+  const important = str.includes('!') ? str = str.replaceAll('!', '') : false
+
+  const [prop, ...states] = str.split(/(?<!\\):/g).reverse();
+
+  let dec = prop
     .split(';')
-    .map(el => B_CREATE_VAL(autoState = B_VAL_PATH(blick[model], el), model, str))
+    .map(el => B_CREATE_VAL(auto_state = B_VAL_PATH(blick[model], el), model, str))
     .join(";")
 
-  autoState = autoState.p?._s || ""
+  auto_state = auto_state.p?._s || ""
 
-  if (dec === "false") {
+  if (dec === "false" || !dec) {
     return false;
   }
 
-  if (imp) {
+  if (important) {
     dec += '!important';
   }
+  const selector = B_FROMAT(prev_str, blick.attr[model] || 'class') + auto_state
 
-  if (!B_STYLE_STORE && !B_MQ_STORE && !B_MQ_ARR) {
-    return dec;
-  }
+  if (!_STORE_) return params ? handle_data(params?.cli) : dec;
 
-  const selector = B_FROMAT(prStr, blick.attr[model] || 'class') + autoState
 
-  if (state) {
-    const mq_states = []
-    const ps_states = []
+  function handle_data(CLI) {
+    const CLI_PARAMS = {}
 
-    for (const st of state) {
-      if (B_MQ_ARR.includes(st)) {
-        mq_states.push(st);
-      } else {
-        ps_states.push(st);
+    if (states.length) {
+      const state_type = {
+        media:  [],
+        pseudo: []
+      }
+  
+      for (const state of states.reverse()) {
+        state_type[B_MQ_ARR?.includes(state) ? "media" : "pseudo"].push(state)
+      }
+  
+      const str_state = state_type.pseudo.map(state => 
+        (state.startsWith("&") ? state.slice(1).replaceAll(/(?<!\\)_/g, " ") : false)
+        || blick.states[state] 
+        || ":" + state
+      ).join("")
+      
+      if (state_type.media.length) {
+        for (const sc of state_type.media) {
+          let sel = ((sc === "dark" && !blick.autoTheme) ? blick.dark + " " : "") + selector + str_state
+          if (CLI) {
+            if (sc.startsWith(blick.maxPrefix + '-')) {
+              CLI_PARAMS.media = `(max-width:${gmqw(blick.screen[sc.slice(blick.maxPrefix.length + 1)], true)})`
+            }
+            else {
+              CLI_PARAMS.media = gmqw(blick.screen[sc])
+            }
+            CLI_PARAMS.mediaKey = sc
+            CLI_PARAMS.selector = sel
+            CLI_PARAMS.value = dec
+          }
+          else B_MQ_STORE[sc][sel] = dec
+        }
+      }
+      else {
+        if (CLI) {
+          CLI_PARAMS.selector = selector + str_state
+          CLI_PARAMS.value = dec
+        }
+        else B_STYLE_STORE[selector + str_state] = dec
       }
     }
-
-    const str_state = ps_states.map(st => 
-      (st.startsWith("&") ? st.slice(1).replaceAll(/(?<!\\)_/g, " ") : false)
-      || blick.states[st] 
-      || ":" + st
-    ).join("")
-    
-    if (mq_states.length) {
-      for (const sc of mq_states) {
-        B_MQ_STORE[sc][((sc === "dark" && !blick.autoTheme) ? blick.dark + " " : "") + selector + str_state] = dec
+    else {
+      if (CLI) {
+        CLI_PARAMS.selector = selector
+        CLI_PARAMS.value = dec
       }
+      else B_STYLE_STORE[selector] = dec 
     }
-    else B_STYLE_STORE[selector + str_state] = dec
+
+    return CLI_PARAMS
   }
-  else B_STYLE_STORE[selector] = dec 
+  handle_data(false)
 }

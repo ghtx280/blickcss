@@ -22,7 +22,7 @@ export function config(updates, source = this, isFirstCall = true) {
   return source;
 }
 
-export function hex(str){
+export function getHex(str){
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = str;
@@ -47,7 +47,7 @@ export function getColor(str) {
   return colors[colorName]?.["def" || "DEFAULT"];
 }
 
-export function getShade(str) {
+export function getAlpha(str) {
   let shade = Math.round(+str / 100 * 255).toString(16);
   if (shade.length === 1) {
     shade = "0" + shade

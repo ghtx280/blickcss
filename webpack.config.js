@@ -1,7 +1,14 @@
-const TerserPlugin = require('terser-webpack-plugin');
-const path = require("path");
+// const TerserPlugin = require('terser-webpack-plugin');
+// const path = require("path");
+import TerserPlugin from 'terser-webpack-plugin';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url'
 
-module.exports = {
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = dirname(__filename);
+
+export default {
   mode: "production",
   entry: {
     "blick": "./src/index.js",

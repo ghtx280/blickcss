@@ -1,15 +1,22 @@
-// import blick from "../blick-obj.js";
-import colors from "../theme/colors.js";
-import { hex, getColor, getShade } from "../theme/funcs.js";
-
-
-
+import blick from "../blick-obj.js";
+import { getHex, getColor, getAlpha } from "../theme/funcs.js";
 
 export default function (val, sel = {}, model = "class") {
+
+  function getColorCli(color, alpha) {
+    let result = ""
+    alpha = alpha / 100
+    try {
+      result = blick._COLOR_(color).alpha(alpha || 0).string()
+    } catch (err) {
+      throw new SyntaxError(`Invalid color "${color}"`)
+    }
+    return result
+  }
+
   if (!sel.p && typeof sel === "object") {
     sel.p = sel;
   }
-
   if (val) {
     return val
       .split(/(?<!\\)\+/g)
@@ -20,12 +27,18 @@ export default function (val, sel = {}, model = "class") {
           const [n1, n2] = item.split("/");
           if (isNaN(n1[0])) {
             if (/^(\w|#)/.test(n1)) {
-              return hex(n1) + getShade(n2)
+              if (blick._COLOR_) {
+                return getColorCli(n1, n2)
+              }
+              return getHex(n1) + getAlpha(n2)
             }
             else if(n1.startsWith("$")){
               let color = getColor(n1.slice(1))
               if (color) {
-                return hex(color) + getShade(n2)
+                if (blick._COLOR_) {
+                  return getColorCli(color, n2)
+                }
+                return getHex(color) + getAlpha(n2)
               }
               else return `var(--${n1.slice(1)});opacity:${n2}`;
             }

@@ -1,11 +1,15 @@
 {
   "name": "blickcss",
-  "version": "1.2.8",
+  "version": "1.3.0",
   "description": "A simple CSS library for styling web pages",
   "main": "dist/blick.min.js",
   "directories": {
     "doc": "docs"
   },
+  "bin": {
+    "blickcss": "src/index_cli.js"
+  },
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -34,5 +38,13 @@
     "webpack": "^5.84.1",
     "webpack-cli": "^5.1.1",
     "webpack-sources": "^3.2.3"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "color": "^4.2.3",
+    "fs": "^0.0.1-security",
+    "glob": "^10.3.0",
+    "js-beautify": "^1.14.8",
+    "live-server": "^1.2.2"
   }
 }

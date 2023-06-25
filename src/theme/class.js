@@ -556,7 +556,7 @@ const classes = {
   invisible: "visibility:hidden",
   collapse: "visibility:collapse",
   opacity: {
-    prop: "opacity:$"
+    prop: ({val}) => `opacity:${val / 100}`
   },
   blend: {
     prop: "mix-blend-mode:$"

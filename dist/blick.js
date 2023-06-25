@@ -43,9 +43,21 @@ __webpack_require__.d(funcs_namespaceObject, {
   config: () => (config),
   css: () => (css),
   format: () => (funcs_format),
+  getAlpha: () => (getAlpha),
   getColor: () => (getColor),
-  getShade: () => (getShade),
-  hex: () => (hex)
+  getHex: () => (getHex)
+});
+
+// NAMESPACE OBJECT: ./src/store.js
+var store_namespaceObject = {};
+__webpack_require__.r(store_namespaceObject);
+__webpack_require__.d(store_namespaceObject, {
+  B_ATTRS_STORE: () => (B_ATTRS_STORE),
+  B_MQ_ARR: () => (B_MQ_ARR),
+  B_MQ_STORE: () => (B_MQ_STORE),
+  B_MQ_STRING: () => (B_MQ_STRING),
+  B_MQ_STR_COPY: () => (B_MQ_STR_COPY),
+  B_STYLE_STORE: () => (B_STYLE_STORE)
 });
 
 ;// CONCATENATED MODULE: ./src/theme/class.js
@@ -607,7 +619,7 @@ const classes = {
   invisible: "visibility:hidden",
   collapse: "visibility:collapse",
   opacity: {
-    prop: "opacity:$"
+    prop: ({val}) => `opacity:${val / 100}`
   },
   blend: {
     prop: "mix-blend-mode:$"
@@ -1090,18 +1102,25 @@ const grid_i_vals = {
 //export default `html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}details,main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline dotted}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{color:inherit;display:table;max-width:100%;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio],legend{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}`
 
 ;// CONCATENATED MODULE: ./src/funcs/calc-val.js
-// import blick from "../blick-obj.js";
-
-
-
 
 
 
 /* harmony default export */ function calc_val(val, sel = {}, model = "class") {
+
+  function getColorCli(color, alpha) {
+    let result = ""
+    alpha = alpha / 100
+    try {
+      result = blick_obj._COLOR_(color).alpha(alpha || 0).string()
+    } catch (err) {
+      throw new SyntaxError(`Invalid color "${color}"`)
+    }
+    return result
+  }
+
   if (!sel.p && typeof sel === "object") {
     sel.p = sel;
   }
-
   if (val) {
     return val
       .split(/(?<!\\)\+/g)
@@ -1112,12 +1131,18 @@ const grid_i_vals = {
           const [n1, n2] = item.split("/");
           if (isNaN(n1[0])) {
             if (/^(\w|#)/.test(n1)) {
-              return hex(n1) + getShade(n2)
+              if (blick_obj._COLOR_) {
+                return getColorCli(n1, n2)
+              }
+              return getHex(n1) + getAlpha(n2)
             }
             else if(n1.startsWith("$")){
               let color = getColor(n1.slice(1))
               if (color) {
-                return hex(color) + getShade(n2)
+                if (blick_obj._COLOR_) {
+                  return getColorCli(color, n2)
+                }
+                return getHex(color) + getAlpha(n2)
               }
               else return `var(--${n1.slice(1)});opacity:${n2}`;
             }
@@ -1210,6 +1235,25 @@ const grid_i_vals = {
   }
 };
 
+;// CONCATENATED MODULE: ./src/funcs/get-mq-width.js
+/* harmony default export */ const get_mq_width = ((scr, raw) => {
+  const f = (str, st) => isNaN((str+"")[0]) ? str : `${st}-width:${str}`;
+  const u = num => isNaN(+num) ? num : `${num}px`
+
+  if (typeof scr === "object") {
+    const [min, max] = scr
+    if (raw) {
+      return u(max || min)
+    }
+    return `(${f(u(min),"min")})${max ? ` and (${f(u(max),"max")})` : ""}`
+  }
+  else {
+    if (raw) {
+      return  u((scr+"").replaceAll(/[()]/g, "").split(":").at(-1))
+    }
+    return scr[0] === "(" ? scr : `(${f(u(scr),"min")})`
+  }
+});
 ;// CONCATENATED MODULE: ./src/funcs/val-path.js
 
 
@@ -1239,60 +1283,95 @@ const grid_i_vals = {
 
 
 
-/* harmony default export */ function create_css(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR) {
-  let prStr   = str
-  let imp     = str.includes('!') ? str = str.replaceAll('!', '') : false
-  let sp      = str.split(':')  
-  let state   = sp.length !== 1 ? sp.slice(0,sp.length - 1) : false 
-  let autoState  
-  let dec = sp
-    .at(-1)
+
+
+/* harmony default export */ function create_css(str, params, _STORE_) {
+  
+  let { B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR } = _STORE_ || blick_obj._STORE_ || {}
+
+  let prev_str = str
+  let auto_state = ""
+  
+  const model = (typeof params === "object" ? params.model : params)  || "class"
+
+  const important = str.includes('!') ? str = str.replaceAll('!', '') : false
+
+  const [prop, ...states] = str.split(/(?<!\\):/g).reverse();
+
+  let dec = prop
     .split(';')
-    .map(el => create_val(autoState = val_path(blick_obj[model], el), model, str))
+    .map(el => create_val(auto_state = val_path(blick_obj[model], el), model, str))
     .join(";")
 
-  autoState = autoState.p?._s || ""
+  auto_state = auto_state.p?._s || ""
 
-  if (dec === "false") {
+  if (dec === "false" || !dec) {
     return false;
   }
 
-  if (imp) {
+  if (important) {
     dec += '!important';
   }
+  const selector = format(prev_str, blick_obj.attr[model] || 'class') + auto_state
 
-  if (!B_STYLE_STORE && !B_MQ_STORE && !B_MQ_ARR) {
-    return dec;
-  }
+  if (!_STORE_) return params ? handle_data(params?.cli) : dec;
 
-  const selector = format(prStr, blick_obj.attr[model] || 'class') + autoState
 
-  if (state) {
-    const mq_states = []
-    const ps_states = []
+  function handle_data(CLI) {
+    const CLI_PARAMS = {}
 
-    for (const st of state) {
-      if (B_MQ_ARR.includes(st)) {
-        mq_states.push(st);
-      } else {
-        ps_states.push(st);
+    if (states.length) {
+      const state_type = {
+        media:  [],
+        pseudo: []
+      }
+  
+      for (const state of states.reverse()) {
+        state_type[B_MQ_ARR?.includes(state) ? "media" : "pseudo"].push(state)
+      }
+  
+      const str_state = state_type.pseudo.map(state => 
+        (state.startsWith("&") ? state.slice(1).replaceAll(/(?<!\\)_/g, " ") : false)
+        || blick_obj.states[state] 
+        || ":" + state
+      ).join("")
+      
+      if (state_type.media.length) {
+        for (const sc of state_type.media) {
+          let sel = ((sc === "dark" && !blick_obj.autoTheme) ? blick_obj.dark + " " : "") + selector + str_state
+          if (CLI) {
+            if (sc.startsWith(blick_obj.maxPrefix + '-')) {
+              CLI_PARAMS.media = `(max-width:${get_mq_width(blick_obj.screen[sc.slice(blick_obj.maxPrefix.length + 1)], true)})`
+            }
+            else {
+              CLI_PARAMS.media = get_mq_width(blick_obj.screen[sc])
+            }
+            CLI_PARAMS.mediaKey = sc
+            CLI_PARAMS.selector = sel
+            CLI_PARAMS.value = dec
+          }
+          else B_MQ_STORE[sc][sel] = dec
+        }
+      }
+      else {
+        if (CLI) {
+          CLI_PARAMS.selector = selector + str_state
+          CLI_PARAMS.value = dec
+        }
+        else B_STYLE_STORE[selector + str_state] = dec
       }
     }
-
-    const str_state = ps_states.map(st => 
-      (st.startsWith("&") ? st.slice(1).replaceAll(/(?<!\\)_/g, " ") : false)
-      || blick_obj.states[st] 
-      || ":" + st
-    ).join("")
-    
-    if (mq_states.length) {
-      for (const sc of mq_states) {
-        B_MQ_STORE[sc][((sc === "dark" && !blick_obj.autoTheme) ? blick_obj.dark + " " : "") + selector + str_state] = dec
+    else {
+      if (CLI) {
+        CLI_PARAMS.selector = selector
+        CLI_PARAMS.value = dec
       }
+      else B_STYLE_STORE[selector] = dec 
     }
-    else B_STYLE_STORE[selector + str_state] = dec
+
+    return CLI_PARAMS
   }
-  else B_STYLE_STORE[selector] = dec 
+  handle_data(false)
 }
 ;// CONCATENATED MODULE: ./src/theme/funcs.js
 
@@ -1319,7 +1398,7 @@ function config(updates, source = this, isFirstCall = true) {
   return source;
 }
 
-function hex(str){
+function getHex(str){
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = str;
@@ -1344,7 +1423,7 @@ function getColor(str) {
   return colors[colorName]?.["def" || 0];
 }
 
-function getShade(str) {
+function getAlpha(str) {
   let shade = Math.round(+str / 100 * 255).toString(16);
   if (shade.length === 1) {
     shade = "0" + shade
@@ -1368,8 +1447,7 @@ const funcs_format = format
 
 
 
-
-/* harmony default export */ const blick_obj = ({
+const blick_obj_blick = {
   class:theme_class,
   flex: flex,
   grid: grid,
@@ -1392,14 +1470,25 @@ const funcs_format = format
   dark:".theme-dark",
   autoFlex:true,
 
+  version: '1.2.9',
+
   ...funcs_namespaceObject
-});
+}
+
+/* harmony default export */ const blick_obj = (blick_obj_blick);
 
 
 ;// CONCATENATED MODULE: ./src/style-tag.js
-const B_STYLE_TAG = document.createElement('style')
-B_STYLE_TAG.id = 'BLICK_OUTPUT'
-document.head.append(B_STYLE_TAG)
+let B_STYLE_TAG = {
+  textContent:""
+}
+
+if (typeof window !== "undefined") {
+  B_STYLE_TAG = document.createElement('style')
+  B_STYLE_TAG.id = 'BLICK_OUTPUT'
+  document.head.append(B_STYLE_TAG)
+}
+
 
 /* harmony default export */ const style_tag = (B_STYLE_TAG);
 ;// CONCATENATED MODULE: ./src/funcs/get-kf.js
@@ -1423,34 +1512,23 @@ document.head.append(B_STYLE_TAG)
 ;// CONCATENATED MODULE: ./src/store.js
 
 
-let B_MQ_ARR
-let B_MQ_STORE
-let B_MQ_STRING
-let B_MQ_STR_COPY
-
-
 let B_STYLE_STORE = Object.create(null)
 let B_ATTRS_STORE = {
-    class: [],
-    flex:  [], 
-    text:  [],
-    grid:  [],  
-  }
-
-function F_SET_STORES() {
-	F_SET_STORES = false
-
-
-	B_MQ_STORE = Object.fromEntries([
-		...(Object.keys(blick_obj?.screen).map(e=>[e,{}])),
-		...(Object.keys(blick_obj?.screen).map(e=>[blick_obj.maxPrefix+'-'+e,{}])),
-		["dark",{}]
-	])
-	
-	B_MQ_ARR = Object.keys(B_MQ_STORE)
-	B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
-	B_MQ_STR_COPY = {...B_MQ_STRING} 
+	class: [],
+	flex:  [], 
+	text:  [],
+	grid:  [],  
 }
+
+let B_MQ_STORE = Object.fromEntries([
+	...(Object.keys(blick_obj?.screen)?.map(e=>[e,{}])),
+	...(Object.keys(blick_obj?.screen).map(e=>[blick_obj.maxPrefix+'-'+e,{}])),
+	["dark",{}]
+])
+
+let B_MQ_ARR = Object.keys(B_MQ_STORE)
+let B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
+let B_MQ_STR_COPY = {...B_MQ_STRING} 
 
 
 
@@ -1460,41 +1538,25 @@ function F_SET_STORES() {
 
 
 
+
 /* harmony default export */ function get_mq(mq) {
   let str = ""
 
-  const getScr = (scr, raw) => {
-    const f = (str, st) => isNaN((str+"")[0]) ? str : `${st}-width:${str}`;
-    const u = num => isNaN(+num) ? num : `${num}px`
-
-    if (typeof scr === "object") {
-      const [min, max] = scr
-      if (raw) {
-        return u(max || min)
-      }
-      return `(${f(u(min),"min")})${max ? ` and (${f(u(max),"max")})` : ""}`
-    }
-    else {
-      if (raw) {
-        return  u((scr+"").replaceAll(/[()]/g, "").split(":").at(-1))
-      }
-      return scr[0] === "(" ? scr : `(${f(u(scr),"min")})`
-    }
-  }
+  
 
   for (const k in B_MQ_STORE) {
     if (k.startsWith(blick_obj.maxPrefix + '-')) {
       if (mq[k]) {
         const scr = blick_obj.screen[k.slice(blick_obj.maxPrefix.length + 1)]
-        str += `@media (max-width:${getScr(scr, true)}){${mq[k]}}`
+        str += `@media (max-width:${get_mq_width(scr, true)}){${mq[k]}}`
       }
     }
     else {
       if (blick_obj.screen[k]) {
         if (mq[k] || blick_obj.wrapper) {
           const scr = blick_obj.screen[k]
-          str += `@media ${getScr(scr)}{${
-            blick_obj.wrapper ? `${blick_obj.wrapper}{max-width:${getScr(scr, true)}}` : ""
+          str += `@media ${get_mq_width(scr)}{${
+            blick_obj.wrapper ? `${blick_obj.wrapper}{max-width:${get_mq_width(scr, true)}}` : ""
           }${mq[k]}}`
         }
       }
@@ -1525,7 +1587,6 @@ function F_SET_STORES() {
 
 
 
-const B_VERSION = '1.2.8' 
 let B_ROOT
 let B_KEYFRAMES
 
@@ -1534,7 +1595,7 @@ let B_KEYFRAMES
   B_KEYFRAMES ||= get_kf(blick_obj)
 
   const B_CSS_RESULT =
-  `/* ! blickcss v${B_VERSION} | MIT License | https://blick.netlify.app */\n`
+  `/* ! blickcss v${blick_obj.version} | MIT License | https://blick.netlify.app */\n`
   + (blick_obj.reset || "") 
   + (blick_obj.root  ? B_ROOT : "")
   + (
@@ -1546,7 +1607,7 @@ let B_KEYFRAMES
   + (blick_obj.autoFlex ? '[class*="flex-"],[class*="jc-"],[class*="ai-"],[class*="gap-"]{display:flex}' : "")
   + (
     blick_obj.wrapper 
-    ? `${blick_obj.wrapper}{width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
+    ? `${blick_obj.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
     : ""
   )
   + B_STYLE_STRING
@@ -1556,11 +1617,15 @@ let B_KEYFRAMES
 
   let prevContext
 
+  if (typeof window === "undefined") {
+    return B_CSS_RESULT
+  }
+
   if (blick_obj.time) {
     prevContext = style_tag.textContent
   }
 
-  if (blick_obj.beautify) { 
+  if (blick_obj.beautify && typeof window !== "undefined") { 
     if (!window.css_beautify) {
       throw new Error("BlickCSS. css_beautify is not defined. Make sure the 'css-beautify' is connected. Read docs for more info https://blick.netlify.app/docs/beautify")
     }
@@ -1571,8 +1636,13 @@ let B_KEYFRAMES
   }
 
   if (blick_obj.time) {
-    return prevContext !== style_tag.textContent
+    if (prevContext !== style_tag.textContent) {
+      return style_tag.textContent
+    }
+    else return false
   }
+
+  return style_tag.textContent
 }
 ;// CONCATENATED MODULE: ./src/funcs/check-rec.js
 /* harmony default export */ function check_rec(rec) {
@@ -1604,11 +1674,8 @@ let B_KEYFRAMES
 
 
 
+// import * as _STORE_ from "../store.js"
 
-
-
-let B_STYLE_STRING = ""
-let B_MQ_STR = B_MQ_STRING
 
 function timer(label) {
   const startTime = performance.now();
@@ -1622,59 +1689,93 @@ function timer(label) {
 }
 
 
-/* harmony default export */ function render(record) {
+/* harmony default export */ function render(record, params) {
+  let consoleTimer
+  if (blick_obj.time) consoleTimer = timer('blick. styles upd')
+
+  const _STORE_ = blick_obj._STORE_
+
+  let {
+    B_MQ_STORE,
+    B_STYLE_STORE,
+    B_ATTRS_STORE,
+    B_MQ_STR_COPY,
+    B_MQ_STRING
+  } = _STORE_
+
+  let B_STYLE_STRING = ""
+  let B_MQ_STR = B_MQ_STRING
+
+  if (params.cli) {
+
+    for (const attr in record) {
+      for (const val of record[attr]) {
+        create_css(val, attr, _STORE_)
+      }
+    }
+    return get_nodes(true)
+
+  }
+
   if (!document.body) return
   if (!(check_rec(record) || !style_tag.textContent)) return
-  if (F_SET_STORES) F_SET_STORES()
   
   let nodes = document.querySelectorAll(
   `[class],[${blick_obj.attr.flex}],[${blick_obj.attr.text}],[${blick_obj.attr.grid}]`
   )
 
   if (!nodes.length) return
-    
-  let consoleTimer
-
-  if (blick_obj.time) consoleTimer = timer('blick. styles upd')
 
   for (const elem of nodes) {
     for (const model in B_ATTRS_STORE) {
       let attr = blick_obj.attr[model] || 'class'
       if (elem.hasAttribute(attr)) {
-        for (const str of elem.getAttribute(attr).trim().split(' ').filter(el => el)){
+        for (const str of elem.getAttribute(attr).trim().split(/\s+/g)){
           if (!B_ATTRS_STORE[model].includes(str)) {
-            create_css(str, model, B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR)
+            create_css(str, model, _STORE_)
             B_ATTRS_STORE[model].push(str)
           }
         }
       }
     }
   } 
+    
+  function get_nodes(IS_CLI) {
+    
+    B_MQ_STR = {...B_MQ_STR_COPY}
 
-  B_MQ_STR = {...B_MQ_STR_COPY}
-
-  for (const key in B_MQ_STORE) {
-    for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-      B_MQ_STR[key] += `${a}{${b}}`
+    for (const key in B_MQ_STORE) {
+      for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
+        B_MQ_STR[key] += `${a}{${b}}`
+      }
     }
+
+    B_STYLE_STRING = ''
+
+    for (const [a, b] of Object.entries(B_STYLE_STORE)) {
+      B_STYLE_STRING += `${a}{${b}}`
+    }
+
+    let rendered_styles = upd_style(B_STYLE_STRING, B_MQ_STR)
+
+
+    if (blick_obj.time && rendered_styles) consoleTimer.stop()
+
+    if (IS_CLI) return rendered_styles
   }
-
-  B_STYLE_STRING = ''
-
-  for (const [a, b] of Object.entries(B_STYLE_STORE)) {
-    B_STYLE_STRING += `${a}{${b}}`
-  }
-
-  let isUpd = upd_style(B_STYLE_STRING, B_MQ_STR, B_MQ_STORE)
-
-  if (blick_obj.time && isUpd) consoleTimer.stop()
+  get_nodes(false)
 }
 ;// CONCATENATED MODULE: ./src/index.js
 
 
 
+
+
+blick_obj._STORE_ = store_namespaceObject
+
 window.blick = blick_obj
 window.blickcss = blick_obj
+
 
 const B_SCRIPT_TAG = document.currentScript
 

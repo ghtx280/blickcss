@@ -10,8 +10,7 @@ import font   from "./theme/font.js";
 import reset  from "./theme/reset.js";
 import  * as funcs  from "./theme/funcs.js"
 
-
-export default {
+const blick = {
   class:_class,
   flex,
   grid,
@@ -34,6 +33,10 @@ export default {
   dark:".theme-dark",
   autoFlex:true,
 
+  version: '1.3.0',
+
   ...funcs
-};
+}
+
+export default blick
 
