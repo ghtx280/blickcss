@@ -1,52 +1,24 @@
-### Update 1.2.8
-1. Now you can flexibly configure states for media queries using an **array** or a **raw string** that will be inserted after `@media`.
-```js
-// use an array for the range of min, max values
-blick.config({
-  screen: {
-    sm: ['screen', 500], // (screen) and (max-width: 500px)
-    md: [500, 1000], // (min-width: 500px) and (max-width: 1000px)
-    lg: 1000 // (min-width: 1000px)
-  }
-})
-```
-The `screen` object defines states that are written to the class before `:`, for example `md:bg-red`. The syntax is very versatile, that is, you can write the value in any way convenient for you, everything will work properly. 
-- `md: [min, max]` - will be converted to the string `(min-width: {min}px) and (max-width: {min}px)`.
-- `md: [min]` - one value in the array will mean `(min-width: {min}px)`
-- `md: ['20rem', 640]` - the array can have a value as a string to set the value with the unit you need `(min-width: 20rem) and (max-width: 640px)`
-- `md: 460`, `md: '20rem'` - the value can be written directly, the same logic will be used as in the array `(min-width: 460px)`, `(min-width: 20rem)`
-- `md: '(min-width: 20rem) and (max-width: 640px)'` - you can also write a raw string that will be inserted directly into the  media queries.
-The keys of the `screen` object can be custom, you can write any prefix of your own that will define your own  media queries parameters.
----
-2. Added the ability to easily set transparency for a color using `/`.
-```html
-<div class="bg-red/50">   -> background:#ff000080
-<div class="c-$green/34"> -> color:#22c55e57
-<div class="bc-#00f/86">  -> border-color:#0000ffdb
-```
-You can use any color format, color name, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal `hex`, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
-```js
-blick.config({
-  colors: {
-    teal: {
-      def:"#078989" // default color ( $teal )
-      1: "#16bfbf"  // using numbers you can write shades ( $teal-1 )
-    },
-    // other colors
-  }
-})
-```
-You can then use this color in your markup, for example `bg-$teal/25` -> `background:#07898940`.   
-[Here you can read more about colors](https://developer.mozilla.org/docs/Web/CSS/color_value).
+### BlickCSS is a small library for quickly creating styles by styling through classes and special attributes. An alternative to Tailwind for those who write their own property values.
 
-3. Added a new class to the standard theme:
-  - `sq-*` -> `width: *; height: *` - creates a square, * this is your value, the default unit is `px`
+### Installation
+To use CLI run the following commands
 
-4. Performance has been improved
+```shell
+npm i blickcss
+```
+```shell
+npx blickcss
+```
+After that, you will see the configuration file for setting up the library. The src folder will also appear by default (if it doesn't exist) with the output.css file. All you need to do is add HTML files to src and start creating masterpieces. All this can be customized in the configuration file.
 
 ***
 
-#### BlickCSS is a small library (~20kb) for quick styling by converting class names into CSS properties. It provides a simple and intuitive way to apply styles using familiar class names. An alternative to Tailwind. for those who do not want to use prepared templates, but write their own property values.
+Or add the following script tag in the head section of your HTML file.
+
+```html
+<script src="https://unpkg.com/blickcss"></script>
+```
+
   
 #### Visit [this site](https://blick.netlify.app) for more info.
 
@@ -64,13 +36,7 @@ You can then use this color in your markup, for example `bg-$teal/25` -> `backgr
 
 ## Getting Started
 
-### Installation
 
-To use BlickCSS in your project, you need add the following script tag in the head section of your HTML file.
-
-```html
-<script src="https://unpkg.com/blickcss"></script>
-```
 
 ### Usage
 
@@ -400,6 +366,54 @@ tailwind: class="flex flex-col md:flex-row justify-center align-center gap-[15px
 
 blickcss: flex="col md:row jc-c ai-c 15"
 ```
+
+### Update 1.2.8
+1. Now you can flexibly configure states for media queries using an **array** or a **raw string** that will be inserted after `@media`.
+```js
+// use an array for the range of min, max values
+blick.config({
+  screen: {
+    sm: ['screen', 500], // (screen) and (max-width: 500px)
+    md: [500, 1000], // (min-width: 500px) and (max-width: 1000px)
+    lg: 1000 // (min-width: 1000px)
+  }
+})
+```
+The `screen` object defines states that are written to the class before `:`, for example `md:bg-red`. The syntax is very versatile, that is, you can write the value in any way convenient for you, everything will work properly. 
+- `md: [min, max]` - will be converted to the string `(min-width: {min}px) and (max-width: {min}px)`.
+- `md: [min]` - one value in the array will mean `(min-width: {min}px)`
+- `md: ['20rem', 640]` - the array can have a value as a string to set the value with the unit you need `(min-width: 20rem) and (max-width: 640px)`
+- `md: 460`, `md: '20rem'` - the value can be written directly, the same logic will be used as in the array `(min-width: 460px)`, `(min-width: 20rem)`
+- `md: '(min-width: 20rem) and (max-width: 640px)'` - you can also write a raw string that will be inserted directly into the  media queries.
+The keys of the `screen` object can be custom, you can write any prefix of your own that will define your own  media queries parameters.
+---
+2. Added the ability to easily set transparency for a color using `/`.
+```html
+<div class="bg-red/50">   -> background:#ff000080
+<div class="c-$green/34"> -> color:#22c55e57
+<div class="bc-#00f/86">  -> border-color:#0000ffdb
+```
+You can use any color format, color name, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal `hex`, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
+```js
+blick.config({
+  colors: {
+    teal: {
+      def:"#078989" // default color ( $teal )
+      1: "#16bfbf"  // using numbers you can write shades ( $teal-1 )
+    },
+    // other colors
+  }
+})
+```
+You can then use this color in your markup, for example `bg-$teal/25` -> `background:#07898940`.   
+[Here you can read more about colors](https://developer.mozilla.org/docs/Web/CSS/color_value).
+
+3. Added a new class to the standard theme:
+  - `sq-*` -> `width: *; height: *` - creates a square, * this is your value, the default unit is `px`
+
+4. Performance has been improved
+
+***
 
 ## Conclusion
 
