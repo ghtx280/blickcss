@@ -1,4 +1,6 @@
-### BlickCSS is a small library for quickly creating styles by styling through classes and special attributes. An alternative to Tailwind for those who write their own property values.
+### BlickCSS is a small library for quickly creating styles by styling via classes and special attributes. An alternative to Tailwind for those who write their own values.
+
+## Getting Started
 
 ### Installation
 To use CLI run the following commands
@@ -9,9 +11,9 @@ npm i blickcss
 ```shell
 npx blickcss
 ```
-After that, you will see the configuration file for setting up the library. The src folder will also appear by default (if it doesn't exist) with the output.css file. All you need to do is add HTML files to src and start creating masterpieces. All this can be customized in the configuration file.
+After that, you will see the configuration file for setting up the library. The src folder will also appear by default (if it doesn't exist) with the `src/output.css` file. All you need to do is add HTML files to src and start creating masterpieces. All this can be customized in the configuration file `blick.config.js`.
 
-Add this to the configuration file to remove unnecessary css code from output.css so that only your styles remain
+Add this to the configuration file to remove unnecessary css code from `output.css` so that only your styles remain
 ```js
 reset: false,
 root: false,
@@ -21,16 +23,52 @@ wrapper: false,
 ```
 ***
 
-Or add the following script tag in the head section of your HTML file.
+Or add the following script tag in the `<head>` of your HTML file if you want use it via CDN.
 
 ```html
 <script src="https://unpkg.com/blickcss"></script>
 ```
 
-  
+***
+
+### Usage
+
+To style any element, add a class using the `property-value' or `state:property-value' pattern.
+
+```html
+<div class="m-20 p-12+35 bg-red c-white h:c-#f00 md:bg-$brand">Hello, BlickCSS!</div>
+```
+CSS output:
+```css
+.m-20 {
+  margin: 20px
+}
+.p-12\+35 {
+  padding:12px 35px
+}
+.bg-red {
+  background: red
+}
+.c-white {
+  color: white
+}
+.h\:c-\#f00:hover {
+  color: #f00
+}
+@media (min-width: 768px){
+  .md\:bg-\$brand {
+    background: var(--brand)
+  }
+}
+```
+
+---
+
+#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/).
+
 #### Visit [this site](https://blick.netlify.app) for more info.
 
-#### Try it out [playground](https://playcode.io/1243248)
+#### Try it out [PLAYGROUND](https://playcode.io/1243248).
 
 ---
 
@@ -41,37 +79,15 @@ Or add the following script tag in the head section of your HTML file.
 - Handles pseudo-classes and media queries.
 - Provides dynamic values, constants, CSS variables, and percentages for flexible styling.
 - Easy configuration options to customize the conversion object.
-
-## Getting Started
-
-
-
-### Usage
-
-To apply styles with BlickCSS, simply add class names to your HTML elements. Each class name corresponds to a CSS property.
-
-```html
-<div class="m-20 bg-red c-white">Hello, BlickCSS!</div>
-```
-CSS output:
-```css
-.m-20 { margin: 20px }
-.bg-red { background: red }
-.c-white { color: white }
-```
-In the example above, the class name `m-20` sets the margin to `20px`, `bg-red` sets the background to `red`, and `c-white` sets the text color to `white`.
-
----
-#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/)
 ---
 
 ### Conversion Object
 
-BlickCSS uses a conversion object called `blick`, which contains CSS properties and their corresponding class names. You can modify this object to add, change, or remove properties.
+BlickCSS has a special object that the library uses to create classes, attributes, colors, states, media queries, and much more. For example, here is an object with classes that you can use. They all have a certain structure to give you more flexibility in creating styles. You can modify this object to add, change, or remove properties directly through `window.blick` or `blick` (if you are using a CDN) or in `blick.config.js` (if you are using the CLI). 
 
-Here's an example of the conversion object:
+Here's an example of an object with classes:
 
-```javascript
+```js
 {
   m: { prop: "margin:$", def: "px" },
   p: { prop: "padding:$", def: "px" },
@@ -91,20 +107,21 @@ Here's an example of the conversion object:
     one: "display:flex",
     prop: "flex:$",
     ...
-  }
+  },
+  abs: "position:absolute"
   // ... other properties ...
 }
 ```
 
-- key - means the first part of the class is separated by a dash (`m` - `margin`, `p` - `padding`).
+- key - means the first part of the class is separated by a dash `(m -> margin, p -> padding)`.
 
-- prop - defines a CSS property using the `$` character, your value will be inserted instead of `$` (`m-20 -> margin: 20px`).
+- prop - defines a CSS property using the `$` character, your value will be inserted instead of `$` `(m-20 -> margin: 20px)`.
 
-- def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added (`p-2em -> margin: 2em`).
+- def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added `(m-2em -> margin: 2em)`.
 
-- vals - prepared values that will be substituted for `$` (`w-full -> width:100%`).
+- vals - prepared values that will be substituted for `$` `(w-full -> width:100%)`.
 
-- one - means one css class without a value (`flex -> display:flex`).
+- one - means one css class without a value `(flex -> display:flex)`.
 
 ### Combining classes with nested objects
 
@@ -151,7 +168,7 @@ class="over-y-hide"   // overflow-y: hidden
 class="over"          // overflow: auto
 ```
 
-### (NEW) Property as a function
+### Property as a function
 
 Functions in `prop` give you complete control over the output of the generated CSS. Using functions, you can define dynamic styles based on specific conditions or calculations.
   The function takes a parameter (often called "val") that represents the value passed to the function.
@@ -163,9 +180,9 @@ Here are some examples to demonstrate the use of functions for class properties:
      text: {
        prop: ({ val }) => isNaN(val) ? `color:${val}` : `font-size:${val}px`,
      },
-     // you can also write it in a key if you only use `prop`
-     text: ({ val }) => isNaN(val) ? `color:${val}` : `font-size:${val}px`,
      fs: {
+       prop: "font-size:$",
+       def: "px",
        rand: {
          one: () => `font-size:${Math.floor(Math.random() * 64)}px`
        }
