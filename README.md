@@ -11,6 +11,14 @@ npx blickcss
 ```
 After that, you will see the configuration file for setting up the library. The src folder will also appear by default (if it doesn't exist) with the output.css file. All you need to do is add HTML files to src and start creating masterpieces. All this can be customized in the configuration file.
 
+Add this to the configuration file to remove unnecessary css code from output.css so that only your styles remain
+```js
+reset: false,
+root: false,
+useAttr: false,
+autoFlex: false,
+wrapper: false,
+```
 ***
 
 Or add the following script tag in the head section of your HTML file.
