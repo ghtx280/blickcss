@@ -1,42 +1,48 @@
 #!/usr/bin/env node
 
-import liveServer        from "live-server" 
-import B_RENDER          from "./funcs/render.js" 
-import blick             from "./blick-obj.js" 
 import fs                from 'fs' ;
+import color             from "color"
 import chokidar          from 'chokidar' ;
-import { fileURLToPath } from 'url';
-import { dirname, join, relative } from 'path';
-import * as _STORE_      from "./store.js";
 import { glob }          from 'glob';
 import beautify          from 'js-beautify'
-import color             from "color"
-
+import liveServer        from "live-server" 
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { createRequire } from 'node:module';
 
+import blick             from "../blick-obj.js" 
+import B_RENDER          from "../funcs/render.js" 
+import * as _STORE_      from "../store.js";
+import defalutConfig     from "./default-config.js";
+
+import { getRelPathSync } from "./funcs/rel-path.js";
+import { getProjectType } from "./funcs/proj-type.js";
+
+
 const root = process.cwd()
+const this_file = fileURLToPath(import.meta.url)
+const requireSync = createRequire(import.meta.url);
+const config_filename = `blick.config.${getProjectType("module") ? "c" : ""}js`
 
-const require = createRequire(import.meta.url);
 
-let config = {};
+let config = {
+  input: "./src/**/*.{html,js}",
+  output: "./src/output.css",
+  beautify: true,
+  watch: true
+};
 
-const config_filename = "blick.config.js"
 
-function getRelPathSync(fileName) {
-  try {
-    fs.accessSync(fileName, fs.constants.F_OK)
-    return relative(
-      dirname(fileURLToPath(import.meta.url)),
-      join(root, fileName)
-    ); 
-  } catch {}
-  return null;
-}
+(async function(){
 
-const filePath = getRelPathSync(config_filename);
+const filePath = getRelPathSync(config_filename, this_file);
+
 
 if (filePath) {
-  config = require(filePath)
+  config = requireSync(filePath)
+}
+else {
+  fs.writeFileSync(`${root}/${config_filename}`, defalutConfig)
 }
 
 const store_copy = structuredClone({..._STORE_})
@@ -44,12 +50,6 @@ const store_copy = structuredClone({..._STORE_})
 blick._STORE_ = store_copy
 blick._COLOR_ = color
 blick._CLI_   = true
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = dirname(__filename);
- 
-const intputPath = config.input  || './src/*.html';
-const outputPath = config.output || './src/output.css';
 
 blick.config(config)
 
@@ -64,12 +64,12 @@ if (config.server) {
   });
 }
 
-let filesText = {};
+const filesText = {};
 
 async function processHTMLFiles(updatedFile) {
   blick._STORE_ = structuredClone(store_copy)
 
-  const files = await glob(intputPath)
+  const files = await glob(config.input)
 
   for (const file of files) {
     const data = fs.readFileSync(file, 'utf-8')
@@ -118,23 +118,38 @@ async function processHTMLFiles(updatedFile) {
 
   let css = B_RENDER(all, { cli: true })
 
-  if (config.beautify) {
+  if (config.beautify) { 
     css = beautify.css(css, {
       indent_size: 2
     })
   }
 
-  fs.writeFile(outputPath, css, function(err) {
+  const outputDir = dirname(config.output);
+
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  fs.writeFile(config.output, css, (err) => {
     if (err) {
-      console.error("Error writing file", err);
+      console.error(`Error writing file`, err);
     } else {
-      console.log(`${updatedFile ? `'${updatedFile}' was changed. ` : ""}'${outputPath}' updated successfully`);
+      console.log(
+        `\n${
+          updatedFile ? `'${updatedFile.replaceAll("\\","/")}' was changed.\n` : ""
+        }'${config.output.replaceAll(/\.+\//g,"")}' updated successfully. ${
+          config.watch ? "\nWaiting for change..." : ""
+        }`
+        );
     }
   });
 }
 processHTMLFiles();
 
 
-chokidar.watch(intputPath).on('change', (filePath) => {
-  processHTMLFiles(filePath)
-})
+if (config.watch) {
+  chokidar.watch(config.input).on('change', (filePath) => {
+    processHTMLFiles(filePath)
+  })
+}
+})()
