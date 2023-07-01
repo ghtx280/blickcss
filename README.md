@@ -1,4 +1,4 @@
-### BlickCSS is a small library for quickly creating styles by styling via classes and special attributes. An alternative to Tailwind for those who write their own values.
+### Small library for quickly creating styles by styling via classes and special attributes. An alternative to Tailwind for those who write their own values.
 
 ## Getting Started
 
