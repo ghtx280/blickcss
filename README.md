@@ -33,7 +33,7 @@ Or add the following script tag in the `<head>` of your HTML file if you want us
 
 ### Usage
 
-To style any element, add a class using the `property-value' or `state:property-value' pattern.
+To style any element, add a class using the `property-value` or `state:property-value` pattern.
 
 ```html
 <div class="m-20 p-12+35 bg-red c-white h:c-#f00 md:bg-$brand">Hello, BlickCSS!</div>
