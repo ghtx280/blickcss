@@ -23,7 +23,7 @@ export default function (val, sel = {}, model = "class") {
       .map((item) => {
         item = item.replaceAll("\\", "");
 
-        if (item.includes("/")) {
+        if (item.includes("/")) { // c-505/50
           const [n1, n2] = item.split("/");
           if (isNaN(n1[0])) {
             if (/^(\w|#)/.test(n1)) {
@@ -40,7 +40,7 @@ export default function (val, sel = {}, model = "class") {
                 }
                 return getHex(color) + getAlpha(n2)
               }
-              else return `var(--${n1.slice(1)});opacity:${n2}`;
+              else return `var(--${n1.slice(1)});opacity:${n2 > 1 ? n2 / 100 : n2}`;
             }
             else return `${n1};opacity:${n2 > 1 ? n2 / 100 : n2}`
           }
