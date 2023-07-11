@@ -1098,7 +1098,7 @@ const grid_i_vals = {
   sans: "sans-serif"
 });
 ;// CONCATENATED MODULE: ./src/theme/reset.js
-/* harmony default export */ const theme_reset = (`*,::after,::before{text-decoration:none;object-fit:cover;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{color:inherit}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
+/* harmony default export */ const theme_reset = (`*,::after,::before{box-sizing:border-box;object-fit:cover;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{text-decoration:none}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
  
 // normalize_css
 //export default `html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}details,main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline dotted}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{color:inherit;display:table;max-width:100%;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio],legend{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}`
@@ -1148,7 +1148,7 @@ const grid_i_vals = {
               }
               else return `var(--${n1.slice(1)});opacity:${n2}`;
             }
-            else return `${n1};opacity:${n2}`
+            else return `${n1};opacity:${n2 > 1 ? n2 / 100 : n2}`
           }
           else return parseFloat(((n1 / n2) * 100).toFixed(2)) + "%";
         }
@@ -1170,13 +1170,16 @@ const grid_i_vals = {
 ;// CONCATENATED MODULE: ./src/funcs/create-val.js
 
 
-/* harmony default export */ function create_val(sel, model) {
+/* harmony default export */ function create_val(sel, model, str, attr) {
   if (!sel.v) {
     if (typeof sel.p === "string") {
       return sel.p
     }
     else if(typeof sel.p === "function") {
       return sel.p()
+    }
+    else if(typeof sel.p?.one === "function") {
+      return sel.p.one({ str, attr })
     }
     else return sel.p?.one
   }
@@ -1186,6 +1189,8 @@ const grid_i_vals = {
         prop:sel.s?.prop,
         val:sel.v,
         sel:sel.s,
+        str,
+        attr
       })  
     }
     else if (sel.p.prop) {
@@ -1194,7 +1199,9 @@ const grid_i_vals = {
           prop:sel.p?.prop,
           val:sel.p?.vals?.[sel?.v] || sel?.v || "",
           sel:sel.p,
-          rawVal:sel?.v
+          rawVal:sel?.v,
+          str,
+          attr
         })
       }
       else {
@@ -1226,15 +1233,9 @@ const grid_i_vals = {
   .replace(/[^\w-_]/g, '\\$&')
   .replace(/^\d/, '\\3$& ')
 
-  if (model === "raw") {
-    return format
-  }
+  if (model === "raw") return format
 
-  if (model === 'class') {
-    return `.${format}`;
-  } else {
-    return `[${model}~="${str}"]`;
-  }
+  return model === 'class' ? `.${format}` : `[${model}~="${str}"]`;
 };
 
 ;// CONCATENATED MODULE: ./src/funcs/get-mq-width.js
@@ -1287,7 +1288,7 @@ const grid_i_vals = {
 
 
 
-/* harmony default export */ function create_css(str, params, _STORE_) {
+/* harmony default export */ function create_css(str, params, _STORE_, attr_val) {
   
   let { B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR } = _STORE_ || blick_obj._STORE_ || {}
 
@@ -1302,7 +1303,7 @@ const grid_i_vals = {
 
   let dec = prop
     .split(';')
-    .map(el => create_val(auto_state = val_path(blick_obj[model], el), model, str))
+    .map(el => create_val(auto_state = val_path(blick_obj[model], el), model, str, attr_val))
     .join(";")
 
   auto_state = auto_state.p?._s || ""
@@ -1472,7 +1473,7 @@ const blick_obj_blick = {
   dark:".theme-dark",
   autoFlex:true,
 
-  version: '1.3.4',
+  version: '1.3.5',
 
   ...funcs_namespaceObject
 }
@@ -1601,17 +1602,18 @@ let B_KEYFRAMES
   + (blick_obj.reset || "") 
   + (blick_obj.root  ? B_ROOT : "")
   + (
+    blick_obj.wrapper 
+    ? `${blick_obj.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
+    : ""
+  )
+  + (
     blick_obj.useAttr 
     ? `[${blick_obj.attr.flex}]:not([${blick_obj.attr.flex}~=off]){display:flex}`
     + `[${blick_obj.attr.grid}]:not([${blick_obj.attr.grid}~=off]){display:grid}` 
     : ""
   )
   + (blick_obj.autoFlex ? '[class*="flex-"],[class*="jc-"],[class*="ai-"],[class*="gap-"]{display:flex}' : "")
-  + (
-    blick_obj.wrapper 
-    ? `${blick_obj.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
-    : ""
-  )
+  
   + B_STYLE_STRING
   + get_mq(B_MQ_STRING)
   + (blick_obj.autoTheme ? `@media(prefers-color-scheme:dark){${B_MQ_STRING.dark}}` : B_MQ_STRING.dark) 
@@ -1650,24 +1652,28 @@ let B_KEYFRAMES
 /* harmony default export */ function check_rec(rec) {
   if (rec === undefined) return true;
 
-  const elems = ["STYLE", "SCRIPT", "HEAD", "#text"];
+  const g = (el, at) => !!el?.getAttribute?.(at);
+
+  const elems = ["STYLE", "SCRIPT", "HEAD", "HTML", "#text"];
 
   function B_CHECK_ELEM(el) {
+    if (!el || !el?.nodeName) return false;
+    const a = blick.attr;
     return (
-      !elems.includes(el?.nodeName) &&
-      !!(
-        el?.getAttribute("class") ||
-        el?.getAttribute(blick.attr.flex) ||
-        el?.getAttribute(blick.attr.text) ||
-        el?.getAttribute(blick.attr.grid)
-      )
+      !elems.includes(el?.nodeName) ||
+      g(el, "class") ||
+      g(el, a.flex) ||
+      g(el, a.text) ||
+      g(el, a.grid)
     );
   }
 
-  if (rec.length !== 1) return true;
-  if (B_CHECK_ELEM(rec[0].target) && !rec[0].addedNodes) return true;
-  if (rec[0].addedNodes.length > 1) return true;
-  if (B_CHECK_ELEM(rec[0].addedNodes[0])) return true;
+  if (rec.length !== 1) return "0";
+  if (B_CHECK_ELEM(rec[0].target)) return "t";
+  if (rec[0].addedNodes.length > 1) return "a0";
+  else {
+    if (B_CHECK_ELEM(rec[0].addedNodes[0])) return "a1";
+  }
 }
 
 ;// CONCATENATED MODULE: ./src/funcs/render.js
@@ -1676,13 +1682,11 @@ let B_KEYFRAMES
 
 
 
-// import * as _STORE_ from "../store.js"
-
 
 function timer(label) {
   const startTime = performance.now();
   return {
-    stop: function() {
+    stop: function () {
       const endTime = performance.now();
       const elapsedTime = endTime - startTime;
       console.log(`${label}: ${elapsedTime.toFixed(1)}ms`);
@@ -1690,83 +1694,76 @@ function timer(label) {
   };
 }
 
-
 /* harmony default export */ function render(record, params) {
-  let consoleTimer
-  if (blick_obj.time) consoleTimer = timer('blick. styles upd')
+  let consoleTimer;
+  if (blick_obj.time) consoleTimer = timer("blick. styles upd");
 
-  const _STORE_ = blick_obj._STORE_
+  const _STORE_ = blick_obj._STORE_;
 
-  let {
-    B_MQ_STORE,
-    B_STYLE_STORE,
-    B_ATTRS_STORE,
-    B_MQ_STR_COPY,
-    B_MQ_STRING
-  } = _STORE_
+  let { B_MQ_STORE, B_STYLE_STORE, B_ATTRS_STORE, B_MQ_STR_COPY, B_MQ_STRING } =
+    _STORE_;
 
-  let B_STYLE_STRING = ""
-  let B_MQ_STR = B_MQ_STRING
+  let B_STYLE_STRING = "";
+  let B_MQ_STR = B_MQ_STRING;
 
   if (params.cli) {
-
     for (const attr in record) {
       for (const val of record[attr]) {
-        create_css(val, attr, _STORE_)
+        create_css(val, attr, _STORE_);
       }
     }
-    return get_nodes(true)
-
+    return get_nodes(true);
   }
 
-  if (!document.body) return
-  if (!(check_rec(record) || !style_tag.textContent)) return
-  
-  let nodes = document.querySelectorAll(
-  `[class],[${blick_obj.attr.flex}],[${blick_obj.attr.text}],[${blick_obj.attr.grid}]`
-  )
+  if (!document.body) return;
 
-  if (!nodes.length) return
+  if (!style_tag.textContent ? 0 : !check_rec(record)) return;
+
+  let nodes = document.querySelectorAll(
+    `[class],[${blick_obj.attr.flex}],[${blick_obj.attr.text}],[${blick_obj.attr.grid}]`
+  );
+
+  if (!nodes.length) return;
 
   for (const elem of nodes) {
     for (const model in B_ATTRS_STORE) {
-      let attr = blick_obj.attr[model] || 'class'
+      let attr = blick_obj.attr[model] || "class";
       if (elem.hasAttribute(attr)) {
-        for (const str of elem.getAttribute(attr).trim().split(/\s+/g)){
+        const attr_val = elem.getAttribute(attr).trim().split(/\s+/g);
+        for (const str of attr_val) {
           if (!B_ATTRS_STORE[model].includes(str)) {
-            create_css(str, model, _STORE_)
-            B_ATTRS_STORE[model].push(str)
+            create_css(str, model, _STORE_, attr_val);
+            B_ATTRS_STORE[model].push(str);
           }
         }
       }
     }
-  } 
-    
+  }
+
   function get_nodes(IS_CLI) {
-    
-    B_MQ_STR = {...B_MQ_STR_COPY}
+    B_MQ_STR = { ...B_MQ_STR_COPY };
 
     for (const key in B_MQ_STORE) {
       for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-        B_MQ_STR[key] += `${a}{${b}}`
+        B_MQ_STR[key] += `${a}{${b}}`;
       }
     }
 
-    B_STYLE_STRING = ''
+    B_STYLE_STRING = "";
 
     for (const [a, b] of Object.entries(B_STYLE_STORE)) {
-      B_STYLE_STRING += `${a}{${b}}`
+      B_STYLE_STRING += `${a}{${b}}`;
     }
 
-    let rendered_styles = upd_style(B_STYLE_STRING, B_MQ_STR)
+    let rendered_styles = upd_style(B_STYLE_STRING, B_MQ_STR);
 
+    if (blick_obj.time && rendered_styles) consoleTimer.stop();
 
-    if (blick_obj.time && rendered_styles) consoleTimer.stop()
-
-    if (IS_CLI) return rendered_styles
+    if (IS_CLI) return rendered_styles;
   }
-  get_nodes(false)
+  get_nodes(false);
 }
+
 ;// CONCATENATED MODULE: ./src/index.js
 
 

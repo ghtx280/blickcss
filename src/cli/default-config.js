@@ -1,5 +1,4 @@
-export default 
-`module.exports = {
+export default `module.exports = {
   input: "./src/**/*.{html,js}", // Your input files by glob pattern
   output: "./src/output.css",    // File in which css will be generated
 
@@ -13,4 +12,4 @@ export default
   // server: {
   //   open: true
   // }
-}`
+}`;

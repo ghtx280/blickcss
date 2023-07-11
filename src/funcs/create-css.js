@@ -5,7 +5,7 @@ import gmqw         from "./get-mq-width.js";
 import B_VAL_PATH   from "./val-path.js"
 
 
-export default function(str, params, _STORE_) {
+export default function(str, params, _STORE_, attr_val) {
   
   let { B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR } = _STORE_ || blick._STORE_ || {}
 
@@ -20,7 +20,7 @@ export default function(str, params, _STORE_) {
 
   let dec = prop
     .split(';')
-    .map(el => B_CREATE_VAL(auto_state = B_VAL_PATH(blick[model], el), model, str))
+    .map(el => B_CREATE_VAL(auto_state = B_VAL_PATH(blick[model], el), model, str, attr_val))
     .join(";")
 
   auto_state = auto_state.p?._s || ""

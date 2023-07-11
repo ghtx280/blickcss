@@ -42,7 +42,7 @@ export default function (val, sel = {}, model = "class") {
               }
               else return `var(--${n1.slice(1)});opacity:${n2}`;
             }
-            else return `${n1};opacity:${n2}`
+            else return `${n1};opacity:${n2 > 1 ? n2 / 100 : n2}`
           }
           else return parseFloat(((n1 / n2) * 100).toFixed(2)) + "%";
         }

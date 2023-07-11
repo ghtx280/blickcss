@@ -1,12 +1,15 @@
 import B_CALC_VAL from "./calc-val.js"
 
-export default function(sel, model) {
+export default function(sel, model, str, attr) {
   if (!sel.v) {
     if (typeof sel.p === "string") {
       return sel.p
     }
     else if(typeof sel.p === "function") {
       return sel.p()
+    }
+    else if(typeof sel.p?.one === "function") {
+      return sel.p.one({ str, attr })
     }
     else return sel.p?.one
   }
@@ -16,6 +19,8 @@ export default function(sel, model) {
         prop:sel.s?.prop,
         val:sel.v,
         sel:sel.s,
+        str,
+        attr
       })  
     }
     else if (sel.p.prop) {
@@ -24,7 +29,9 @@ export default function(sel, model) {
           prop:sel.p?.prop,
           val:sel.p?.vals?.[sel?.v] || sel?.v || "",
           sel:sel.p,
-          rawVal:sel?.v
+          rawVal:sel?.v,
+          str,
+          attr
         })
       }
       else {
