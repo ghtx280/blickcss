@@ -1,56 +1,74 @@
-### Update 1.2.8
-1. Now you can flexibly configure states for media queries using an **array** or a **raw string** that will be inserted after `@media`.
-```js
-// use an array for the range of min, max values
-blick.config({
-  screen: {
-    sm: ['screen', 500], // (screen) and (max-width: 500px)
-    md: [500, 1000], // (min-width: 500px) and (max-width: 1000px)
-    lg: 1000 // (min-width: 1000px)
-  }
-})
+### Small library for quickly creating styles via classes and special attributes. An alternative to Tailwind for those who write their own values.
+
+## Getting Started
+
+### Installation
+To use CLI run the following commands
+
+```shell
+npm i blickcss
 ```
-The `screen` object defines states that are written to the class before `:`, for example `md:bg-red`. The syntax is very versatile, that is, you can write the value in any way convenient for you, everything will work properly. 
-- `md: [min, max]` - will be converted to the string `(min-width: {min}px) and (max-width: {min}px)`.
-- `md: [min]` - one value in the array will mean `(min-width: {min}px)`
-- `md: ['20rem', 640]` - the array can have a value as a string to set the value with the unit you need `(min-width: 20rem) and (max-width: 640px)`
-- `md: 460`, `md: '20rem'` - the value can be written directly, the same logic will be used as in the array `(min-width: 460px)`, `(min-width: 20rem)`
-- `md: '(min-width: 20rem) and (max-width: 640px)'` - you can also write a raw string that will be inserted directly into the  media queries.
-The keys of the `screen` object can be custom, you can write any prefix of your own that will define your own  media queries parameters.
----
-2. Added the ability to easily set transparency for a color using `/`.
+```shell
+npx blickcss
+```
+After that, you will see the configuration file for setting up the library. The src folder will also appear by default (if it doesn't exist) with the `src/output.css` file. All you need to do is add HTML files to src and start creating masterpieces. All this can be customized in the configuration file `blick.config.js`.
+
+Add this to the configuration file to remove unnecessary css code from `output.css` so that only your styles remain
+```js
+reset: false,
+root: false,
+useAttr: false,
+autoFlex: false,
+wrapper: false,
+```
+***
+
+Or add the following script tag in the `<head>` of your HTML file if you want use it via CDN.
+
 ```html
-<div class="bg-red/50">   -> background:#ff000080
-<div class="c-$green/34"> -> color:#22c55e57
-<div class="bc-#00f/86">  -> border-color:#0000ffdb
+<script src="https://unpkg.com/blickcss"></script>
 ```
-You can use any color format, color name, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal `hex`, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
-```js
-blick.config({
-  colors: {
-    teal: {
-      def:"#078989" // default color ( $teal )
-      1: "#16bfbf"  // using numbers you can write shades ( $teal-1 )
-    },
-    // other colors
-  }
-})
-```
-You can then use this color in your markup, for example `bg-$teal/25` -> `background:#07898940`.   
-[Here you can read more about colors](https://developer.mozilla.org/docs/Web/CSS/color_value).
-
-3. Added a new class to the standard theme:
-  - `sq-*` -> `width: *; height: *` - creates a square, * this is your value, the default unit is `px`
-
-4. Performance has been improved
 
 ***
 
-#### BlickCSS is a small library (~20kb) for quick styling by converting class names into CSS properties. It provides a simple and intuitive way to apply styles using familiar class names. An alternative to Tailwind. for those who do not want to use prepared templates, but write their own property values.
-  
+### Usage
+
+To style any element, add a class using the `property-value` or `state:property-value` pattern.
+
+```html
+<div class="m-20 p-12+35 bg-red c-white h:c-#f00 md:bg-$brand">Hello, BlickCSS!</div>
+```
+CSS output:
+```css
+.m-20 {
+  margin: 20px
+}
+.p-12\+35 {
+  padding:12px 35px
+}
+.bg-red {
+  background: red
+}
+.c-white {
+  color: white
+}
+.h\:c-\#f00:hover {
+  color: #f00
+}
+@media (min-width: 768px){
+  .md\:bg-\$brand {
+    background: var(--brand)
+  }
+}
+```
+
+---
+
+#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/).
+
 #### Visit [this site](https://blick.netlify.app) for more info.
 
-#### Try it out [playground](https://playcode.io/1243248)
+#### Try it out [PLAYGROUND](https://playcode.io/1243248).
 
 ---
 
@@ -61,43 +79,15 @@ You can then use this color in your markup, for example `bg-$teal/25` -> `backgr
 - Handles pseudo-classes and media queries.
 - Provides dynamic values, constants, CSS variables, and percentages for flexible styling.
 - Easy configuration options to customize the conversion object.
-
-## Getting Started
-
-### Installation
-
-To use BlickCSS in your project, you need add the following script tag in the head section of your HTML file.
-
-```html
-<script src="https://unpkg.com/blickcss"></script>
-```
-
-### Usage
-
-To apply styles with BlickCSS, simply add class names to your HTML elements. Each class name corresponds to a CSS property.
-
-```html
-<div class="m-20 bg-red c-white">Hello, BlickCSS!</div>
-```
-CSS output:
-```css
-.m-20 { margin: 20px }
-.bg-red { background: red }
-.c-white { color: white }
-```
-In the example above, the class name `m-20` sets the margin to `20px`, `bg-red` sets the background to `red`, and `c-white` sets the text color to `white`.
-
----
-#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/)
 ---
 
 ### Conversion Object
 
-BlickCSS uses a conversion object called `blick`, which contains CSS properties and their corresponding class names. You can modify this object to add, change, or remove properties.
+BlickCSS has a special object that the library uses to create classes, attributes, colors, states, media queries, and much more. For example, here is an object with classes that you can use. They all have a certain structure to give you more flexibility in creating styles. You can modify this object to add, change, or remove properties directly through `window.blick` or `blick` (if you are using a CDN) or in `blick.config.js` (if you are using the CLI). 
 
-Here's an example of the conversion object:
+Here's an example of an object with classes:
 
-```javascript
+```js
 {
   m: { prop: "margin:$", def: "px" },
   p: { prop: "padding:$", def: "px" },
@@ -117,20 +107,21 @@ Here's an example of the conversion object:
     one: "display:flex",
     prop: "flex:$",
     ...
-  }
+  },
+  abs: "position:absolute"
   // ... other properties ...
 }
 ```
 
-- key - means the first part of the class is separated by a dash (`m` - `margin`, `p` - `padding`).
+- key - means the first part of the class is separated by a dash `(m -> margin, p -> padding)`.
 
-- prop - defines a CSS property using the `$` character, your value will be inserted instead of `$` (`m-20 -> margin: 20px`).
+- prop - defines a CSS property using the `$` character, your value will be inserted instead of `$` `(m-20 -> margin: 20px)`.
 
-- def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added (`p-2em -> margin: 2em`).
+- def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added `(m-2em -> margin: 2em)`.
 
-- vals - prepared values that will be substituted for `$` (`w-full -> width:100%`).
+- vals - prepared values that will be substituted for `$` `(w-full -> width:100%)`.
 
-- one - means one css class without a value (`flex -> display:flex`).
+- one - means one css class without a value `(flex -> display:flex)`.
 
 ### Combining classes with nested objects
 
@@ -177,7 +168,7 @@ class="over-y-hide"   // overflow-y: hidden
 class="over"          // overflow: auto
 ```
 
-### (NEW) Property as a function
+### Property as a function
 
 Functions in `prop` give you complete control over the output of the generated CSS. Using functions, you can define dynamic styles based on specific conditions or calculations.
   The function takes a parameter (often called "val") that represents the value passed to the function.
@@ -189,9 +180,9 @@ Here are some examples to demonstrate the use of functions for class properties:
      text: {
        prop: ({ val }) => isNaN(val) ? `color:${val}` : `font-size:${val}px`,
      },
-     // you can also write it in a key if you only use `prop`
-     text: ({ val }) => isNaN(val) ? `color:${val}` : `font-size:${val}px`,
      fs: {
+       prop: "font-size:$",
+       def: "px",
        rand: {
          one: () => `font-size:${Math.floor(Math.random() * 64)}px`
        }
@@ -400,6 +391,54 @@ tailwind: class="flex flex-col md:flex-row justify-center align-center gap-[15px
 
 blickcss: flex="col md:row jc-c ai-c 15"
 ```
+
+### Update 1.2.8
+1. Now you can flexibly configure states for media queries using an **array** or a **raw string** that will be inserted after `@media`.
+```js
+// use an array for the range of min, max values
+blick.config({
+  screen: {
+    sm: ['screen', 500], // (screen) and (max-width: 500px)
+    md: [500, 1000], // (min-width: 500px) and (max-width: 1000px)
+    lg: 1000 // (min-width: 1000px)
+  }
+})
+```
+The `screen` object defines states that are written to the class before `:`, for example `md:bg-red`. The syntax is very versatile, that is, you can write the value in any way convenient for you, everything will work properly. 
+- `md: [min, max]` - will be converted to the string `(min-width: {min}px) and (max-width: {min}px)`.
+- `md: [min]` - one value in the array will mean `(min-width: {min}px)`
+- `md: ['20rem', 640]` - the array can have a value as a string to set the value with the unit you need `(min-width: 20rem) and (max-width: 640px)`
+- `md: 460`, `md: '20rem'` - the value can be written directly, the same logic will be used as in the array `(min-width: 460px)`, `(min-width: 20rem)`
+- `md: '(min-width: 20rem) and (max-width: 640px)'` - you can also write a raw string that will be inserted directly into the  media queries.
+The keys of the `screen` object can be custom, you can write any prefix of your own that will define your own  media queries parameters.
+---
+2. Added the ability to easily set transparency for a color using `/`.
+```html
+<div class="bg-red/50">   -> background:#ff000080
+<div class="c-$green/34"> -> color:#22c55e57
+<div class="bc-#00f/86">  -> border-color:#0000ffdb
+```
+You can use any color format, color name, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal `hex`, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
+```js
+blick.config({
+  colors: {
+    teal: {
+      def:"#078989" // default color ( $teal )
+      1: "#16bfbf"  // using numbers you can write shades ( $teal-1 )
+    },
+    // other colors
+  }
+})
+```
+You can then use this color in your markup, for example `bg-$teal/25` -> `background:#07898940`.   
+[Here you can read more about colors](https://developer.mozilla.org/docs/Web/CSS/color_value).
+
+3. Added a new class to the standard theme:
+  - `sq-*` -> `width: *; height: *` - creates a square, * this is your value, the default unit is `px`
+
+4. Performance has been improved
+
+***
 
 ## Conclusion
 
