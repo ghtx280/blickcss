@@ -1129,7 +1129,7 @@ const grid_i_vals = {
       .map((item) => {
         item = item.replaceAll("\\", "");
 
-        if (item.includes("/")) {
+        if (item.includes("/")) { // c-505/50
           const [n1, n2] = item.split("/");
           if (isNaN(n1[0])) {
             if (/^(\w|#)/.test(n1)) {
@@ -1146,7 +1146,7 @@ const grid_i_vals = {
                 }
                 return getHex(color) + getAlpha(n2)
               }
-              else return `var(--${n1.slice(1)});opacity:${n2}`;
+              else return `var(--${n1.slice(1)});opacity:${n2 > 1 ? n2 / 100 : n2}`;
             }
             else return `${n1};opacity:${n2 > 1 ? n2 / 100 : n2}`
           }
@@ -1473,7 +1473,7 @@ const blick_obj_blick = {
   dark:".theme-dark",
   autoFlex:true,
 
-  version: '1.3.5',
+  version: '1.3.6',
 
   ...funcs_namespaceObject
 }
@@ -1544,8 +1544,6 @@ let B_MQ_STR_COPY = {...B_MQ_STRING}
 
 /* harmony default export */ function get_mq(mq) {
   let str = ""
-
-  
 
   for (const k in B_MQ_STORE) {
     if (k.startsWith(blick_obj.maxPrefix + '-')) {
