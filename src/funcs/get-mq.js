@@ -5,8 +5,6 @@ import getMqWidth from "./get-mq-width.js"
 export default function(mq) {
   let str = ""
 
-  
-
   for (const k in B_MQ_STORE) {
     if (k.startsWith(blick.maxPrefix + '-')) {
       if (mq[k]) {
