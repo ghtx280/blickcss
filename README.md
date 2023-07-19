@@ -136,8 +136,8 @@ it is possible to create chains of classes from nested objects, you can combine 
   }
 }
 ```
-```html
-<div class="foo-bar-qux-10"></div>
+```js
+class="foo-bar-qux-10" // something:10
 ```
 
 Based on this capability, you can create complex class structures.
@@ -191,20 +191,20 @@ Here are some examples to demonstrate the use of functions for class properties:
 ```
 
 In the first example, the `text` property is assigned a function as its `prop`. The function checks if the value is a number. If it's a number, it generates a CSS property for the font size; otherwise it generates a CSS property for the color.
-```html
-<div class="text-24">Element with font size: 24px</div>
-<div class="text-red">Element with color: red</div>
+```js
+class="text-24" // font-size: 24px
+class="text-red" // color: red
 ```
 In the second example, the `fs` property includes a nested `rand` object that contains the `one` property as a function ("one" means no value is required). The function generates a random font size value between 0 and 64 pixels.
-```html
-<div class="fs-rand">Element with random font size</div>
+```js
+class="fs-rand" // font-size: {random number}px
 ```
 In this case, each time the page is loaded the `fs-rand` class will apply a different font size value.
 
 
 ### Special Attributes
 
-BlickCSS supports special attributes to enhance styling and semantics of your code. Currently, it supports `flex`, `text`, and `grid`.
+BlickCSS supports special attributes to enhance styling and semantics of your code. Currently, it supports `flex`, `text`, and `grid`.   
 
 #### Flex Attribute
 
@@ -247,8 +247,28 @@ output
 [grid~="12"]{ gap: 12px }
 [grid~="cols-3"]{ grid-template-columns: repeat(3, 1fr) }
 ```
+   
+You can change attributes name in config: 
+
+```js
+blick.attr.flex = "data-flex"
+blick.attr.text = "txt"
+blick.attr.grid = "grd"
+// or
+blick.config({
+  attr: {
+    flex: "data-flex",
+    text: "txt",
+    grid: "grd"
+  }
+})
+```
+```html
+<div txt="14 #f0f line"></div>
+```
 
 <!-- Example: `grid="12 cols-3"` sets the gap to `12px`, and the grid-template-columns to `repeat(3, 1fr)`. -->
+
 
 ### Pseudo-classes
 
@@ -260,7 +280,14 @@ You can also use shorthand notations for pseudo-classes. For example, `h:bg-blue
 
 ### Media Queries
 
-BlickCSS provides support for media queries based on default screen sizes. The default screen sizes are `sm` (576px), `md` (768px), `lg` (992px), and `xl` (1200px). To apply styles based on a specific media query, prefix the class name with the desired media query.
+BlickCSS provides support for media queries based on default screen sizes.   
+The default screen sizes are:
+- `sm`: `@media (min-width: 576px) { ... }`
+- `md`: `@media (min-width: 768px) { ... }`
+- `lg`: `@media (min-width: 992px) { ... }`
+- `xl`: `@media (min-width: 1200px) { ... }`
+
+To apply styles based on a specific media query, prefix the class name with the desired media query.
 
 Example: `md:bg-orange` sets the background color to `orange` for screens larger than or equal to `768px`.
 
@@ -269,33 +296,25 @@ Example: `md:bg-orange` sets the background color to `orange` for screens larger
 BlickCSS allows you to customize values and modifiers for more flexibility in styling.
 
 - Numbers: If a class name contains a number value (e.g., `m-20`), the default unit specified in the conversion object (`def: "px"` in this case) will be added to the value. However, if the number ends with a non-numeric character (e.g., `m-20%`), the default unit will not be added.
-```http
-input:  r-123
-output: border-radius: 123px
-```
-```http
-input:  r-5em
-output: border-radius: 5em
+```js
+class="r-123" // border-radius: 123px
+class="r-5em" // border-radius: 5em
 ```
 - CSS Variables: You can use the `$` symbol before a value to indicate that it should be treated as a CSS variable. For example, `c-$foo` sets the color to the CSS variable `--foo`.
-```http
-input:  fs-$my-var
-output: font-size: var(--my-var) 
+```js
+class="fs-$my-var" // font-size: var(--my-var) 
 ```
 - Percentages: If the value contains a slash (`/`), it will be treated as a percentage. i.n. the JS expression `num1 / num2 * 100` is executed. For example, `w-1/2` sets the width to `50%`.
-```http
-input:  h-1/4
-output: height: 25%
+```js
+class="h-1/4" // font-size: height: 25%
 ```
 - Multiple Values: You can use the plus symbol (`+`) to combine multiple values. For example, `m-10+20` sets the margin to `10px` on the top and bottom and `20px` on the left and right.
-```http
-input:  p-0+30
-output: padding: 0px 30px
+```js
+class="p-0+30" // padding: 0px 30px
 ```
 - Combination with Other Types: You can combine values with other types of values using the plus symbol (`+`). For example, `b-2+solid+$baz` sets the border width to `2px`, the border style to `solid`, and the border color to the CSS variable `--baz`.
-```http
-input:  outline-3+dashed+$bar
-output: outline: 3px dashed var(--bar)
+```js
+class="outline-3+dashed+$bar" // outline: 3px dashed var(--bar)
 ```
 
 ### Configuration
@@ -304,7 +323,7 @@ You can customize the conversion object by using the `blick.config()` function. 
 
 Example:
 
-```javascript
+```js
 blick.config({
   class:{
     // Add 
@@ -413,10 +432,10 @@ The `screen` object defines states that are written to the class before `:`, for
 The keys of the `screen` object can be custom, you can write any prefix of your own that will define your own  media queries parameters.
 ---
 2. Added the ability to easily set transparency for a color using `/`.
-```html
-<div class="bg-red/50">   -> background:#ff000080
-<div class="c-$green/34"> -> color:#22c55e57
-<div class="bc-#00f/86">  -> border-color:#0000ffdb
+```js
+class="bg-red/50"   // background: #ff000080
+class="c-$green/34" // color: #22c55e57
+class="bc-#00f/86"  // border-color: #0000ffdb
 ```
 You can use any color format, color name, hex, rgb, and even using the `$var-name` variable (more on this below). The script will convert your color to a normal `hex`, provided you use a `/` between the color and transparency. The transparency value is arbitrary. As shown above, the variable `$green` was used, but this will not work with your variable, for example `bg-$foo/25`, it will turn into `background: var(--foo); opacity: 0.25`. For this to work with your color in a variable, you need to write it in a configuration object (the best option is to write it in hex format).
 ```js
