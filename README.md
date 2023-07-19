@@ -114,19 +114,20 @@ Here's an example of an object with classes:
 ```
 
 - key - means the first part of the class before or between the dash   
-`(m -> margin, p -> padding)`.
+`m -> margin, p -> padding`.
 
 - prop - defines a CSS property using the `$` character, your value will be inserted instead of `$`   
-`(m-20 -> margin: 20px)`.
+`m-20 -> margin: 20px`.
 
 - def - used in conjunction with `prop`, it sets the unit of measurement for numeric values. If the end of the numeric value is not a number, def will not be added   
-`(m-2em -> margin: 2em)`.
+`m-5   -> margin: 5px`   
+`m-5em -> margin: 5em`.
 
 - vals - prepared values that will be substituted for `$`   
-`(w-full -> width:100%)`.
+`w-full -> width: 100%`.
 
 - one - means one css class without a value   
-`(flex -> display:flex)`.
+`flex -> display: flex`.
 
 ### Combining classes with nested objects
 
