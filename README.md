@@ -1,4 +1,4 @@
-### Small library for quickly creating styles via classes and special attributes. An alternative to Tailwind for those who write their own values.
+### Small library for quickly creating styles via classes and special attributes. An alternative to Tailwind.
 
 ## Getting Started
 
