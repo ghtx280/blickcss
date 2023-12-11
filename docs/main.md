@@ -48,7 +48,14 @@ If you put it all together, classes and attributes are written according to this
 ### Read more:
 **[Properties](./props.md)**  
 **[Values](./values.md)**  
-**[States](./states.md) & [Media queries](./media-query.md)**  
+**[States](./states.md) & [Media queries](./media-query.md)** 
+
+---
+**[Attributes](./attributes.md)**  
+**[Colors](./colors.md)**  
+**[Attributes](./attributes.md)**  
+**[Wrapper](./wrapper.md)**  
+
 
 **For advanced**
 

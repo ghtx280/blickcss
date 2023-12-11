@@ -27,3 +27,6 @@ This can be customized! [Learn how](./config.md)
 ###  Read more:   
 **[Values](./values.md)**  
 **[States](./states.md) & [Media queries](./media-query.md)** 
+
+---
+### [home](./main.md)

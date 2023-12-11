@@ -49,3 +49,6 @@ You can specify either a simple `number` that will mean `(min-width: $px)`, or a
 ---
 ### Read more: 
 [Configuration](./config.md)
+
+---
+### [home](./main.md)

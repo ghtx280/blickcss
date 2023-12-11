@@ -71,3 +71,11 @@ config({
     }
 })
 ```
+
+
+---
+### Read more: 
+[Configuration](./config.md)
+
+---
+### [home](./main.md)

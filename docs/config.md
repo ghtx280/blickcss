@@ -259,3 +259,7 @@ Read only. `blick.version`
 **[Properties](./props.md)**  
 **[Values](./values.md)**  
 **[States](./states.md) & [Media queries](./media-query.md)** 
+
+
+---
+### [home](./main.md)
