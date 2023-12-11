@@ -18,10 +18,7 @@ npx blickcss
 ```
 ***
 
-## Documentation
-
-**!!! Important** Read the [documentation](./docs/main.md) before get started with BlickCss.
-
+## [Documentation](./docs/main.md)
 
 ## PLAYGROUND & other
 
