@@ -18,7 +18,7 @@ npx blickcss
 ```
 ***
 
-## Dosc
+## Documentation
 
 **!!! Important** Read the [documentation](./docs/main.md) before get started with BlickCss.
 
