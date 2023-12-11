@@ -1,4 +1,7 @@
 node_modules
-*.html
+publish.js
 *.css
-blick.config.*
+*.html
+trash
+blick.config.js
+test.js

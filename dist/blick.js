@@ -1,1803 +1,1893 @@
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
+(() => {
+  // src/theme/attrs/text.js
+  var text_default = {
+    _name: "text",
+    _else: function({ style, states, token }) {
+      if (style.includes("/")) {
+        let [v1, v2, v3] = style.split("/");
+        if (+v1[0] && v3) {
+          return [
+            {
+              _prop: `font-size:$1;font-weight:$2;line-height:$3`,
+              _unit: ["px", "", "px"]
+            },
+            [v1, v2, v3]
+          ];
+        }
+        if (+v1[0]) {
+          return [
+            {
+              _prop: `font-size:$;font-weight:${v2}`,
+              _unit: "px"
+            },
+            [v1]
+          ];
+        }
+      } else {
+        if (+style[0]) {
+          return { _prop: "font-size:$", _unit: "px" };
+        }
+      }
+      return "color:$";
+    },
+    100: "font-weight:100",
+    200: "font-weight:200",
+    300: "font-weight:300",
+    400: "font-weight:400",
+    500: "font-weight:500",
+    600: "font-weight:600",
+    700: "font-weight:700",
+    800: "font-weight:800",
+    900: "font-weight:900",
+    nowrap: "white-space: nowrap",
+    light: "font-weight:300",
+    regular: "font-weight:400",
+    medium: "font-weight:500",
+    semibold: "font-weight:600",
+    bold: "font-weight:700",
+    extrabold: "font-weight:800",
+    tp: "color:transparent!important",
+    thin: "font-weight:lighter",
+    normal: "font-weight:normal",
+    bolder: "font-weight:bolder",
+    italic: "font-style: italic",
+    delete: "text-decoration-line:line-through",
+    line: "text-decoration-line:underline",
+    overline: "text-decoration-line:overline",
+    up: "text-transform:uppercase",
+    low: "text-transform:lowercase",
+    cap: "text-transform:capitalize",
+    center: "text-align:center",
+    left: "text-align:left",
+    right: "text-align:right",
+    justify: "text-align:justify",
+    mono: "font-family:var(--font-mono)",
+    serif: "font-family:var(--font-serif)",
+    sans: "font-family:var(--font-sans)",
+    vertical: "writing-mode:vertical-lr",
+    wrap: "word-wrap:break-word",
+    dots: "overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%",
+    cols: { _prop: "columns:$", _unit: "" },
+    lh: { _prop: "line-height:$", _unit: "" },
+    wg: { _prop: "font-weight:$", _unit: "" },
+    font: { _prop: "font-family:$", _unit: "" },
+    align: { _prop: "vertical-align:$", _unit: "" },
+    space: { _prop: "white-space:$", _unit: "" },
+    shadow: {
+      _one: "text-shadow:3px 3px 2px #0000004d",
+      _prop: "text-shadow:$",
+      _unit: "px"
+    },
+    stroke: {
+      _prop: "-webkit-text-stroke:$",
+      _unit: "px"
+    },
+    break: {
+      _prop: "word-break:$",
+      _vals: { all: "break-all", keep: "keep-all" },
+      _unit: ""
+    }
+  };
 
-// NAMESPACE OBJECT: ./src/theme/funcs.js
-var funcs_namespaceObject = {};
-__webpack_require__.r(funcs_namespaceObject);
-__webpack_require__.d(funcs_namespaceObject, {
-  calcVal: () => (calcVal),
-  config: () => (config),
-  css: () => (css),
-  format: () => (funcs_format),
-  getAlpha: () => (getAlpha),
-  getColor: () => (getColor),
-  getHex: () => (getHex)
-});
-
-// NAMESPACE OBJECT: ./src/store.js
-var store_namespaceObject = {};
-__webpack_require__.r(store_namespaceObject);
-__webpack_require__.d(store_namespaceObject, {
-  B_ATTRS_STORE: () => (B_ATTRS_STORE),
-  B_MQ_ARR: () => (B_MQ_ARR),
-  B_MQ_STORE: () => (B_MQ_STORE),
-  B_MQ_STRING: () => (B_MQ_STRING),
-  B_MQ_STR_COPY: () => (B_MQ_STR_COPY),
-  B_STYLE_STORE: () => (B_STYLE_STORE)
-});
-
-;// CONCATENATED MODULE: ./src/theme/class.js
-const w_vals = {
-  full: "100%",
-  half: "50%",
-  min: "min-content",
-  fit: "fit-content",
-  max: "max-content",
-  screen: "100vw"
-}
-const h_vals = {
-  full: "100%",
-  half: "50%",
-  min: "min-content",
-  fit: "fit-content",
-  max: "max-content",
-  screen: "100vh"
-}
-const c_vals = {
-  c: "center",
-  bl: "baseline",
-  s: "start",
-  e: "end",
-  sb: "space-between",
-  sa: "space-around",
-  se: "space-evenly"
-}
-const i_vals = {
-  c: "center",
-  bl: "baseline",
-  s: "start",
-  e: "end",
-  st: "stretch"
-}
-
-const classes = {
-  m: {
-    prop: "margin:$",
-    def: "px"
-  },
-  my: {
-    prop: "margin-top:$;margin-bottom:$",
-    def: "px"
-  },
-  mx: {
-    prop: "margin-left:$;margin-right:$",
-    def: "px"
-  },
-  mt: {
-    prop: "margin-top:$",
-    def: "px"
-  },
-  mr: {
-    prop: "margin-right:$",
-    def: "px"
-  },
-  mb: {
-    prop: "margin-bottom:$",
-    def: "px"
-  },
-  ml: {
-    prop: "margin-left:$",
-    def: "px"
-  },
-  ms: {
-    prop: "margin-inline-start:$",
-    def: "px"
-  },
-  me: {
-    prop: "margin-inline-end:$",
-    def: "px"
-  },
-  center: "margin:auto",
-  p: {
-    prop: "padding:$",
-    def: "px"
-  },
-  py: {
-    prop: "padding-top:$;padding-bottom:$",
-    def: "px"
-  },
-  px: {
-    prop: "padding-left:$;padding-right:$",
-    def: "px"
-  },
-  pt: {
-    prop: "padding-top:$",
-    def: "px"
-  },
-  pr: {
-    prop: "padding-right:$",
-    def: "px"
-  },
-  pb: {
-    prop: "padding-bottom:$",
-    def: "px"
-  },
-  pl: {
-    prop: "padding-left:$",
-    def: "px"
-  },
-  ps: {
-    prop: "padding-inline-start:$",
-    def: "px"
-  },
-  pe: {
-    prop: "padding-inline-end:$",
-    def: "px"
-  },
-  space:{
-    prop:"margin-left:$", _s:">*+*", def:"px",
-    x:{ prop:"margin-left:$", _s:">*+*", def:"px" },
-    y:{ prop:"margin-top:$",  _s:">*+*", def:"px" },
-  },
-  b: {
-    prop: "border-width:$",
-    def: "px"
-  },
-  bt: {
-    prop: "border-top-width:$",
-    def: "px"
-  },
-  br: {
-    prop: "border-right-width:$",
-    def: "px"
-  },
-  bb: {
-    prop: "border-bottom-width:$",
-    def: "px"
-  },
-  bl: {
-    prop: "border-left-width:$",
-    def: "px"
-  },
-  bc: {
-    prop: "border-color:$",
-    vals: {
-      f: "#fff",
-      0: "#000",
-      tp: "transparent",
-      cc: "currentcolor"
-    }
-  },
-  bs: {
-    prop: "border-style:$"
-  },
-  border: {
-    one: "border:1px solid",
-    prop: "border:$",
-    def: "px"
-  },
-  outline: {
-    prop: "outline:$",
-    def: "px"
-  },
-  fill: {
-    prop: "fill:$",
-    vals: {
-      f: "#fff",
-      0: "#000",
-      tp: "transparent",
-      cc: "currentcolor"
-    }
-  },
-  stroke: {
-    prop: "stroke:$",
-    vals: {
-      f: "#fff",
-      0: "#000",
-      tp: "transparent",
-      cc: "currentcolor"
-    }
-  },
-  unappearance: "appearance:none",
-  unapp: "appearance:none",
-  scale: {
-    prop: "scale:$"
-  },
-  rotate: {
-    prop: "rotate:$",
-    def: "deg"
-  },
-  translate: {
-    prop: "translate:$",
-    def: "px"
-  },
-  skew: {
-    prop: "transform:skew($)",
-    def: "deg",
-    join: ",",
-    x: {
-      prop: "transform:skewX($)",
-      def: "deg"
+  // src/theme/class.js
+  var w_vals = {
+    full: "100%",
+    half: "50%",
+    min: "min-content",
+    fit: "fit-content",
+    max: "max-content",
+    screen: "100vw"
+  };
+  var h_vals = {
+    full: "100%",
+    half: "50%",
+    min: "min-content",
+    fit: "fit-content",
+    max: "max-content",
+    screen: "100vh"
+  };
+  var c_vals = {
+    c: "center",
+    bl: "baseline",
+    s: "start",
+    e: "end",
+    sb: "space-between",
+    sa: "space-around",
+    se: "space-evenly"
+  };
+  var i_vals = {
+    c: "center",
+    bl: "baseline",
+    s: "start",
+    e: "end",
+    st: "stretch"
+  };
+  var classes = {
+    m: {
+      _prop: "margin:$",
+      _unit: "px"
     },
-    y: {
-      prop: "transform:skewY($)",
-      def: "deg"
-    }
-  },
-  flip: {
-    one: "scale:-1 -1",
-    prop: "scale:$",
-    vals: {
-      x: "-1 1",
-      y: "1 -1"
-    }
-  },
-  clamp: {
-    prop: "overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:$"
-  },
-  inset: {
-    prop:  "inset:$",
-    x: { prop:"left:$;right:$"},
-    y: { prop:"top:$;bottom:$"},
-  },
-  start: {prop:"inset-inline-start:$"},
-  end: {prop:"inset-inline-end:$"},
-  tf: {
-    prop: "transform:$",
-    sc: {
-      prop: "transform:scale($)",
-      join: ","
+    my: {
+      _prop: "margin-top:$1;margin-bottom:$2",
+      _unit: "px"
     },
-    sc3d: {
-      prop: "transform:scale3d($)",
-      join: ","
+    mx: {
+      _prop: "margin-left:$1;margin-right:$2",
+      _unit: "px"
     },
-    scx: {
-      prop: "transform:scaleX($)"
+    mt: {
+      _prop: "margin-top:$",
+      _unit: "px"
     },
-    scy: {
-      prop: "transform:scaleY($)"
+    mr: {
+      _prop: "margin-right:$",
+      _unit: "px"
     },
-    scz: {
-      prop: "transform:scaleZ($)"
+    mb: {
+      _prop: "margin-bottom:$",
+      _unit: "px"
     },
-    rt: {
-      prop: "transform:rotate($)",
-      def: "deg"
+    ml: {
+      _prop: "margin-left:$",
+      _unit: "px"
     },
-    rt3d: {
-      prop: "transform:rotate3d($)",
-      join: ","
+    ms: {
+      _prop: "margin-inline-start:$",
+      _unit: "px"
     },
-    rtx: {
-      prop: "transform:rotateX($)",
-      def: "deg"
+    me: {
+      _prop: "margin-inline-end:$",
+      _unit: "px"
     },
-    rty: {
-      prop: "transform:rotateY($)",
-      def: "deg"
+    center: "margin:auto",
+    p: {
+      _prop: "padding:$",
+      _unit: "px"
     },
-    rtz: {
-      prop: "transform:rotateZ($)",
-      def: "deg"
+    py: {
+      _prop: "padding-top:$1;padding-bottom:$2",
+      _unit: "px"
     },
-    tl: {
-      prop: "transform:translate($)",
-      def: "px",
-      join: ","
+    px: {
+      _prop: "padding-left:$1;padding-right:$2",
+      _unit: "px"
     },
-    tl3d: {
-      prop: "transform:translate3d($)",
-      join: ","
+    pt: {
+      _prop: "padding-top:$",
+      _unit: "px"
     },
-    tlx: {
-      prop: "transform:translateX($)",
-      def: "px"
+    pr: {
+      _prop: "padding-right:$",
+      _unit: "px"
     },
-    tly: {
-      prop: "transform:translateY($)",
-      def: "px"
+    pb: {
+      _prop: "padding-bottom:$",
+      _unit: "px"
     },
-    tlz: {
-      prop: "transform:translateZ($)",
-      def: "px"
+    pl: {
+      _prop: "padding-left:$",
+      _unit: "px"
     },
-    sk: {
-      prop: "transform:skew($)",
-      def: "deg",
-      join: ","
+    ps: {
+      _prop: "padding-inline-start:$",
+      _unit: "px"
     },
-    skx: {
-      prop: "transform:skewX($)",
-      def: "deg"
+    pe: {
+      _prop: "padding-inline-end:$",
+      _unit: "px"
     },
-    sky: {
-      prop: "transform:skewY($)",
-      def: "deg"
-    }
-  },
-  w: {
-    prop: "width:$",
-    vals: w_vals,
-    def: "px"
-  },
-  h: {
-    prop: "height:$",
-    vals: h_vals,
-    def: "px"
-  },
-  sq: {
-    prop:"width:$;height:$",
-    def:"px"
-  },
-  max: {
+    space: {
+      _prop: "margin-left:$",
+      _selector: "$>*+*",
+      _unit: "px",
+      x: { _prop: "margin-left:$", _selector: "$>*+*", _unit: "px" },
+      y: { _prop: "margin-top:$", _selector: "$>*+*", _unit: "px" }
+    },
+    b: {
+      _prop: "border-width:$",
+      _unit: "px"
+    },
+    bt: {
+      _prop: "border-top-width:$",
+      _unit: "px"
+    },
+    br: {
+      _prop: "border-right-width:$",
+      _unit: "px"
+    },
+    bb: {
+      _prop: "border-bottom-width:$",
+      _unit: "px"
+    },
+    bl: {
+      _prop: "border-left-width:$",
+      _unit: "px"
+    },
+    bc: {
+      _prop: "border-color:$",
+      _vals: {
+        f: "#fff",
+        0: "#000",
+        tp: "transparent",
+        cc: "currentcolor"
+      }
+    },
+    bs: {
+      _prop: "border-style:$"
+    },
+    border: {
+      _one: "border:1px solid",
+      _prop: "border:$",
+      _unit: "px"
+    },
+    outline: {
+      _prop: "outline:$",
+      _unit: "px"
+    },
+    fill: {
+      _prop: "fill:$",
+      _vals: {
+        f: "#fff",
+        0: "#000",
+        tp: "transparent",
+        cc: "currentcolor"
+      }
+    },
+    stroke: {
+      _prop: "stroke:$",
+      _vals: {
+        f: "#fff",
+        0: "#000",
+        tp: "transparent",
+        cc: "currentcolor"
+      }
+    },
+    unappearance: "appearance:none",
+    unapp: "appearance:none",
+    scale: {
+      _prop: "scale:$"
+    },
+    rotate: {
+      _prop: "rotate:$",
+      _unit: "deg"
+    },
+    translate: {
+      _prop: "translate:$",
+      _unit: "px"
+    },
+    skew: {
+      _prop: "transform:skew($)",
+      _unit: "deg",
+      _join: ",",
+      x: {
+        _prop: "transform:skewX($)",
+        _unit: "deg"
+      },
+      y: {
+        _prop: "transform:skewY($)",
+        _unit: "deg"
+      }
+    },
+    flip: {
+      _one: "scale:-1 -1",
+      _prop: "scale:$",
+      _vals: {
+        x: "-1 1",
+        y: "1 -1"
+      }
+    },
+    clamp: {
+      _prop: "overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:$"
+    },
+    inset: {
+      _prop: "inset:$",
+      x: { _prop: "left:$;right:$" },
+      y: { _prop: "top:$;bottom:$" }
+    },
+    start: { _prop: "inset-inline-start:$" },
+    end: { _prop: "inset-inline-end:$" },
+    tf: {
+      _prop: "transform:$",
+      sc: {
+        _prop: "transform:scale($)",
+        _join: ","
+      },
+      sc3d: {
+        _prop: "transform:scale3d($)",
+        _join: ","
+      },
+      scx: {
+        _prop: "transform:scaleX($)"
+      },
+      scy: {
+        _prop: "transform:scaleY($)"
+      },
+      scz: {
+        _prop: "transform:scaleZ($)"
+      },
+      rt: {
+        _prop: "transform:rotate($)",
+        _unit: "deg"
+      },
+      rt3d: {
+        _prop: "transform:rotate3d($)",
+        _join: ","
+      },
+      rtx: {
+        _prop: "transform:rotateX($)",
+        _unit: "deg"
+      },
+      rty: {
+        _prop: "transform:rotateY($)",
+        _unit: "deg"
+      },
+      rtz: {
+        _prop: "transform:rotateZ($)",
+        _unit: "deg"
+      },
+      tl: {
+        _prop: "transform:translate($)",
+        _unit: "px",
+        _join: ","
+      },
+      tl3d: {
+        _prop: "transform:translate3d($)",
+        _join: ","
+      },
+      tlx: {
+        _prop: "transform:translateX($)",
+        _unit: "px"
+      },
+      tly: {
+        _prop: "transform:translateY($)",
+        _unit: "px"
+      },
+      tlz: {
+        _prop: "transform:translateZ($)",
+        _unit: "px"
+      },
+      sk: {
+        _prop: "transform:skew($)",
+        _unit: "deg",
+        _join: ","
+      },
+      skx: {
+        _prop: "transform:skewX($)",
+        _unit: "deg"
+      },
+      sky: {
+        _prop: "transform:skewY($)",
+        _unit: "deg"
+      }
+    },
     w: {
-      prop: "max-width:$",
-      vals: w_vals,
-      def: "px"
+      _prop: "width:$",
+      _vals: w_vals,
+      _unit: "px"
     },
     h: {
-      prop: "max-height:$",
-      vals: h_vals,
-      def: "px"
-    }
-  },
-  min: {
-    w: {
-      prop: "min-width:$",
-      vals: w_vals,
-      def: "px"
+      _prop: "height:$",
+      _vals: h_vals,
+      _unit: "px"
     },
-    h: {
-      prop: "min-height:$",
-      vals: h_vals,
-      def: "px"
-    }
-  },
-  minW: {
-    prop: "min-width:$",
-    vals: w_vals,
-    def: "px"
-  },
-  minH: {
-    prop: "min-height:$",
-    vals: h_vals,
-    def: "px"
-  },
-  maxW: {
-    prop: "max-width:$",
-    vals: w_vals,
-    def: "px"
-  },
-  maxH: {
-    prop: "max-height:$",
-    vals: h_vals,
-    def: "px"
-  },
-  d: {
-    prop: "display:$",
-    vals: {
-      inblock: "inline-block",
-      inflex:  "inline-flex",
-      ingrid:  "inline-grid"
-    }
-  },
-  table:{
-    one: 'display:table',
-    prop:"display:table-$"
-  },
-  inline: "display:inline",
-  block: "display:block",
-  inblock: "display:inline-block",
-  inflex: "display:inline-flex",
-  ingrid: "display:inline-grid",
-  hide: "display:none",
-  hidden: "display:none",
-  upper: "text-transform:uppercase",
-  uppercase: "text-transform:uppercase",
-  lower: "text-transform:lowercase",
-  lowercase: "text-transform:lowercase",
-  capit: "text-transform:capitalize",
-  capitalize: "text-transform:capitalize",
-  pos: {
-    prop: "position:$"
-  },
-  static: "position:static",
-  abs: "position:absolute",
-  absolute: "position:absolute",
-  rel: "position:relative",
-  relative: "position:relative",
-  sticky: "position:sticky",
-  fixed: "position:fixed",
-  r: {
-    prop: "border-radius:$",
-    def: "px"
-  },
-  round: {
-    one: "border-radius:9999px",
-    prop: "border-radius:$",
-    def: "px"
-  },
-  sharp: "border-radius:0",
-  transition: {
-    prop: "transition:$",
-    def: "ms"
-  },
-  time: {
-    prop: "transition:$",
-    def: "ms"
-  },
-  select: {
-    prop: "user-select:$"
-  },
-  fit: {
-    prop: "object-fit:$",
-    top:	'object-position:top',
-    bottom:	'object-position:bottom',
-    center:	'object-position:center',
-    left:	{
-      one:'object-position:left',
-      prop:"object-position:left $"
+    sq: {
+      _prop: "width:$1;height:$2",
+      _vals: { full: "100%" },
+      _unit: "px"
     },
-    right:	{
-      one:'object-position:right',
-      prop:"object-position:right $"
+    max: {
+      w: {
+        _prop: "max-width:$",
+        _vals: w_vals,
+        _unit: "px"
+      },
+      h: {
+        _prop: "max-height:$",
+        _vals: h_vals,
+        _unit: "px"
+      }
     },
-  },
-  bg: {
-    prop: "background:$",
-    tp: "background-color:transparent",
-    cc: "background-color:currentcolor",
-    f: "background-color:#fff",
-    0: "background-color:#000",
-    fixed: "background-attachment:fixed",
-    local: "background-attachment:local",
-    scroll: "background-attachment:scroll",
-    clip: {
-      border: "background-clip:border-box",
-      padding: "background-clip:padding-box",
-      content: "background-clip:content-box",
-      text: "background-clip:text",
+    min: {
+      w: {
+        _prop: "min-width:$",
+        _vals: w_vals,
+        _unit: "px"
+      },
+      h: {
+        _prop: "min-height:$",
+        _vals: h_vals,
+        _unit: "px"
+      }
     },
-    origin: {
-      border: "background-origin:border-box",
-      padding: "background-origin:padding-box",
-      content: "background-origin:content-box"
-    }
-  },
-  bgp: {
-    prop:"background-position:$",
-    x: { prop:"background-position-x:$" },
-    y: { prop:"background-position-y:$" }
-  },
-  c: {
-    prop: "color:$",
-    vals: {
-      f: "#fff",
-      0: "#000",
-      tp: "transparent",
-      cc: "currentcolor",
-      
+    minW: {
+      _prop: "min-width:$",
+      _vals: w_vals,
+      _unit: "px"
     },
-    
-  },
-  accent: {
-    prop: "accent-color:$",
-    vals: {
-      f: "#fff",
-      0: "#000",
-      tp: "transparent",
-      cc: "currentcolor"
-    }
-  },
-  caret: {
-    prop: "caret-color:$",
-    vals: {
-      f: "#fff",
-      0: "#000",
-      tp: "transparent",
-      cc: "currentcolor"
-    }
-  },
-  over: {
-    prop: "overflow:$",
-    x: {
-      prop: "overflow-x:$"
+    minH: {
+      _prop: "min-height:$",
+      _vals: h_vals,
+      _unit: "px"
     },
-    y: {
-      prop: "overflow-y:$"
-    }
-  },
-  snap: {
-    x: "scroll-snap-type:x mandatory",
-    y: "scroll-snap-type:y mandatory",
-    start: "scroll-snap-align:start",
-    center: "scroll-snap-align:center",
-    end: "scroll-snap-align:end",
-    stop: "scroll-snap-stop: always"
-  },
-  shadow: {
+    maxW: {
+      _prop: "max-width:$",
+      _vals: w_vals,
+      _unit: "px"
+    },
+    maxH: {
+      _prop: "max-height:$",
+      _vals: h_vals,
+      _unit: "px"
+    },
+    d: {
+      _prop: "display:$",
+      _vals: {
+        inblock: "inline-block",
+        inflex: "inline-flex",
+        ingrid: "inline-grid"
+      }
+    },
+    table: {
+      _one: "display:table",
+      _prop: "display:table-$"
+    },
+    inline: "display:inline",
+    block: "display:block",
+    inblock: "display:inline-block",
+    inflex: "display:inline-flex",
+    ingrid: "display:inline-grid",
+    hide: "display:none",
+    hidden: "display:none",
+    upper: "text-transform:uppercase",
+    uppercase: "text-transform:uppercase",
+    lower: "text-transform:lowercase",
+    lowercase: "text-transform:lowercase",
+    capit: "text-transform:capitalize",
+    capitalize: "text-transform:capitalize",
+    pos: {
+      _prop: "position:$"
+    },
+    static: "position:static",
+    abs: "position:absolute",
+    absolute: "position:absolute",
+    rel: "position:relative",
+    relative: "position:relative",
+    sticky: "position:sticky",
+    fixed: "position:fixed",
+    r: {
+      _prop: "border-radius:$",
+      _unit: "px"
+    },
+    round: {
+      _one: "border-radius:9999px",
+      _prop: "border-radius:$",
+      _unit: "px"
+    },
+    sharp: "border-radius:0",
+    transition: {
+      _prop: "transition:$",
+      _unit: "ms"
+    },
+    time: {
+      _prop: "transition:$",
+      _unit: "ms"
+    },
+    select: {
+      _prop: "user-select:$"
+    },
+    fit: {
+      _prop: "object-fit:$",
+      top: "object-position:top",
+      bottom: "object-position:bottom",
+      center: "object-position:center",
+      left: {
+        _one: "object-position:left",
+        _prop: "object-position:left $"
+      },
+      right: {
+        _one: "object-position:right",
+        _prop: "object-position:right $"
+      }
+    },
+    bg: {
+      _prop: "background:$",
+      tp: "background-color:transparent",
+      cc: "background-color:currentcolor",
+      f: "background-color:#fff",
+      0: "background-color:#000",
+      fixed: "background-attachment:fixed",
+      local: "background-attachment:local",
+      scroll: "background-attachment:scroll",
+      clip: {
+        border: "background-clip:border-box",
+        padding: "background-clip:padding-box",
+        content: "background-clip:content-box",
+        text: "background-clip:text"
+      },
+      origin: {
+        border: "background-origin:border-box",
+        padding: "background-origin:padding-box",
+        content: "background-origin:content-box"
+      }
+    },
+    bgp: {
+      _prop: "background-position:$",
+      x: { _prop: "background-position-x:$" },
+      y: { _prop: "background-position-y:$" }
+    },
+    c: {
+      _prop: "color:$",
+      _vals: {
+        f: "#fff",
+        0: "#000",
+        tp: "transparent",
+        cc: "currentcolor"
+      }
+    },
+    accent: {
+      _prop: "accent-color:$",
+      _vals: {
+        f: "#fff",
+        0: "#000",
+        tp: "transparent",
+        cc: "currentcolor"
+      }
+    },
+    caret: {
+      _prop: "caret-color:$",
+      _vals: {
+        f: "#fff",
+        0: "#000",
+        tp: "transparent",
+        cc: "currentcolor"
+      }
+    },
+    over: {
+      _prop: "overflow:$",
+      x: {
+        _prop: "overflow-x:$"
+      },
+      y: {
+        _prop: "overflow-y:$"
+      }
+    },
+    snap: {
+      x: "scroll-snap-type:x mandatory",
+      y: "scroll-snap-type:y mandatory",
+      start: "scroll-snap-align:start",
+      center: "scroll-snap-align:center",
+      end: "scroll-snap-align:end",
+      stop: "scroll-snap-stop: always"
+    },
+    shadow: {
+      box: {
+        _prop: "box-shadow:$",
+        _one: "box-shadow:3px 4px 3px #0000004d",
+        _unit: "px"
+      },
+      text: {
+        _prop: "text-shadow:$",
+        _one: "text-shadow:3px 4px 3px #0000004d",
+        _unit: "px"
+      }
+    },
+    cursor: {
+      _prop: "cursor:$"
+    },
+    resize: {
+      _prop: "resize:$",
+      _vals: {
+        x: "horizontal",
+        y: "vertical"
+      }
+    },
+    top: {
+      _prop: "top:$",
+      _unit: "px"
+    },
+    right: {
+      _prop: "right:$",
+      _unit: "px"
+    },
+    bottom: {
+      _prop: "bottom:$",
+      _unit: "px"
+    },
+    left: {
+      _prop: "left:$",
+      _unit: "px"
+    },
+    ratio: {
+      _prop({ src, rawVal, val }) {
+        return `aspect-ratio:${+rawVal[0] ? rawVal.split("/").join(" / ") : val}`;
+      },
+      _vals: {
+        sqr: "1 / 1",
+        vid: "16 / 9"
+      }
+    },
     box: {
-      prop: "box-shadow:$",
-      one: "box-shadow:3px 4px 3px #0000004d",
-      def: "px"
+      _prop: "box-sizing:$",
+      _vals: {
+        content: "content-box",
+        border: "border-box"
+      },
+      decoration: { _prop: "box-decoration-break:$" }
+    },
+    float: {
+      _prop: "float:$"
+    },
+    clear: {
+      _prop: "clear:$",
+      _vals: {
+        x: "horizontal",
+        y: "vertical"
+      }
+    },
+    z: {
+      _prop: "z-index:$"
+    },
+    visible: "visibility:visible",
+    invisible: "visibility:hidden",
+    collapse: "visibility:collapse",
+    opacity: {
+      _prop: ({ val }) => `opacity:${val > 1 ? val / 100 : val}`
+    },
+    blend: {
+      _prop: "mix-blend-mode:$"
+    },
+    hue: {
+      _prop: "filter:hue-rotate($)",
+      _unit: "deg"
+    },
+    invert: {
+      _one: "filter:invert(1)",
+      _prop: "filter:invert($)"
+    },
+    blur: {
+      _prop: "filter:blur($)",
+      _unit: "px"
+    },
+    brightness: {
+      _prop: "filter:brightness($)"
+    },
+    contrast: {
+      _prop: "filter:contrast($)"
+    },
+    saturate: {
+      _prop: "filter:saturate($)"
+    },
+    grayscale: {
+      _prop: "filter:grayscale($)",
+      _unit: "%"
+    },
+    sepia: {
+      _prop: "filter:sepia($)",
+      _unit: "%"
+    },
+    isolate: "isolation:isolate",
+    isolation: { _prop: "isolation:$" },
+    pointer: "cursor:pointer",
+    ws: {
+      _prop: "white-space:$"
+    },
+    list: {
+      _prop: "list-style:$",
+      item: "display:list-item"
+    },
+    spacing: {
+      _prop: "letter-spacing:$",
+      _unit: "px"
+    },
+    fs: {
+      _prop: "font-size:$",
+      _unit: "px"
+    },
+    fsz: {
+      _prop: "font-size:$",
+      _unit: "px"
+    },
+    fst: {
+      _prop: "font-style:$"
+    },
+    italic: "font-style:italic",
+    fw: {
+      _prop: "font-weight:$"
+    },
+    extrathin: "font-weight:100",
+    thin: "font-weight:200",
+    light: "font-weight:300",
+    regular: "font-weight:400",
+    medium: "font-weight:500",
+    semibold: "font-weight:600",
+    bold: "font-weight:700",
+    extrabold: "font-weight:800",
+    fv: {
+      _prop: "font-variant:$"
+    },
+    ff: {
+      _prop: "font-family:$",
+      _vals: {
+        sans: "var(--font-sans)",
+        serif: "var(--font-serif)",
+        mono: "var(--font-mono)"
+      }
+    },
+    lh: {
+      _prop: "line-height:$"
+    },
+    ta: {
+      _prop: "text-align:$"
+    },
+    underline: "text-decoration:underline",
+    td: {
+      _prop: "text-decoration:$",
+      _vals: {
+        line: "underline"
+      },
+      _unit: "px"
+    },
+    wb: {
+      _prop: "word-break:$",
+      _vals: {
+        all: "break-all",
+        keep: "keep-all"
+      }
+    },
+    break: {
+      _prop: "word-break:$",
+      _vals: {
+        all: "break-all",
+        keep: "keep-all"
+      },
+      after: { _prop: "break-after:$" },
+      before: { _prop: "break-before:$" },
+      inside: { _prop: "break-inside:$" }
+    },
+    grad: {
+      _prop: "background:linear-gradient($)",
+      _unit: "deg",
+      _join: ","
+    },
+    fullscreen: "position:absolute;left:0;top:0;width:100%;height:100%",
+    flex: {
+      _one: "display:flex",
+      _prop({ val, rawVal, src }) {
+        if (rawVal in src._vals) {
+          return "flex:" + val;
+        }
+        return "gap:" + val;
+      },
+      _vals: {
+        1: "1 1 0%",
+        auto: "1 1 auto",
+        initial: "0 1 auto"
+      },
+      _unit: "px",
+      center: "justify-content:center;align-items:center",
+      col: {
+        _one: "flex-direction:column",
+        rev: "flex-direction:column-reverse"
+      },
+      row: {
+        _one: "flex-direction:row",
+        rev: "flex-direction:row-reverse"
+      },
+      space: "justify-content:space-between;align-items:center",
+      evenly: "justify-content:space-evenly;align-items:center",
+      around: "justify-content:space-around;align-items:center",
+      wrap: {
+        _one: "flex-wrap:wrap",
+        rev: "flex-wrap:wrap-reverse"
+      },
+      nowrap: "flex-wrap:nowrap",
+      stretch: "align-items:stretch",
+      start: {
+        _one: "justify-content:flex-start",
+        top: "justify-content:flex-start;align-items:flex-start",
+        center: "justify-content:flex-start;align-items:center",
+        bottom: "justify-content:flex-start;align-items:flex-end"
+      },
+      end: {
+        _one: "justify-content:flex-end",
+        top: "justify-content:flex-end;align-items:flex-start",
+        center: "justify-content:flex-end;align-items:center",
+        bottom: "justify-content:flex-end;align-items:flex-end"
+      },
+      top: {
+        _one: "align-items:flex-start",
+        start: "justify-content:flex-start;align-items:flex-start",
+        center: "justify-content:center;align-items:flex-start",
+        end: "justify-content:flex-end;align-items:flex-start"
+      },
+      bottom: {
+        _one: "align-items:flex-end",
+        start: "justify-content:flex-start;align-items:flex-end",
+        center: "justify-content:center;align-items:flex-end",
+        end: "justify-content:flex-end;align-items:flex-end"
+      }
+    },
+    col: {
+      _one: "flex-direction:column",
+      rev: "flex-direction:column-reverse",
+      _prop: "grid-column:$",
+      span: {
+        _prop: "grid-column:span $ / span $",
+        full: "grid-column:1 / -1"
+      },
+      start: { _prop: "grid-column-start:$" },
+      end: { _prop: "grid-column-end:$" }
+    },
+    row: {
+      _one: "flex-direction:row",
+      rev: "flex-direction:row-reverse",
+      _prop: "grid-row:$",
+      span: {
+        _prop: "grid-row:span $ / span $",
+        full: "grid-row:1 / -1"
+      },
+      start: { _prop: "grid-row-start:$" },
+      end: { _prop: "grid-row-end:$" }
+    },
+    flow: {
+      _prop: "grid-auto-flow:$",
+      _vals: {
+        col: "column",
+        "col-dense": "column dense",
+        "row dense": "row dense"
+      }
+    },
+    auto: {
+      cols: {
+        _prop: "grid-auto-columns:$",
+        _vals: {
+          min: "min-content",
+          max: "max-content",
+          fr: "minmax(0,1fr)"
+        }
+      },
+      rows: {
+        _prop: "grid-auto-rows:$",
+        _vals: {
+          min: "min-content",
+          max: "max-content",
+          fr: "minmax(0,1fr)"
+        }
+      }
+    },
+    gap: {
+      _prop: "gap:$",
+      _unit: "px",
+      x: {
+        _prop: "column-gap:$",
+        _unit: "px"
+      },
+      y: {
+        _prop: "row-gap:$",
+        _unit: "px"
+      }
+    },
+    jc: {
+      _prop: "justify-content:$",
+      _vals: c_vals
+    },
+    ji: {
+      _prop: "justify-items:$",
+      _vals: i_vals
+    },
+    js: {
+      _prop: "justify-self:$",
+      _vals: i_vals
+    },
+    ac: {
+      _prop: "align-content:$",
+      _vals: c_vals
+    },
+    ai: {
+      _prop: "align-items:$",
+      _vals: i_vals
+    },
+    as: {
+      _prop: "align-self:$",
+      _vals: i_vals
+    },
+    order: {
+      _prop: "order:$",
+      _vals: {
+        first: "-9999",
+        last: "9999",
+        n_one: "0"
+      }
+    },
+    basis: {
+      _prop: "flex-basis:$"
+    },
+    grow: {
+      _one: "flex-grow:1",
+      _prop: "flex-grow:$"
+    },
+    shrink: {
+      _one: "flex-shrink:1",
+      _prop: "flex-shrink:$"
+    },
+    grid: {
+      _one: "display:grid",
+      cols: {
+        _prop: "grid-template-columns:repeat($,1fr)"
+      },
+      rows: {
+        _prop: "grid-template-rows:repeat($,1fr)"
+      }
+    },
+    sw: {
+      _prop: "stroke-width: $",
+      _unit: "px"
     },
     text: {
-      prop: "text-shadow:$",
-      one: "text-shadow:3px 4px 3px #0000004d",
-      def: "px"
+      _prop: function({ rawVal }) {
+        let [v1, v2, v3] = rawVal.split("/");
+        if (+v1[0] && v3) {
+          return {
+            _prop: `font-size:$1;font-weight:$2;line-height:$3`,
+            _values: [v1, v2, v3]
+          };
+        }
+        if (+v1[0] && v2) {
+          return {
+            _prop: `font-size:$1;font-weight:$2`,
+            _values: [v1, v2]
+          };
+        }
+        if (+v1[0]) {
+          return "font-size:$1";
+        }
+        return "color:$";
+      },
+      _unit: ["px", "", "px"],
+      ...text_default
     }
-  },
-  cursor: {
-    prop: "cursor:$"
-  },
-  resize: {
-    prop: "resize:$",
-    vals: {
-      x: "horizontal",
-      y: "vertical"
-    }
-  },
-  top: {
-    prop: "top:$",
-    def: "px"
-  },
-  right: {
-    prop: "right:$",
-    def: "px"
-  },
-  bottom: {
-    prop: "bottom:$",
-    def: "px"
-  },
-  left: {
-    prop: "left:$",
-    def: "px"
-  },
-  ratio: {
-    prop: ({val}) => `aspect-ratio:${val}`,
-    vals: {
-      sqr: "1 / 1",
-      vid: "16 / 9"
-    }
-  },
-  box: {
-    prop: "box-sizing:$",
-    vals: {
-      content: "content-box",
-      border: "border-box"
-    },
-    decoration: { prop:"box-decoration-break:$" },
-  },
-  
-  float: {
-    prop: "float:$"
-  },
-  clear: {
-    prop: "clear:$",
-    vals: {
-      x: "horizontal",
-      y: "vertical"
-    }
-  },
-  z: {
-    prop: "z-index:$"
-  },
-  visible:"visibility:visible",
-  invisible: "visibility:hidden",
-  collapse: "visibility:collapse",
-  opacity: {
-    prop: ({val}) => `opacity:${val / 100}`
-  },
-  blend: {
-    prop: "mix-blend-mode:$"
-  },
-  hue: {
-    prop: "filter:hue-rotate($)",
-    def: "deg"
-  },
-  invert: {
-    one: "filter:invert(1)",
-    prop: "filter:invert($)"
-  },
-  blur: {
-    prop: "filter:blur($)",
-    def: "px"
-  },
-  brightness: {
-    prop: "filter:brightness($)"
-  },
-  contrast: {
-    prop: "filter:contrast($)"
-  },
-  saturate: {
-    prop: "filter:saturate($)"
-  },
-  contrast: {
-    prop: "filter:contrast($)"
-  },
-  grayscale: {
-    prop: "filter:grayscale($)",
-    def: "%"
-  },
-  sepia: {
-    prop: "filter:sepia($)",
-    def: "%"
-  },
-  isolate: "isolation:isolate",
-  isolation: { prop:"isolation:$" },
-  pointer: "cursor:pointer",
-  ws: {
-    prop: "white-space:$"
-  },
-  list: {
-    prop: "list-style:$",
-    item: 'display:list-item'
-  },
-  spacing:{
-    prop:'letter-spacing:$',
-    def:'px'
-  },
-  fs: {
-    prop: "font-size:$",
-    def: "px"
-  },
-  fsz: {
-    prop: "font-size:$",
-    def: "px"
-  },
-  fst: {
-    prop: "font-style:$"
-  },
-  italic:"font-style:italic",
-  fw: {
-    prop: "font-weight:$"
-  },
-  light:"font-weight:300",
-  regular:"font-weight:400",
-  medium: "font-weight:500",
-  semibold: "font-weight:600",
-  bold: "font-weight:700",
-  extrabold: "font-weight:800",
-  fv: {
-    prop: "font-variant:$"
-  },
-  ff: {
-    prop: "font-family:$",
-    vals: {
-      sans: "var(--font-sans)",
-      serif: "var(--font-serif)",
-      mono: "var(--font-mono)"
-    }
-  },
-  lh: {
-    prop: "line-height:$"
-  },
-  ta: {
-    prop: "text-align:$"
-  },
-  underline: "text-decoration:underline",
-  td: {
-    prop: "text-decoration:$",
-    vals: {
-      line: "underline"
-    },
-    def: "px"
-  },
-  wb: {
-    prop: "word-break:$",
-    vals: {
-      all: "break-all",
-      keep: "keep-all"
-    }
-  },
-  break: {
-    prop: "word-break:$",
-    vals: {
-      all: "break-all",
-      keep: "keep-all"
-    },
-    after:  { prop: "break-after:$"  },
-    before: { prop: "break-before:$" },
-    inside: { prop: "break-inside:$" },
+  };
+  classes.object = classes.fit;
+  classes.overflow = classes.over;
+  classes.op = classes.opacity;
+  var class_default = classes;
 
-  },
-  grad: {
-    prop: "background:linear-gradient($)",
-    def: "deg",
-    join: ","
-  },
-  fullscreen: "position:absolute;left:0;top:0;width:100%;height:100%",
-  flex: {
-    one: "display:flex",
-    prop:"flex:$",
-    vals:{
-      1: "1 1 0%",
-      auto: "1 1 auto",
-      initial: "0 1 auto",
+  // src/theme/attrs/flex.js
+  var c_vals2 = {
+    c: "center",
+    bl: "baseline",
+    s: "start",
+    e: "end",
+    sb: "space-between",
+    sa: "space-around",
+    se: "space-evenly"
+  };
+  var i_vals2 = {
+    c: "center",
+    bl: "baseline",
+    s: "start",
+    e: "end",
+    st: "stretch"
+  };
+  var flex_default = {
+    _name: "flex",
+    _using: "display:flex",
+    _else: function(e) {
+      if (!isNaN(+e.style[0])) {
+        return { _prop: "gap:$", _unit: "px" };
+      }
     },
+    col: {
+      _one: "flex-direction:column",
+      start: "flex-direction:column;align-items:flex-start",
+      center: "flex-direction:column;align-items:center",
+      end: "flex-direction:column;align-items:flex-end",
+      rev: "flex-direction:column-reverse"
+    },
+    row: {
+      _one: "flex-direction:row",
+      start: "flex-direction:row;justify-content:flex-start",
+      center: "flex-direction:row;justify-content:center",
+      end: "flex-direction:row;justify-content:flex-end",
+      rev: "flex-direction:row-reverse"
+    },
+    order: { _prop: "order:$1" },
+    basis: { _prop: "flex-basis:$" },
     center: "justify-content:center;align-items:center",
-    col:{
-      one:"flex-direction:column",
-      rev:"flex-direction:column-reverse"
-    },
-    row:{
-      one: "flex-direction:row",
-      rev: "flex-direction:row-reverse",
-    },
     space: "justify-content:space-between;align-items:center",
-    wrap:{
-      one: "flex-wrap:wrap",
-      rev: "flex-wrap:wrap-reverse",
+    evenly: "justify-content: space-evenly;align-items:center",
+    around: "justify-content: space-around;align-items:center",
+    stretch: "align-items:stretch",
+    grow: { _one: "flex-grow:1", _prop: "flex-grow:$" },
+    shrink: { _one: "flex-shrink:1", _prop: "flex-shrink:$" },
+    start: "justify-content: flex-start",
+    end: "justify-content: flex-end",
+    top: "align-items: flex-start",
+    bottom: "align-items: flex-end",
+    wrap: {
+      _one: "flex-wrap:wrap",
+      _prop: "flex-wrap:$",
+      _vals: { rev: "wrap-reverse" }
     },
-    nowrap: "flex-wrap:nowrap",
-    stretch: "align-items:stretch"
+    jc: {
+      _prop: "justify-content:$",
+      _vals: c_vals2
+    },
+    ji: {
+      _prop: "justify-items:$",
+      _vals: i_vals2
+    },
+    ac: {
+      _prop: "align-content:$",
+      _vals: c_vals2
+    },
+    ai: {
+      _prop: "align-items:$",
+      _vals: i_vals2
+    }
+  };
 
-  },
-  col: {
-    one: "flex-direction:column",
-    rev: "flex-direction:column-reverse",
-    prop:'grid-column:$',
-    span: {
-      prop:"grid-column:span $ / span $",
-      full:"grid-column:1 / -1"
-    },
-    start: { prop:"grid-column-start:$" },
-    end:   { prop:"grid-column-end:$" },
-    
-  },
-  row: {
-    one: "flex-direction:row",
-    rev: "flex-direction:row-reverse",
-    prop:'grid-row:$',
-    span: {
-      prop:"grid-row:span $ / span $",
-      full:"grid-row:1 / -1"
-    },
-    start: { prop:"grid-row-start:$" },
-    end:   { prop:"grid-row-end:$" },
-  },
-  flow:{
-    prop:"grid-auto-flow:$",
-    vals:{
-      col:"column",
-      "col-dense":'column dense',
-      "row dense":'row dense'
-    }
-  },
-  auto:{
-    cols:{
-      prop:"grid-auto-columns:$",
-      vals:{
-        min: "min-content",
-        max: "max-content",
-        fr:	 "minmax(0,1fr)",
+  // src/theme/attrs/grid.js
+  var c_vals3 = {
+    c: "center",
+    bl: "baseline",
+    s: "start",
+    e: "end",
+    sb: "space-between",
+    sa: "space-around",
+    se: "space-evenly"
+  };
+  var i_vals3 = {
+    c: "center",
+    bl: "baseline",
+    s: "start",
+    e: "end",
+    st: "stretch"
+  };
+  var grid_default = {
+    _name: "grid",
+    _using: "display:grid",
+    _else: function(e) {
+      if (+e.style[0]) {
+        return [{ _prop: "gap:$", _unit: "px" }];
       }
     },
-    rows:{
-      prop:"grid-auto-rows:$",
-      vals:{
-        min: "min-content",
-        max: "max-content",
-        fr:	 "minmax(0,1fr)",
-      }
-    }
-  },
-  gap: {
-    prop: "gap:$",
-    def: "px",
-    x: {
-      prop: "column-gap:$",
-      def: "px"
-    },
-    y: {
-      prop: "row-gap:$",
-      def: "px"
-    }
-  },
-  jc: {
-    prop: "justify-content:$",
-    vals: c_vals
-  },
-  ji: {
-    prop: "justify-items:$",
-    vals: i_vals
-  },
-  js: {
-    prop: "justify-self:$",
-    vals: i_vals
-  },
-  ac: {
-    prop: "align-content:$",
-    vals: c_vals
-  },
-  ai: {
-    prop: "align-items:$",
-    vals: i_vals
-  },
-  as: {
-    prop: "align-self:$",
-    vals: i_vals
-  },
-  order: {
-    prop: "order:$",
-    vals:{
-      first: "-9999",
-      last: "9999",
-      none: "0",
-    }
-  },
-  basis: {
-    prop: "flex-basis:$"
-  },
-  grow: {
-    one: "flex-grow:1",
-    prop: "flex-grow:$"
-  },
-  shrink: {
-    one: "flex-shrink:1",
-    prop: "flex-shrink:$"
-  },
-  grid: {
-    one: "display:grid",
     cols: {
-      prop: "grid-template-columns:repeat($,1fr)"
+      _prop: "grid-template-columns:repeat($,1fr)"
     },
     rows: {
-      prop: "grid-template-rows:repeat($,1fr)"
-    }
-  }
-};
-
-classes.object   = classes.fit
-classes.overflow = classes.over
-
-/* harmony default export */ const theme_class = (classes);
-;// CONCATENATED MODULE: ./src/theme/flex.js
-const flex_c_vals = {
-  c: 'center',
-  bl: 'baseline',
-  s: 'start',
-  e: 'end',
-  sb: 'space-between',
-  sa: 'space-around',
-  se: 'space-evenly',
-}
-const flex_i_vals = {
-  c: 'center',
-  bl: 'baseline',
-  s: 'start',
-  e: 'end',
-  st: 'stretch',
-}
-
-/* harmony default export */ const flex = ({
-  col: {
-    one: 'flex-direction:column',
-    vals: {
-      start: 'flex-direction:column;align-items:flex-start',
-      center: 'flex-direction:column;align-items:center',
-      end: 'flex-direction:column;align-items:flex-end',
-      rev: 'flex-direction:column-reverse'
-    }
-  },
-  row: {
-    one: 'flex-direction:row',
-    vals: {
-      start: 'flex-direction:row;justify-content:flex-start',
-      center: 'flex-direction:row;justify-content:center',
-      end: 'flex-direction:row;justify-content:flex-end',
-      rev: 'flex-direction:row-reverse'
-    }
-  },
-  order: { prop: 'order:$',def:'' },
-  basis: { prop: 'flex-basis:$' },
-  center: 'justify-content:center;align-items:center' ,
-  space: 'justify-content:space-between;align-items:center' ,
-  stretch: 'align-items:stretch' ,
-  grow: { one: 'flex-grow:1', prop: 'flex-grow:$',def:'' },
-  shrink: { one: 'flex-shrink:1', prop: 'flex-shrink:$',def:'' },
-  wrap: {
-    one: 'flex-wrap:wrap',
-    prop: 'flex-wrap:$',
-    vals: { rev: 'wrap-reverse' }
-  },
-  jc: {
-    prop: 'justify-content:$',
-    vals: flex_c_vals
-  },
-  ji: {
-    prop: 'justify-items:$',
-    vals: flex_i_vals
-  },
-  ac: {
-    prop: 'align-content:$',
-    vals: flex_c_vals
-  },
-  ai: {
-    prop: 'align-items:$',
-    vals: flex_i_vals
-  },
-});
-;// CONCATENATED MODULE: ./src/theme/grid.js
-const grid_c_vals = {
-  c: 'center',
-  bl: 'baseline',
-  s: 'start',
-  e: 'end',
-  sb: 'space-between',
-  sa: 'space-around',
-  se: 'space-evenly',
-}
-const grid_i_vals = {
-  c: 'center',
-  bl: 'baseline',
-  s: 'start',
-  e: 'end',
-  st: 'stretch',
-}
-
-/* harmony default export */ const grid = ({
-  cols: {
-    prop: 'grid-template-columns:repeat($,1fr)', def:''
-  },
-  rows: {
-    prop: 'grid-template-rows:repeat($,1fr)', def:''
-  },
-  jc: {
-    prop: 'justify-content:$', vals: grid_c_vals
-  },
-  ji: {
-    prop: 'justify-items:$', vals: grid_i_vals
-  },
-  ac: {
-    prop: 'align-content:$', vals: grid_c_vals
-  },
-  ai: {
-    prop: 'align-items:$', vals: grid_i_vals
-  },
-});
-;// CONCATENATED MODULE: ./src/theme/text.js
-/* harmony default export */ const theme_text = ({
-  tp:       'color:transparent!important',
-  thin:     'font-weight:lighter',
-  normal:   'font-weight:normal',
-  bold:     'font-weight:bold',
-  bolder:   'font-weight:bolder',
-  italic:   'font-style: italic',
-  delete:   'text-decoration-line:line-through',
-  line:     'text-decoration-line:underline',
-  overline: 'text-decoration-line:overline',
-  up:       'text-transform:uppercase',
-  low:      'text-transform:lowercase',
-  cap:      'text-transform:capitalize',
-  center:  'text-align:center',
-  left:    'text-align:left',
-  right:   'text-align:right',
-  justify: 'text-align:justify',
-  mono:    'font-family:var(--font-mono)',
-  serif:   'font-family:var(--font-serif)',
-  sans:    'font-family:var(--font-sans)',
-  vertical: 'writing-mode:vertical-lr' ,
-  wrap:     'word-wrap:break-word',
-  dots:     'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%',
-  cols:    { prop: 'columns:$',        def:"" },
-  lh:      { prop: 'line-height:$',    def:"" },
-  wg:      { prop: 'font-weight:$',    def:"" },
-  font:    { prop: 'font-family:$',    def:"" },
-  align:   { prop: 'vertical-align:$', def:"" },
-  space:   { prop: 'white-space:$',    def:"" },
-  shadow:  {
-    one: 'text-shadow:3px 3px 2px #0000004d',
-    prop: 'text-shadow:$',
-    def: 'px',
-  },
-  stroke: {
-    prop: '-webkit-text-stroke:$',
-    def: 'px',
-  },
-  break: {
-    prop: 'word-break:$',
-    vals: { all: 'break-all', keep: 'keep-all', },
-    def:""
-  }
-});
-;// CONCATENATED MODULE: ./src/theme/screen.js
-/* harmony default export */ const screen = ({
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200
-});
-;// CONCATENATED MODULE: ./src/theme/states.js
-/* harmony default export */ const states = ({
-  h: `:hover`,
-  f: `:focus`,
-  c: `:checked`,
-  a: `:active`,
-  first: `>*:first-child`,
-  last: `>*:last-child`,
-  odd: `>*:nth-child(odd)`,
-  even: `>*:nth-child(even)`,
-  ft: `>*:first-child`,
-  lt: `>*:last-child`,
-  od: `>*:nth-child(odd)`,
-  ev: `>*:nth-child(even)`,
-  all: ` *`,
-  "*": ` *`,
-  every: `>*`,
-  ">": `>*`,
-  bt: `>*+*`,
-  between: `>*+*`,
-  aft: `::after`,
-  bef: `::before`,
-  after: `::after`,
-  before: `::before`,
-});
-;// CONCATENATED MODULE: ./src/theme/attr.js
-/* harmony default export */ const attr = ({
-  text: "text",
-  flex: "flex",
-  grid: "grid"
-});
-;// CONCATENATED MODULE: ./src/theme/colors.js
-/* harmony default export */ const colors = ({
-  black:  { def: "#000" },
-  white:  { def: "#fff" },
-  gray:   { def: "#6b7280", 1: "#f3f4f6", 2: "#d1d5db", 3: "#374151", 4: "#111827" }, 
-  red:    { def: "#ef4444", 1: "#fee2e2", 2: "#fca5a5", 3: "#b91c1c", 4: "#7f1d1d" }, 
-  orange: { def: "#f97316", 1: "#ffedd5", 2: "#fdba74", 3: "#c2410c", 4: "#7c2d12" }, 
-  yellow: { def: "#eab308", 1: "#fef9c3", 2: "#fde047", 3: "#a16207", 4: "#713f12" }, 
-  lime:   { def: "#84cc16", 1: "#ecfccb", 2: "#bef264", 3: "#4d7c0f", 4: "#365314" }, 
-  green:  { def: "#22c55e", 1: "#dcfce7", 2: "#86efac", 3: "#15803d", 4: "#14532d" }, 
-  cyan:   { def: "#06b6d4", 1: "#cffafe", 2: "#67e8f9", 3: "#0e7490", 4: "#164e63" }, 
-  blue:   { def: "#3b82f6", 1: "#dbeafe", 2: "#93c5fd", 3: "#1d4ed8", 4: "#1e3a8a" }, 
-  purple: { def: "#a855f7", 1: "#f3e8ff", 2: "#d8b4fe", 3: "#7e22ce", 4: "#581c87" }, 
-  pink:   { def: "#ec4899", 1: "#fce7f3", 2: "#f9a8d4", 3: "#be185d", 4: "#831843" }, 
-  
-});
-;// CONCATENATED MODULE: ./src/theme/font.js
-/* harmony default export */ const font = ({
-  main: "system-ui,-apple-system,sans-serif",
-  serif: "serif",
-  mono: "monospace",
-  sans: "sans-serif"
-});
-;// CONCATENATED MODULE: ./src/theme/reset.js
-/* harmony default export */ const theme_reset = (`*,::after,::before{box-sizing:border-box;object-fit:cover;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{text-decoration:none}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#fff}`);
- 
-// normalize_css
-//export default `html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}details,main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline dotted}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{color:inherit;display:table;max-width:100%;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio],legend{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}`
-
-;// CONCATENATED MODULE: ./src/funcs/calc-val.js
-
-
-
-/* harmony default export */ function calc_val(val, sel = {}, model = "class") {
-
-  function getColorCli(color, alpha) {
-    let result = ""
-    alpha = alpha / 100
-    try {
-      result = blick_obj._COLOR_(color).alpha(alpha || 0).string()
-    } catch (err) {
-      throw new SyntaxError(`Invalid color "${color}"`)
-    }
-    return result
-  }
-
-  if (!sel.p && typeof sel === "object") {
-    sel.p = sel;
-  }
-  if (val) {
-    return val
-      .split(/(?<!\\)\+/g)
-      .map((item) => {
-        item = item.replaceAll("\\", "");
-
-        if (item.includes("/")) { // c-505/50
-          const [n1, n2] = item.split("/");
-          if (isNaN(n1[0])) {
-            if (/^(\w|#)/.test(n1)) {
-              if (blick_obj._COLOR_) {
-                return getColorCli(n1, n2)
-              }
-              return getHex(n1) + getAlpha(n2)
-            }
-            else if(n1.startsWith("$")){
-              let color = getColor(n1.slice(1))
-              if (color) {
-                if (blick_obj._COLOR_) {
-                  return getColorCli(color, n2)
-                }
-                return getHex(color) + getAlpha(n2)
-              }
-              else return `var(--${n1.slice(1)});opacity:${n2 > 1 ? n2 / 100 : n2}`;
-            }
-            else return `${n1};opacity:${n2 > 1 ? n2 / 100 : n2}`
-          }
-          else return parseFloat(((n1 / n2) * 100).toFixed(2)) + "%";
-        }
-        else if (item.startsWith("$")) {
-          return `var(--${item.slice(1)})`;
-        }
-        else {
-          const defaultValue = sel.p?.def ?? (model !== "class" ? "px" : "");
-          return !isNaN(item) ? item + defaultValue : item;
-        }
-      })
-      .join(sel.p?.join ?? " ")
-      .replaceAll(/(?<!\\)_/g, " ");
-  } else {
-    return "";
-  }
-}
-
-;// CONCATENATED MODULE: ./src/funcs/create-val.js
-
-
-/* harmony default export */ function create_val(sel, model, str, attr) {
-  if (!sel.v) {
-    if (typeof sel.p === "string") {
-      return sel.p
-    }
-    else if(typeof sel.p === "function") {
-      return sel.p()
-    }
-    else if(typeof sel.p?.one === "function") {
-      return sel.p.one({ str, attr })
-    }
-    else return sel.p?.one
-  }
-  else if (sel.p) {
-    if(typeof sel.p === "function") {
-      return sel.p({
-        prop:sel.s?.prop,
-        val:sel.v,
-        sel:sel.s,
-        str,
-        attr
-      })  
-    }
-    else if (sel.p.prop) {
-      if (typeof sel.p.prop === "function") {
-        return sel.p.prop({
-          prop:sel.p?.prop,
-          val:sel.p?.vals?.[sel?.v] || sel?.v || "",
-          sel:sel.p,
-          rawVal:sel?.v,
-          str,
-          attr
-        })
-      }
-      else {
-        return sel.p.prop.replaceAll("$", sel.p.vals?.[sel.v] ?? calc_val(sel.v, sel, model)) 
-      }
-    }
-    else {
-      return sel.p.vals?.[sel.v]
-    }
-  }
-  else {
-    if (model === 'class') {
-      return false
-    }
-    else if (model === 'text') {
-      if (parseFloat(sel.v)) return `font-size:${calc_val(sel.v, false, model)}`
-      else return `color:${calc_val(sel.v, false, model)}`
-    }
-    else {
-      return `gap:${calc_val(sel.v, false, model)}`
-    }
-  }
-}
-;// CONCATENATED MODULE: ./src/funcs/format.js
-/* harmony default export */ function format(str, model = "class") {
-  let format = str;
-  
-  format = format
-  .replace(/[^\w-_]/g, '\\$&')
-  .replace(/^\d/, '\\3$& ')
-
-  if (model === "raw") return format
-
-  return model === 'class' ? `.${format}` : `[${model}~="${str}"]`;
-};
-
-;// CONCATENATED MODULE: ./src/funcs/get-mq-width.js
-/* harmony default export */ const get_mq_width = ((scr, raw) => {
-  const f = (str, st) => isNaN((str+"")[0]) ? str : `${st}-width:${str}`;
-  const u = num => isNaN(+num) ? num : `${num}px`
-
-  if (typeof scr === "object") {
-    const [min, max] = scr
-    if (raw) {
-      return u(max || min)
-    }
-    return `(${f(u(min),"min")})${max ? ` and (${f(u(max),"max")})` : ""}`
-  }
-  else {
-    if (raw) {
-      return  u((scr+"").replaceAll(/[()]/g, "").split(":").at(-1))
-    }
-    return scr[0] === "(" ? scr : `(${f(u(scr),"min")})`
-  }
-});
-;// CONCATENATED MODULE: ./src/funcs/val-path.js
-
-
-/* harmony default export */ function val_path(obj, path) {
-  let parts = path.split("-");
-  let value = obj || blick_obj["class"];
-  let prop
-  let prevProp
-
-  for (const i in parts) {
-    const part = parts[i];
-    value = value[part]
-
-    if (!value) {
-      let val = parts.slice(i).join("-");
-      return { p: prop, v: val, s: prevProp } 
-    }
-
-    prevProp = prop
-    prop = value
-  }
-  return { p: prop, v: false };
-}
-;// CONCATENATED MODULE: ./src/funcs/create-css.js
-
-
-
-
-
-
-
-/* harmony default export */ function create_css(str, params, _STORE_, attr_val) {
-  
-  let { B_STYLE_STORE, B_MQ_STORE, B_MQ_ARR } = _STORE_ || blick_obj._STORE_ || {}
-
-  let prev_str = str
-  let auto_state = ""
-  
-  const model = (typeof params === "object" ? params.model : params)  || "class"
-
-  const important = str.includes('!') ? str = str.replaceAll('!', '') : false
-
-  const [prop, ...states] = str.split(/(?<!\\):/g).reverse();
-
-  let dec = prop
-    .split(';')
-    .map(el => create_val(auto_state = val_path(blick_obj[model], el), model, str, attr_val))
-    .join(";")
-
-  auto_state = auto_state.p?._s || ""
-
-  if (dec === "false" || !dec) {
-    return false;
-  }
-
-  if (important) {
-    dec += '!important';
-  }
-  const selector = format(prev_str, blick_obj.attr[model] || 'class') + auto_state
-
-  if (!_STORE_) return params ? handle_data(params?.cli) : dec;
-
-
-  function handle_data(CLI) {
-    const CLI_PARAMS = {}
-
-    if (states.length) {
-      const state_type = {
-        media:  [],
-        pseudo: []
-      }
-  
-      for (const state of states.reverse()) {
-        state_type[B_MQ_ARR?.includes(state) ? "media" : "pseudo"].push(state)
-      }
-  
-      const str_state = state_type.pseudo.map(state => 
-        (state.startsWith("&") ? state.slice(1).replaceAll(/(?<!\\)_/g, " ") : false)
-        || blick_obj.states[state] 
-        || ":" + state
-      ).join("")
-      
-      if (state_type.media.length) {
-        for (const sc of state_type.media) {
-          let sel = ((sc === "dark" && !blick_obj.autoTheme) ? blick_obj.dark + " " : "") + selector + str_state
-          if (CLI) {
-            if (sc.startsWith(blick_obj.maxPrefix + '-')) {
-              CLI_PARAMS.media = `(max-width:${get_mq_width(blick_obj.screen[sc.slice(blick_obj.maxPrefix.length + 1)], true)})`
-            }
-            else {
-              CLI_PARAMS.media = get_mq_width(blick_obj.screen[sc])
-            }
-            CLI_PARAMS.mediaKey = sc
-            CLI_PARAMS.selector = sel
-            CLI_PARAMS.value = dec
-          }
-          else B_MQ_STORE[sc][sel] = dec
-        }
-      }
-      else {
-        if (CLI) {
-          CLI_PARAMS.selector = selector + str_state
-          CLI_PARAMS.value = dec
-        }
-        else B_STYLE_STORE[selector + str_state] = dec
-      }
-    }
-    else {
-      if (CLI) {
-        CLI_PARAMS.selector = selector
-        CLI_PARAMS.value = dec
-      }
-      else B_STYLE_STORE[selector] = dec 
-    }
-
-    return CLI_PARAMS
-  }
-  handle_data(false)
-}
-;// CONCATENATED MODULE: ./src/theme/funcs.js
-
-
-
-
-
-
-function config(updates, source = this, isFirstCall = true) {
-  if (typeof updates !== 'object') throw new Error('BlickCSS. The blick.config function must contain an object.');
-  for (let key in updates) {
-    if (typeof updates[key] === 'object' && updates[key] !== null && !Array.isArray(updates[key])) {
-      if (!source[key] || typeof source[key] == "string") {
-        source[key] = {};
-      }
-      this.config(updates[key], source[key], false);
-    } else {
-      source[key] = updates[key];
-    }
-  }
-  if (isFirstCall) {
-    // code on use config
-  }
-  return source;
-}
-
-function getHex(str){
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = str;
-  const color = ctx.fillStyle
-  canvas.remove()
-  return color
-}
-
-function getColor(str) {
-  const [colorName, shade] = str.split('-');
-
-  if (colors == undefined) {
-    colors
-  }
-
-  if (shade !== undefined) {
-    if (colors.hasOwnProperty(colorName) && colors[colorName].hasOwnProperty(shade)) {
-      return colors[colorName][shade];
-    }
-  }
-
-  return colors[colorName]?.["def" || 0];
-}
-
-function getAlpha(str) {
-  let shade = Math.round(+str / 100 * 255).toString(16);
-  if (shade.length === 1) {
-    shade = "0" + shade
-  }
-  return shade
-}
-
-const calcVal = calc_val
-const css = create_css
-const funcs_format = format
-;// CONCATENATED MODULE: ./src/blick-obj.js
-
-
-
-
-
-
-
-
-
-
-
-
-const blick_obj_blick = {
-  class:theme_class,
-  flex: flex,
-  grid: grid,
-  text: theme_text,
-  screen: screen,
-  states: states,
-  attr: attr,
-  colors: colors,
-  font: font,
-  reset: theme_reset,
-  
-  autoTheme: false,
-  root: true,
-  time: false,
-  wrapper:'.wrapper',
-  useAttr:true,
-  beautify:false,
-  beautifyOption:{},
-  maxPrefix:'m',
-  dark:".theme-dark",
-  autoFlex:true,
-
-  version: '1.3.6',
-
-  ...funcs_namespaceObject
-}
-
-/* harmony default export */ const blick_obj = (blick_obj_blick);
-
-
-;// CONCATENATED MODULE: ./src/style-tag.js
-let B_STYLE_TAG = {
-  textContent:""
-}
-
-if (typeof window !== "undefined") {
-  B_STYLE_TAG = document.createElement('style')
-  B_STYLE_TAG.id = 'BLICK_OUTPUT'
-  document.head.append(B_STYLE_TAG)
-}
-
-
-/* harmony default export */ const style_tag = (B_STYLE_TAG);
-;// CONCATENATED MODULE: ./src/funcs/get-kf.js
-/* harmony default export */ function get_kf(obj) {
-  if (!("keyframes" in obj)) return ""
-  
-  obj = obj.keyframes
-
-  if (typeof obj !== "object") throw new Error("BlickCss. Keyframes must be written as an object");
-
-  return Object.entries(obj)
-  .map(
-    ([key,val]) => `@keyframes ${key}{${
-      Object.entries(val)
-      .map(([p,c]) => `${isNaN(p)?p:`${p}%`}{${c}}`)
-      .join("")
-    }}`
-  )
-  .join("")
-}
-;// CONCATENATED MODULE: ./src/store.js
-
-
-let B_STYLE_STORE = Object.create(null)
-let B_ATTRS_STORE = {
-	class: [],
-	flex:  [], 
-	text:  [],
-	grid:  [],  
-}
-
-let B_MQ_STORE = Object.fromEntries([
-	...(Object.keys(blick_obj?.screen)?.map(e=>[e,{}])),
-	...(Object.keys(blick_obj?.screen).map(e=>[blick_obj.maxPrefix+'-'+e,{}])),
-	["dark",{}]
-])
-
-let B_MQ_ARR = Object.keys(B_MQ_STORE)
-let B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
-let B_MQ_STR_COPY = {...B_MQ_STRING} 
-
-
-
-
-
-;// CONCATENATED MODULE: ./src/funcs/get-mq.js
-
-
-
-
-/* harmony default export */ function get_mq(mq) {
-  let str = ""
-
-  for (const k in B_MQ_STORE) {
-    if (k.startsWith(blick_obj.maxPrefix + '-')) {
-      if (mq[k]) {
-        const scr = blick_obj.screen[k.slice(blick_obj.maxPrefix.length + 1)]
-        str += `@media (max-width:${get_mq_width(scr, true)}){${mq[k]}}`
-      }
-    }
-    else {
-      if (blick_obj.screen[k]) {
-        if (mq[k] || blick_obj.wrapper) {
-          const scr = blick_obj.screen[k]
-          str += `@media ${get_mq_width(scr)}{${
-            blick_obj.wrapper ? `${blick_obj.wrapper}{max-width:${get_mq_width(scr, true)}}` : ""
-          }${mq[k]}}`
-        }
-      }
-    }
-  }
-  
-  return str
-}
-;// CONCATENATED MODULE: ./src/funcs/get-root.js
-/* harmony default export */ function get_root(blick) {
-  let fonts = ''
-  let colors = ''
-
-  for (const [type, val] of Object.entries(blick.font)) {
-    fonts += `--font-${type}:${val};`
-  }
-  for (const [color, obj] of Object.entries(blick.colors)) {
-    for (const [num, code] of Object.entries(obj)) {
-      colors += `--${color+(num==='def'?'':'-'+num)}:${code};`
-    }
-  }
-  return `:root{${ colors + fonts }}`
-}
-;// CONCATENATED MODULE: ./src/funcs/upd-style.js
-
-
-
-
-
-
-let B_ROOT
-let B_KEYFRAMES
-
-/* harmony default export */ function upd_style(B_STYLE_STRING, B_MQ_STRING) {
-  B_ROOT      ||= get_root(blick_obj)
-  B_KEYFRAMES ||= get_kf(blick_obj)
-
-  const B_CSS_RESULT =
-  `/* ! blickcss v${blick_obj.version} | MIT License | https://blick.netlify.app */\n`
-  + (blick_obj.reset || "") 
-  + (blick_obj.root  ? B_ROOT : "")
-  + (
-    blick_obj.wrapper 
-    ? `${blick_obj.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}` 
-    : ""
-  )
-  + (
-    blick_obj.useAttr 
-    ? `[${blick_obj.attr.flex}]:not([${blick_obj.attr.flex}~=off]){display:flex}`
-    + `[${blick_obj.attr.grid}]:not([${blick_obj.attr.grid}~=off]){display:grid}` 
-    : ""
-  )
-  + (blick_obj.autoFlex ? '[class*="flex-"],[class*="jc-"],[class*="ai-"],[class*="gap-"]{display:flex}' : "")
-  
-  + B_STYLE_STRING
-  + get_mq(B_MQ_STRING)
-  + (blick_obj.autoTheme ? `@media(prefers-color-scheme:dark){${B_MQ_STRING.dark}}` : B_MQ_STRING.dark) 
-  + B_KEYFRAMES
-
-  let prevContext
-
-  if (typeof window === "undefined") {
-    return B_CSS_RESULT
-  }
-
-  if (blick_obj.time) {
-    prevContext = style_tag.textContent
-  }
-
-  if (blick_obj.beautify && typeof window !== "undefined") { 
-    if (!window.css_beautify) {
-      throw new Error("BlickCSS. css_beautify is not defined. Make sure the 'css-beautify' is connected. Read docs for more info https://blick.netlify.app/docs/beautify")
-    }
-    style_tag.textContent = window.css_beautify(B_CSS_RESULT, blick_obj.beautifyOption)
-  }
-  else {
-    style_tag.textContent = B_CSS_RESULT
-  }
-
-  if (blick_obj.time) {
-    if (prevContext !== style_tag.textContent) {
-      return style_tag.textContent
-    }
-    else return false
-  }
-
-  return style_tag.textContent
-}
-;// CONCATENATED MODULE: ./src/funcs/check-rec.js
-/* harmony default export */ function check_rec(rec) {
-  if (rec === undefined) return true;
-
-  const g = (el, at) => !!el?.getAttribute?.(at);
-
-  const elems = ["STYLE", "SCRIPT", "HEAD", "HTML", "#text"];
-
-  function B_CHECK_ELEM(el) {
-    if (!el || !el?.nodeName) return false;
-    const a = blick.attr;
-    return (
-      !elems.includes(el?.nodeName) ||
-      g(el, "class") ||
-      g(el, a.flex) ||
-      g(el, a.text) ||
-      g(el, a.grid)
-    );
-  }
-
-  if (rec.length !== 1) return "0";
-  if (B_CHECK_ELEM(rec[0].target)) return "t";
-  if (rec[0].addedNodes.length > 1) return "a0";
-  else {
-    if (B_CHECK_ELEM(rec[0].addedNodes[0])) return "a1";
-  }
-}
-
-;// CONCATENATED MODULE: ./src/funcs/render.js
-
-
-
-
-
-
-function timer(label) {
-  const startTime = performance.now();
-  return {
-    stop: function () {
-      const endTime = performance.now();
-      const elapsedTime = endTime - startTime;
-      console.log(`${label}: ${elapsedTime.toFixed(1)}ms`);
+      _prop: "grid-template-rows:repeat($,1fr)"
     },
+    jc: {
+      _prop: "justify-content:$",
+      _vals: c_vals3
+    },
+    ji: {
+      _prop: "justify-items:$",
+      _vals: i_vals3
+    },
+    ac: {
+      _prop: "align-content:$",
+      _vals: c_vals3
+    },
+    ai: {
+      _prop: "align-items:$",
+      _vals: i_vals3
+    }
   };
-}
 
-/* harmony default export */ function render(record, params) {
-  let consoleTimer;
-  if (blick_obj.time) consoleTimer = timer("blick. styles upd");
+  // src/theme/screen.js
+  var screen_default = {
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200
+  };
 
-  const _STORE_ = blick_obj._STORE_;
+  // src/theme/states.js
+  var states_default = {
+    h: ":hover",
+    f: ":focus",
+    c: ":checked",
+    a: ":active",
+    first: ">*:first-child",
+    ft: ">*:first-child",
+    last: ">*:last-child",
+    lt: ">*:last-child",
+    odd: ">*:nth-child(odd)",
+    od: ">*:nth-child(odd)",
+    even: ">*:nth-child(even)",
+    ev: ">*:nth-child(even)",
+    all: " *",
+    "*": " *",
+    every: ">*",
+    ">": ">*",
+    between: ">*+*",
+    bt: ">*+*",
+    after: "::after",
+    aft: "::after",
+    before: "::before",
+    bef: "::before",
+    dark: (selector) => `.dark ${selector}`
+  };
 
-  let { B_MQ_STORE, B_STYLE_STORE, B_ATTRS_STORE, B_MQ_STR_COPY, B_MQ_STRING } =
-    _STORE_;
+  // src/theme/colors.js
+  var colors_default = {
+    black: { def: "#000" },
+    white: { def: "#fff" },
+    gray: { def: "#6b7280", 1: "#f3f4f6", 2: "#d1d5db", 3: "#374151", 4: "#111827" },
+    red: { def: "#ef4444", 1: "#fee2e2", 2: "#fca5a5", 3: "#b91c1c", 4: "#7f1d1d" },
+    orange: { def: "#f97316", 1: "#ffedd5", 2: "#fdba74", 3: "#c2410c", 4: "#7c2d12" },
+    yellow: { def: "#eab308", 1: "#fef9c3", 2: "#fde047", 3: "#a16207", 4: "#713f12" },
+    lime: { def: "#84cc16", 1: "#ecfccb", 2: "#bef264", 3: "#4d7c0f", 4: "#365314" },
+    green: { def: "#22c55e", 1: "#dcfce7", 2: "#86efac", 3: "#15803d", 4: "#14532d" },
+    cyan: { def: "#06b6d4", 1: "#cffafe", 2: "#67e8f9", 3: "#0e7490", 4: "#164e63" },
+    blue: { def: "#3b82f6", 1: "#dbeafe", 2: "#93c5fd", 3: "#1d4ed8", 4: "#1e3a8a" },
+    purple: { def: "#a855f7", 1: "#f3e8ff", 2: "#d8b4fe", 3: "#7e22ce", 4: "#581c87" },
+    pink: { def: "#ec4899", 1: "#fce7f3", 2: "#f9a8d4", 3: "#be185d", 4: "#831843" }
+  };
 
-  let B_STYLE_STRING = "";
-  let B_MQ_STR = B_MQ_STRING;
+  // src/theme/font.js
+  var font_default = {
+    main: "system-ui,-apple-system,sans-serif",
+    serif: "serif",
+    mono: "monospace",
+    sans: "sans-serif"
+  };
 
-  if (params.cli) {
-    for (const attr in record) {
-      for (const val of record[attr]) {
-        create_css(val, attr, _STORE_);
+  // src/theme/reset.js
+  var reset_default = `*,::after,::before{box-sizing:border-box;object-fit:cover;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{text-decoration:none}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#eee}`;
+
+  // src/lib/check-type.js
+  function isElement(element) {
+    try {
+      return element instanceof Element || element instanceof HTMLElement || element.nodeName && element.nodeType && element.ownerDocument;
+    } catch (error) {
+      return false;
+    }
+  }
+  var TYPES = {
+    func: (e) => typeof e === "function",
+    str: (e) => typeof e === "string",
+    obj: (e) => typeof e === "object",
+    num: (e) => typeof e === "number",
+    arr: (e) => Array.isArray(e),
+    var: (e) => /^\$.+/.test(e),
+    hex: (e) => /^#[\dabcdef]{3,8}$/.test(String(e).trim()),
+    exist: (e) => e !== void 0,
+    null: (e) => e === null,
+    undef: (e) => e === void 0,
+    element: (e) => isElement(e)
+  };
+  var is = {
+    ...TYPES
+    // not: new Proxy(TYPES, {
+    //     get(obj, key) {
+    //         if (key in obj) {
+    //             return (val) => !obj[key](val);
+    //         } else {
+    //             throw new Error(`BlickCss: type '${key}' don't exist`);
+    //         }
+    //     },
+    // }),
+  };
+
+  // src/theme/funcs.js
+  var canvas;
+  var canvas_ctx;
+  if (typeof window !== "undefined") {
+    canvas = document.createElement("canvas");
+    canvas_ctx = canvas.getContext("2d");
+  }
+  function config(updates = this, source = this, isFirstCall = true) {
+    if (updates === source)
+      return source;
+    if (!is.obj(updates)) {
+      console.error(
+        "Blick: The blick.config function must contain an object."
+      );
+      return;
+    }
+    for (let key in updates) {
+      if (is.null(updates[key]) || is.undef(updates[key])) {
+        delete source[key];
+      } else if (is.obj(updates[key]) && !is.arr(updates[key])) {
+        if (!source[key] || is.str(source[key])) {
+          source[key] = {};
+        }
+        config(updates[key], source[key], false);
+      } else {
+        source[key] = updates[key];
       }
     }
-    return get_nodes(true);
+    if (isFirstCall) {
+    }
+    return source;
+  }
+  function getHex(str) {
+    if (!canvas) {
+      throw Error("function getHex available only in browser");
+    }
+    canvas_ctx.fillStyle = str;
+    return canvas_ctx.fillStyle;
+  }
+  function getVarColor(str) {
+    if (!colors_default)
+      return;
+    if (is.var(str)) {
+      str = str.slice(1);
+    }
+    const [colorName, shade] = str.split("-");
+    if (shade) {
+      if (colors_default[colorName][shade]) {
+        return colors_default[colorName][shade];
+      } else {
+        throw Error(
+          `Blick: This shade "${shade}" is not exist for "${colorName}".
+Available shades: ${Object.keys(colors_default[colorName]).filter(
+            (e) => e !== "def"
+          )}`
+        );
+      }
+    }
+    return colors_default[colorName]?.def || colors_default[colorName]?.DEFAULT || colors_default[colorName];
+  }
+  function getHexAlpha(str) {
+    str = +str;
+    if (str < 0 || str > 100) {
+      throw Error("Blick: Alpha value must be a from 0 to 100");
+    }
+    let shade = Math.round(str / 100 * 255).toString(16);
+    if (shade.length === 1) {
+      shade = "0" + shade;
+    }
+    return shade;
+  }
+  var funcs_default = {
+    config,
+    getHex,
+    getVarColor,
+    getHexAlpha
+  };
+
+  // src/lib/format-selector.js
+  function format_selector_default(token, attr = "class") {
+    let format = token;
+    format = format.replace(/[^\w-_]/g, "\\$&").replace(/^\d/, "\\3$& ");
+    if (attr === "raw") {
+      return format;
+    }
+    if (attr === "class") {
+      return `.${format}`;
+    }
+    return `[${attr}~="${token}"]`;
   }
 
-  if (!document.body) return;
+  // src/context.js
+  var context;
+  var context_default = {
+    get() {
+      return context;
+    },
+    set(ctx2) {
+      return context = ctx2;
+    }
+  };
 
-  if (!style_tag.textContent ? 0 : !check_rec(record)) return;
+  // src/lib/create-media-width.js
+  function createMediaWidth(sizes) {
+    if (!is.obj(sizes))
+      sizes = [sizes];
+    const WIDTHS = [];
+    for (const index in sizes) {
+      let size = sizes[index];
+      if (!size)
+        continue;
+      size = size.toString().replace(/\(|\)/g, "");
+      if (+size[0]) {
+        let type = +index === 0 ? "min" : "max";
+        let unit = +size ? "px" : "";
+        WIDTHS.push(`(${type}-width:${size}${unit})`);
+      } else {
+        WIDTHS.push(`(${size})`);
+      }
+    }
+    return WIDTHS.join(" and ");
+  }
 
-  let nodes = document.querySelectorAll(
-    `[class],[${blick_obj.attr.flex}],[${blick_obj.attr.text}],[${blick_obj.attr.grid}]`
-  );
+  // src/lib/parser/parse-media.js
+  function parseMedia(str) {
+    const ctx2 = context_default.get();
+    if (!str)
+      throw new Error(`value is required, (${str})`);
+    if (str.startsWith(ctx2.maxPrefix)) {
+      str = str.slice(ctx2.maxPrefix.length);
+      return createMediaWidth([null, ctx2.screen[str] || str]);
+    }
+    return createMediaWidth(ctx2.screen[str] || str);
+  }
 
-  if (!nodes.length) return;
+  // src/lib/parser/parse-states.js
+  function parseStates(state, attr) {
+    const ctx2 = context_default.get();
+    const IS_IN_ARR = state in ctx2.screen;
+    const IS_MAX_WD = state.startsWith(ctx2.maxPrefix);
+    const IS_NUMBER = +state;
+    let raw = state;
+    let val = null;
+    let type = null;
+    if (IS_IN_ARR || IS_NUMBER || IS_MAX_WD) {
+      val = parseMedia(state);
+      type = "media";
+    } else {
+      if (raw.startsWith("&")) {
+        val = raw.slice(1);
+      } else {
+        val = ctx2.states[raw] || ":" + raw;
+      }
+      if (is.str(val)) {
+        val = val.replace(/(?<!\\)_/g, " ");
+      }
+      type = "pseudo";
+    }
+    return { raw, val, type };
+  }
 
-  for (const elem of nodes) {
-    for (const model in B_ATTRS_STORE) {
-      let attr = blick_obj.attr[model] || "class";
-      if (elem.hasAttribute(attr)) {
-        const attr_val = elem.getAttribute(attr).trim().split(/\s+/g);
-        for (const str of attr_val) {
-          if (!B_ATTRS_STORE[model].includes(str)) {
-            create_css(str, model, _STORE_, attr_val);
-            B_ATTRS_STORE[model].push(str);
+  // src/lib/parser/parse-rule.js
+  function parseRule(path, object) {
+    const PARTS = path.split(/(?<!\\)-/g);
+    let array_path = [];
+    let value_string = null;
+    for (const i in PARTS) {
+      if (!object[PARTS[i]]) {
+        if (i == 0)
+          object = null;
+        value_string = PARTS.slice(i).join("-");
+        break;
+      }
+      array_path.push(PARTS[i]);
+      object = object[PARTS[i]];
+    }
+    return {
+      path: array_path,
+      value: value_string,
+      source: object
+    };
+  }
+
+  // src/lib/parser/parse-value.js
+  function createColor(color, opacity) {
+    const ctx2 = context_default.get();
+    try {
+      if (ctx2._COLOR_) {
+        return ctx2._COLOR_(color, opacity);
+      }
+      return getHex(color) + getHexAlpha(opacity);
+    } catch (error) {
+      console.log(error + "");
+      return null;
+    }
+  }
+  function createVar(variable, opacity = "") {
+    if (is.var(variable)) {
+      variable = variable.slice(1);
+    }
+    if (opacity) {
+      opacity = `;opacity:${opacity}`;
+    }
+    return `var(--${variable})${opacity}`;
+  }
+  function calcOpacity(number) {
+    if (+number) {
+      return number > 1 ? number / 100 : number;
+    }
+  }
+  function getItem(item = "", source = {}, index = 0) {
+    const [first, second] = item.replaceAll("\\", "").split("/");
+    const UNIT = source?._unit || "";
+    if (!first)
+      return;
+    if (second && +second) {
+      if (+first) {
+        return +(first / second * 100).toFixed(2) + "%";
+      }
+      if (is.var(first)) {
+        const COLOR = getVarColor(first);
+        if (COLOR) {
+          return createColor(COLOR, second);
+        }
+        return createVar(first, calcOpacity(second));
+      }
+      return createColor(first, second);
+    }
+    if (is.var(first)) {
+      return createVar(first);
+    }
+    if (Array.isArray(UNIT)) {
+      return +item ? item + (UNIT[index] || "") : item;
+    }
+    return +item ? item + UNIT : item;
+  }
+  function parseValue(value = "", source = {}) {
+    if (!value)
+      return null;
+    if (!is.arr(value)) {
+      value = value.split(/(?<!\\)\+/g);
+    }
+    let fff = value.map((item, index) => {
+      return {
+        val: source._vals?.[item] ?? getItem(item, source, index)?.replace(/\\/g, ""),
+        raw: item
+      };
+    });
+    if (fff.filter((e) => e.val).length) {
+      return fff;
+    }
+    return null;
+  }
+
+  // src/lib/parser/parse-styles.js
+  function parseStyles(style, attr, token, states) {
+    const ctx2 = context_default.get();
+    let object = ctx2.attr[attr] || ctx2.class;
+    let property = null;
+    let values = null;
+    let important = false;
+    if (style.includes("!")) {
+      style = style.replace(/!/g, "");
+      important = true;
+    }
+    let { source, path, value } = parseRule(style, object);
+    if (!source && attr !== "class") {
+      let _else = object._else?.({ style, token, states });
+      if (is.arr(_else)) {
+        let [s, v] = _else || [null, null];
+        source = is.obj(s) ? s : { _prop: s };
+        value = v || style;
+      } else if (is.obj(_else)) {
+        source = _else;
+        value = style;
+      } else {
+        source = { _prop: _else };
+        value = style;
+      }
+    }
+    if (!source)
+      return;
+    if (value) {
+      property = source._prop;
+      values = parseValue(value, source);
+      if (!values) {
+        return null;
+      }
+    } else {
+      property = source._one || source;
+    }
+    if (!property || is.obj(property)) {
+      return null;
+    }
+    return {
+      src: source,
+      path,
+      prop: property,
+      values,
+      rawVal: value,
+      val: values?.map((e) => e.val).join(source._join || " ") || null,
+      unit: source._unit || "",
+      join: source._join || " ",
+      important
+    };
+  }
+
+  // src/lib/parser/index.js
+  function parser(token = "", attr = "class") {
+    let [styles, ...states] = token.split(/(?<!\\):/g).reverse();
+    let selector = format_selector_default(token, attr);
+    let rawSelector = selector;
+    states = states.map((e) => parseStates(e, attr, token));
+    styles = styles.split(/(?<!\\);/g);
+    styles = styles.map((e) => parseStyles(e, attr, token, states));
+    styles = styles.filter((e) => e);
+    if (!states.length) {
+      states = null;
+    }
+    if (styles.length) {
+      const EXTRA_SELECTOR = styles[0].src?._selector;
+      return { states, styles, attr, selector, rawSelector, token, extra: EXTRA_SELECTOR };
+    }
+    return null;
+  }
+
+  // src/lib/create-rule.js
+  function createRule(token, attr) {
+    const STRUCT = parser(token, attr);
+    let IS_MEDIA = false;
+    if (!STRUCT)
+      return null;
+    const MEDIA = [];
+    const DECLARED = [];
+    if (STRUCT.states) {
+      for (let i = STRUCT.states.length - 1; i >= 0; i--) {
+        const state = STRUCT.states[i];
+        if (state.type === "pseudo") {
+          if (is.func(state.val)) {
+            STRUCT.selector = state.val(STRUCT.selector);
+          } else if (state.val?.includes("$")) {
+            STRUCT.selector = state.val.replace("$", STRUCT.selector);
+          } else {
+            STRUCT.selector += state.val;
+          }
+        } else if (state.type === "media") {
+          MEDIA.push(state);
+          IS_MEDIA = true;
+        }
+      }
+    }
+    if (STRUCT.extra && is.str(STRUCT.extra)) {
+      STRUCT.selector = STRUCT.extra.replace(/\$/g, STRUCT.selector);
+    }
+    for (let rule of STRUCT.styles) {
+      let style = rule.prop;
+      let postfix = rule.important ? " !important" : "";
+      if (is.func(rule.prop)) {
+        style = rule.prop(rule) || "";
+        if (is.obj(style)) {
+          style.prop = style._prop || rule.prop;
+          style.vals = style._vals || rule.vals;
+          style.one = style._one || rule.one;
+          style.unit = style._unit || rule.unit;
+          style.values = style._values || rule.values;
+          rule = { ...rule, ...style };
+        } else {
+          rule.prop = style;
+        }
+      }
+      const re = {
+        group: /\$(\d+)?/g,
+        space: /^\s*(.+?):\s*/
+      };
+      if (rule.values) {
+        style = rule.prop.replace(re.group, (_, group) => {
+          if (group) {
+            let vals = rule.values[group - 1] || rule.values[0];
+            let unit = is.arr(rule.unit) ? rule.unit : [rule.unit];
+            if (is.arr(rule.unit) && +vals.raw) {
+              return vals.raw + (rule.unit[group - 1] || "");
+            }
+            return vals.val || vals.raw;
+          }
+          return rule.val || rule.rawVal;
+        });
+      }
+      style = style.split(";").map((e) => e.replace(re.space, "$1:") + postfix).join(";");
+      DECLARED.push(style);
+    }
+    const STYLE = DECLARED.join(";").replace(/(?<!\\)_/g, " ");
+    return [MEDIA, `${STRUCT.selector}{${STYLE}}`];
+  }
+
+  // src/store.js
+  var STYLE_STORE = /* @__PURE__ */ Object.create(null);
+  var ATTRS_STORE = /* @__PURE__ */ Object.create(null);
+  var MEDIA_STORE = /* @__PURE__ */ Object.create(null);
+  var CSS_STORE = /* @__PURE__ */ Object.create(null);
+  CSS_STORE.MEDIA = {};
+  var _STORE_ = {
+    STYLE_STORE,
+    ATTRS_STORE,
+    MEDIA_STORE,
+    CSS_STORE
+  };
+  var store_default = _STORE_;
+
+  // src/style-tag.js
+  var STYLE_TAG = {
+    textContent: ""
+  };
+  if (typeof window !== "undefined") {
+    STYLE_TAG = document.createElement("style");
+    STYLE_TAG.id = "BLICK_OUTPUT";
+    document.head.append(STYLE_TAG);
+  }
+  var style_tag_default = STYLE_TAG;
+
+  // version.js
+  var version_default = "2.0";
+
+  // src/lib/deep-clone.js
+  function deepClone(obj) {
+    if (is.element(obj)) {
+      return obj;
+    }
+    if (typeof obj !== "object") {
+      return obj;
+    }
+    if (is.arr(obj)) {
+      return obj.map((e) => deepClone(e));
+    }
+    const clonedObj = {};
+    for (let key in obj) {
+      clonedObj[key] = deepClone(obj[key]);
+    }
+    return clonedObj;
+  }
+
+  // src/lib/create-root.js
+  function create_root_default() {
+    const ctx2 = context_default.get();
+    let fonts = "";
+    let colors = "";
+    for (const type in ctx2?.font) {
+      fonts += `--font-${type}:${ctx2.font[type]};`;
+    }
+    for (const color in ctx2?.colors) {
+      if (is.str(ctx2.colors[color])) {
+        colors += `--${color}:${ctx2.colors[color]};`;
+        continue;
+      }
+      for (const num in ctx2.colors[color]) {
+        colors += `--${color + (num === "def" ? "" : "-" + num)}:${ctx2.colors[color][num]};`;
+      }
+    }
+    return `:root{${colors + fonts}}`;
+  }
+
+  // src/lib/create-css.js
+  function create_css_default() {
+    const ctx2 = context_default.get();
+    const STORE = ctx2._STORE_.CSS_STORE;
+    let media_str = "";
+    let css_str = "";
+    for (const attr in STORE) {
+      if (attr === "MEDIA") {
+        for (const md in STORE.MEDIA) {
+          media_str += `@media${md}{${STORE.MEDIA[md]}}`;
+        }
+        continue;
+      }
+      css_str += STORE[attr];
+    }
+    let result_css = "";
+    result_css += `/* ! blickcss v${ctx2.version} | MIT License | https://github.com/ghtx280/blickcss */
+
+`;
+    if (ctx2.reset) {
+      result_css += ctx2.reset;
+    }
+    if (ctx2.root) {
+      result_css += create_root_default();
+    }
+    if (ctx2.wrapper) {
+      result_css += `${ctx2.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}`;
+    }
+    for (const key in ctx2.attr) {
+      if (ctx2.attr[key]?._using && key in STORE) {
+        result_css += `[${key}]{${ctx2.attr[key]._using}}`;
+      }
+    }
+    if (ctx2.autoFlex) {
+      result_css += '[class*="flex-"],[class*="jc-"],[class*="ai-"],[class*="gap-"]{display:flex}';
+    }
+    return result_css + css_str + media_str;
+  }
+
+  // src/lib/prerender.js
+  function prerender_default() {
+    const ctx2 = context_default.get();
+    if (!ctx2.dark) {
+      ctx2.dark = ctx2.states.dark("").trim();
+    }
+    if (typeof window !== void 0) {
+      if (ctx2.autoTheme && matchMedia("(prefers-color-scheme: dark)").matches) {
+        if (ctx2.dark.startsWith(".")) {
+          document.documentElement.classList.add(ctx2.dark.slice(1));
+        } else if (ctx2.dark.startsWith("#")) {
+          document.documentElement.id = ctx2.dark.slice(1);
+        } else if (ctx2.dark.startsWith("[") && ctx2.dark.endsWith("]")) {
+          document.documentElement.setAttribute(ctx2.dark.slice(1, -1));
+        }
+      }
+    }
+    if (ctx2.wrapper) {
+      for (const scr in ctx2.screen) {
+        let size = ctx2.screen[scr];
+        ctx2._STORE_.CSS_STORE.MEDIA[parseMedia(scr)] = ctx2.wrapper + `{max-width:${is.num(size) ? size : size[0]}px}`;
+      }
+    }
+  }
+
+  // src/lib/update-store.js
+  function updateStore(token, attr) {
+    const ctx2 = context_default.get();
+    const AS = ctx2._STORE_.ATTRS_STORE;
+    const SS = ctx2._STORE_.STYLE_STORE;
+    const MS = ctx2._STORE_.MEDIA_STORE;
+    const CS = ctx2._STORE_.CSS_STORE;
+    if (!(attr in CS))
+      CS[attr] = "";
+    if (!(attr in SS))
+      SS[attr] = /* @__PURE__ */ Object.create(null);
+    if (!(attr in AS))
+      AS[attr] = /* @__PURE__ */ Object.create(null);
+    if (token in SS[attr])
+      return false;
+    if (token in AS[attr])
+      return false;
+    AS[attr][token] = true;
+    const [MEDIA, RULE] = ctx2.createRule(token, attr) || [[], ""];
+    if (!RULE) {
+      SS[attr][token] = null;
+      return false;
+    }
+    if (MEDIA.length) {
+      for (const m of MEDIA) {
+        if (!(m.raw in MS))
+          MS[m.raw] = /* @__PURE__ */ Object.create(null);
+        if (!(m.val in CS.MEDIA))
+          CS.MEDIA[m.val] = "";
+        if (token in MS[m.raw])
+          return false;
+        MS[m.raw][token] = RULE;
+        CS.MEDIA[m.val] += RULE;
+      }
+    } else {
+      SS[attr][token] = RULE;
+      CS[attr] += RULE;
+    }
+    return true;
+  }
+
+  // src/node/funcs/create-attr-regexp.js
+  function createAttrRegexp(attr = "class") {
+    attr = attr == "class" ? "(?:class|className)" : attr;
+    const REGEXP = `\\s+${attr}\\s*=\\s*(["'\`])(.*?)\\1`;
+    const FLAGS = "g";
+    return new RegExp(REGEXP, FLAGS);
+  }
+
+  // src/lib/from-html.js
+  var ctx;
+  var STORE_COPY = structuredClone(store_default);
+  function from_html_default(html = "", config2) {
+    if (config2 || !ctx) {
+      ctx = theme_default.clone();
+      ctx.config(config2);
+      context_default.set(ctx);
+    }
+    const ATTRS = ["class", ...Object.keys(ctx.attr)];
+    ctx._STORE_ = structuredClone(STORE_COPY);
+    prerender_default();
+    for (const attr of ATTRS) {
+      const MATCHES = [...html.matchAll(createAttrRegexp(attr))];
+      if (MATCHES.length) {
+        const ATTR_VALUE = MATCHES.map((e) => e[2]).join(" ");
+        if (ATTR_VALUE.trim()) {
+          for (const token of ATTR_VALUE.trim().split(/\s+/g)) {
+            updateStore(token, attr);
           }
         }
       }
     }
+    return create_css_default();
   }
 
-  function get_nodes(IS_CLI) {
-    B_MQ_STR = { ...B_MQ_STR_COPY };
+  // src/theme/index.js
+  var BLICK = {
+    class: class_default,
+    screen: screen_default,
+    states: states_default,
+    colors: colors_default,
+    font: font_default,
+    reset: reset_default,
+    attr: {
+      flex: flex_default,
+      grid: grid_default,
+      text: text_default
+    },
+    autoTheme: false,
+    beautify: false,
+    autoFlex: true,
+    useAttr: true,
+    time: false,
+    root: true,
+    wrapper: ".wrapper",
+    maxPrefix: "m-",
+    beautifyOption: {},
+    version: version_default,
+    is,
+    parser,
+    _STORE_: store_default,
+    createRule,
+    getStyleTag: () => style_tag_default,
+    clone(field) {
+      return deepClone(field ? this[field] : this);
+    },
+    html: from_html_default,
+    ...funcs_default
+  };
+  var theme_default = BLICK;
 
-    for (const key in B_MQ_STORE) {
-      for (const [a, b] of Object.entries(B_MQ_STORE[key])) {
-        B_MQ_STR[key] += `${a}{${b}}`;
+  // src/lib/timer.js
+  function timer(label) {
+    const startTime = performance.now();
+    const diff = () => performance.now() - startTime;
+    return {
+      stop() {
+        console.log(`${label}: ${diff().toFixed(1)}ms`);
+      },
+      get() {
+        return diff().toFixed(1);
+      },
+      getFormated() {
+        return `${diff().toFixed(1)}ms`;
       }
-    }
-
-    B_STYLE_STRING = "";
-
-    for (const [a, b] of Object.entries(B_STYLE_STORE)) {
-      B_STYLE_STRING += `${a}{${b}}`;
-    }
-
-    let rendered_styles = upd_style(B_STYLE_STRING, B_MQ_STR);
-
-    if (blick_obj.time && rendered_styles) consoleTimer.stop();
-
-    if (IS_CLI) return rendered_styles;
+    };
   }
-  get_nodes(false);
-}
 
-;// CONCATENATED MODULE: ./src/index.js
+  // src/lib/render.js
+  var once;
+  function render_default(record, params = {}) {
+    const ctx2 = context_default.get();
+    const TIMER = timer("Blick: Styles updated");
+    const ATTRS = ["class", ...Object.keys(ctx2.attr)];
+    const NODES = params.NODES || document.querySelectorAll(ATTRS.map((e) => `[${e}]`).join());
+    if (!once || ctx2._CLI_) {
+      prerender_default();
+      once = true;
+    }
+    let is_style_updated;
+    NODES.forEach((node) => {
+      for (const attr of ATTRS) {
+        let ATTR_VALUE = node.getAttribute(attr);
+        if (is.str(ATTR_VALUE))
+          ATTR_VALUE = ATTR_VALUE.trim();
+        if (!ATTR_VALUE)
+          continue;
+        for (const token of ATTR_VALUE.trim().split(/\s+/g)) {
+          if (!updateStore(token, attr)) {
+            continue;
+          }
+          is_style_updated = true;
+        }
+      }
+    });
+    if (is_style_updated) {
+      style_tag_default.textContent = create_css_default();
+      if (ctx2.time)
+        TIMER.stop();
+    }
+    return style_tag_default.textContent;
+  }
 
-
-
-
-
-blick_obj._STORE_ = store_namespaceObject
-
-window.blick = blick_obj
-window.blickcss = blick_obj
-
-
-const B_SCRIPT_TAG = document.currentScript
-
-if (B_SCRIPT_TAG?.src.includes('?')) {
-	new URLSearchParams(B_SCRIPT_TAG.src.split("?")[1])
-	.forEach((val, prop) => {
-		blick_obj[prop] = (
-			["", "1", "true"].includes(val) ||
-			!["0","false"].includes(val) && val
-		)
-	})
-}
-
-new MutationObserver(render)
-.observe(document.documentElement, {
-	attributeFilter: [
-		'class',
-		blick_obj.attr.text,
-		blick_obj.attr.flex,
-		blick_obj.attr.grid
-	],
-	childList: true,
-	attributes: true,
-	subtree: true,
-})
-/******/ })()
-;
+  // src/main.js
+  window.blick = theme_default;
+  window.blickcss = theme_default;
+  context_default.set(theme_default);
+  new MutationObserver(render_default).observe(document.documentElement, {
+    attributeFilter: ["class", ...Object.keys(theme_default.attr)],
+    childList: true,
+    attributes: true,
+    subtree: true
+  });
+})();
 //# sourceMappingURL=blick.js.map

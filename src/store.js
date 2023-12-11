@@ -1,23 +1,15 @@
-import blick from "./blick-obj.js"
+export let STYLE_STORE = Object.create(null);
+export let ATTRS_STORE = Object.create(null);
+export let MEDIA_STORE = Object.create(null);
+export let CSS_STORE = Object.create(null);
 
-export let B_STYLE_STORE = Object.create(null)
-export let B_ATTRS_STORE = {
-	class: [],
-	flex:  [], 
-	text:  [],
-	grid:  [],  
-}
+CSS_STORE.MEDIA = {};
 
-export let B_MQ_STORE = Object.fromEntries([
-	...(Object.keys(blick?.screen)?.map(e=>[e,{}])),
-	...(Object.keys(blick?.screen).map(e=>[blick.maxPrefix+'-'+e,{}])),
-	["dark",{}]
-])
+const _STORE_ = {
+    STYLE_STORE,
+    ATTRS_STORE,
+    MEDIA_STORE,
+    CSS_STORE,
+};
 
-export let B_MQ_ARR = Object.keys(B_MQ_STORE)
-export let B_MQ_STRING = Object.fromEntries(Object.keys(B_MQ_STORE).map(e=>[e,""]))
-export let B_MQ_STR_COPY = {...B_MQ_STRING} 
-
-
-
-
+export default _STORE_;
