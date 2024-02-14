@@ -25,9 +25,9 @@ We can use different parameters in the object, one of them is `_prop`
 `_prop` is responsible for dynamic values, it can contain `$` which will be replaced by your value
 
 ```
-m-25     => margin: 25px
-m-auto   => margin: auto
-m-20+30  => margin: 20px 30px
+m-25 => margin: 25px
+m-auto => margin: auto
+m-20+30 => margin: 20px 30px
 m-1em+30 => margin: 1em 30px
 ```
 
@@ -48,7 +48,7 @@ mx: {
 Together with `$` you can use a number that indicates the order of the values written with `+`
 
 ```
-mx-10    => margin-left: 10px; margin-right: 10px
+mx-10 => margin-left: 10px; margin-right: 10px
 mx-10+20 => margin-left: 10px; margin-right: 20px
 ```
 
@@ -59,14 +59,14 @@ _unit: ['px', 'em'];
 ```
 
 ```
-mx-10    => margin-left: 10px; margin-right: 10px
+mx-10 => margin-left: 10px; margin-right: 10px
 mx-10+20 => margin-left: 10px; margin-right: 20em
 ```
 
 But again, if the value contains anything other than numbers, then `_unit` will not be added
 
 ```
-mx-1em    => margin-left: 1em;  margin-right: 1em
+mx-1em => margin-left: 1em;  margin-right: 1em
 mx-10+20% => margin-left: 10px; margin-right: 20%
 ```
 
@@ -86,7 +86,7 @@ w: {
 
 ```
 w-full => width: 100%
-w-500  => width: 500px
+w-500 => width: 500px
 ```
 
 ### One
@@ -103,7 +103,7 @@ flex: {
 
 ```
 flex-15 => gap: 15px
-flex    => display: flex
+flex => display: flex
 ```
 
 ### Selector
@@ -120,6 +120,45 @@ Rarely, but if you need to define a selector, there is a `_selector` parameter, 
 
 ```
 space-10 => .space-10>*+* { margin: 10px }
+```
+
+### Join
+
+```javascript
+tf: {
+    ...
+    scale: {
+        _prop: "transform:scale($)",
+        _join: ", "
+    }
+    ...
+}
+```
+But `+` can be more than just a space, it can be changed to anything. For example, in some cases, values separated by a comma
+```
+tf-scale-1+2 => transform: scale(1, 2)
+```
+
+### Function
+
+```javascript
+text: {
+    _prop: function({ val }){
+        if (parseFloat(val)) {
+            return "font-size:" + val
+        }
+        return "color:" + val
+    },
+    _unit: "px",
+    ...
+}
+```
+
+In general, you can make `_prop` or `_one` a function, this will give you unlimited freedom to generate styles
+
+```
+text-24 => font-sise: 24px
+text-red => color: red
 ```
 
 ### Nested classes
@@ -141,11 +180,11 @@ flex: {
 In addition to special parameters, you can write absolutely any other parameters next to it, it will be a nested class, they have the same structure as described above, and to get to the next one you just need to write it as a chain separated by `-`
 
 ```
-flex         => display: flex
-flex-20      => gap: 20px
-flex-5em     => gap: 5em
-flex-col     => flex-direction: column
-flex-foo-15  => test: 15
+flex => display: flex
+flex-20 => gap: 20px
+flex-5em => gap: 5em
+flex-col => flex-direction: column
+flex-foo-15 => test: 15
 flex-foo-baz => something: 123
 ```
 

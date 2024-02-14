@@ -3,7 +3,7 @@ import * as esbuild from 'esbuild';
 const lib_name = 'blick';
 
 esbuild.buildSync({
-    entryPoints: ['./src/main.js'],
+    entryPoints: ['./src/browser.js'],
     bundle: true,
     format: 'iife',
     outfile: `./dist/${lib_name}.js`,
@@ -11,7 +11,7 @@ esbuild.buildSync({
 });
 
 esbuild.buildSync({
-    entryPoints: ['./src/main.js'],
+    entryPoints: ['./src/browser.js'],
     bundle: true,
     minify: true,
     outfile: `./dist/${lib_name}.min.js`,

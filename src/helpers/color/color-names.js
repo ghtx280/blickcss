@@ -1,9 +1,4 @@
-import { getHexAlpha } from "../../theme/funcs.js";
-import { createError } from "./create-error.js";
-
-export default function(color, opacity) {
-  
-  const color_names = {
+export default {
     aliceblue: '#f0f8ff',   
     antiquewhite: '#faebd7',
     aqua: '#00ffff',        
@@ -153,40 +148,3 @@ export default function(color, opacity) {
     yellow: '#ffff00',
     yellowgreen: '#9acd32'
   };
-
-  const rgbToHex = (r = "0", g = "0", b = "0") => '#' + [r, g, b].map(x => {
-    const hex = x.toString(16)
-    return hex.length === 1 ? '0' + hex : hex
-  }).join('')
-
-  opacity = opacity ? getHexAlpha(opacity) : ""
-  
-
-  if (color[0] === "#") {
-    if (color.length === 4) {
-      let r = color[1]
-      let g = color[2]
-      let b = color[3]
-      return "#"+r+r+g+g+b+b + opacity
-    }
-    else {
-      return color + opacity
-    }
-  }
-  else if (color.startsWith("rgb")) {
-    let [r, g, b, a] = color.match(/\((.+)\)/)[1].trim().split(/\s*,\s*/)
-    if (a) {
-      return color
-    }
-    else {
-      return rgbToHex(r, g, b) + opacity
-    }
-  }
-  else {
-    if (!color_names[color]) {
-      createError([['red',`Invalid color "${color}"`]])
-      return null
-    }
-    return color_names[color] + opacity
-  }
-}

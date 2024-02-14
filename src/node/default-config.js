@@ -1,8 +1,8 @@
 export default /*js*/`
-import blick, { config } from "blickcss2"
+import { BlickCss } from "blickcss"
 
-export default config({
-    
+/** @type {BlickCss} */
+export default {
     input: './src/**/*.html', // Your input files by glob pattern
     output: './src/output.css', // File in which css will be generated
 
@@ -12,12 +12,12 @@ export default config({
     watch: true, // For watching changing the input files and rebuilding
 
     
-    // Uncomment the code below so that only your styles are created
+    // Uncomment the code below to disable all unnecessary code
+    // Have only your styles generated
 
     // reset: false,
     // root: false,
     // wrapper: false,
     // autoFlex: false,
-
-})
+}
 `
