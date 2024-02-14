@@ -72,8 +72,8 @@ try {
         await new Promise((resolve, reject) => {
             import(PATH)
             .then(CONFIG => {
-                user_config = CONFIG.default
                 ctx = new BlickCss()
+                user_config = CONFIG.default(ctx)
                 ctx.config(user_config)
                 filesUpdate();
                 resolve()

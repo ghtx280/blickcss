@@ -2622,8 +2622,8 @@ try {
     const PATH = `./${CONFIG_FILE_PATH_REL}?update=${Date.now()}`;
     await new Promise((resolve2, reject) => {
       import(PATH).then((CONFIG) => {
-        user_config = CONFIG.default;
         ctx = new BlickCss();
+        user_config = CONFIG.default(ctx);
         ctx.config(user_config);
         filesUpdate();
         resolve2();

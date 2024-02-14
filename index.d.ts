@@ -1,4 +1,4 @@
-import { BlickCss } from "./types/index"
+import { BlickCss } from "./types/src/blick"
 
 declare module "blickcss" {
     export { BlickCss }
