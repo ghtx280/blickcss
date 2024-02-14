@@ -1,12 +1,14 @@
 import { is } from './check-type.js';
-import { parser } from './parser/index.js';
+// import { parser } from './parser/index.js';
 
-export function createRule(token, attr) {
-    const STRUCT = parser(token, attr);
+
+
+export function createRule(STRUCT) {
+    // const STRUCT = parser(token, attr);
     let IS_MEDIA = false
-
+    
     if (!STRUCT) return null;
-
+    
     const MEDIA = [];
     const DECLARED = [];
 
@@ -39,59 +41,116 @@ export function createRule(token, attr) {
     for (let rule of STRUCT.styles) {
         let style = rule.prop;
         
-        let postfix = rule.important ? " !important" : "";
+
+        let imp = rule.important ? "!important" : "";
+
+        
 
         if (is.func(rule.prop)) {
             style = rule.prop(rule) || '';
 
+            if (!style) return;
+
+            if (is.arr(style)) {
+                rule.values = style[1]
+                style = style[0]
+            }
+
             if (is.obj(style)) {
-                style.prop   = style._prop   || rule.prop;
-                style.vals   = style._vals   || rule.vals;
-                style.one    = style._one    || rule.one;
-                style.unit   = style._unit   || rule.unit;
-                style.values = style._values || rule.values;
-                rule = {...rule, ...style}
+                for (const key in style) {
+                    if (key[0] == "_") {
+                        rule[key.slice(1)] = style[key]
+                    }
+                }
             }
             else {
                 rule.prop = style;
             }
         }
 
+        // console.log(rule);
+
         const re = {
             group: /\$(\d+)?/g,
             space: /^\s*(.+?):\s*/
         }
 
-        if (rule.values) {           
-            style = rule.prop.replace(re.group, (_, group) => {
-                if (group) {
-                    let vals = rule.values[group - 1] || rule.values[0]
-                    let unit = is.arr(rule.unit) ? rule.unit : [rule.unit]
-                    
-                    if (is.arr(rule.unit) && +vals.raw) {
-                        return vals.raw + (rule.unit[group - 1] || "")
-                    }
+        
 
-                    return vals.val || vals.raw
-                }
-                return rule.val || rule.rawVal;
-            });
+        function replaceDynamic(_, group) {
+            if (!group) return rule.val || rule.rawVal || rule.prop;
+
+            let vals = rule.values[group - 1] ?? rule.values[0]
+            let unit = rule.unit?.[group - 1] ?? rule.unit?.[0] ?? rule.unit
+
+            return vals.val || vals.raw || (+vals ? vals + (unit || "") : vals)
         }
 
-        style = style
-            .split(";")
-            .map(e => e.replace(re.space, "$1:") + postfix)
-            .join(";");
+        if (rule.values) {
+            style = rule.prop.replace(re.group, replaceDynamic);
+        }
+        else {
+            style = style._one || style
+        }
 
+        if (!style || !is.str(style)) return;
+
+        
+
+        style = style
+            .replace(/([^:]+):([^;]+);?/g, (_, prop, val) => {
+                    _ = imp
+                    prop = prop.trim()
+                    val = val.trim()
+                    return `${prop}:${val}${_ ? " !important" : ""};`
+                }
+            )
+            .slice(0, -1)
            
-        DECLARED.push(style);
+        DECLARED.push(style.replace(/(?<!\\)_/g, ' '));
     }
 
-    const STYLE = DECLARED
-    .join(';')
-    .replace(/(?<!\\)_/g, ' ');
 
+    return {
+        media: MEDIA.length ? MEDIA : null,
+        selector: STRUCT.selector,
+        styles: DECLARED,
 
-
-    return [MEDIA, `${STRUCT.selector}{${STYLE}}`];
+        css() {
+            return `${STRUCT.selector}{${this.styles.join(";")}}`
+        }
+    }
 }
+
+
+
+
+
+
+// style = style.replace(/(?<!;\s*);(?![^()]*\))|(?<!;)$/g, imp ? ` ${imp};` : ";")
+
+
+
+
+    // const STYLE = DECLARED
+    // .join(';')
+    // .replace(/(?<!\\)_/g, ' ');
+
+
+
+    // return [MEDIA, `${STRUCT.selector}{${STYLE}}`];
+
+
+
+
+
+
+// let unit = is.arr(rule.unit) ? rule.unit : [rule.unit]
+            
+            
+            // // console.log(vals);
+
+            
+            // if (is.arr(rule.unit) && +vals.raw) {
+            //     return vals.raw + (rule.unit[group - 1] || "")
+            // }

@@ -8,8 +8,7 @@ import url      from 'url';
 import path     from 'path';
 import chokidar from 'chokidar';
 
-import BLICK  from '../theme/index.js';
-import COLOR  from './funcs/make-hex.js';
+// import COLOR  from './funcs/make-hex.js';
 import CONFIG from './default-config.js';
 
 import { isModule      } from './funcs/is-module.js';
@@ -20,12 +19,14 @@ import {
     mkdirIfNotExist,
     writeFileIfNotExist
 } from './funcs/node-helpers.js';
-import { createError } from './funcs/create-error.js';
 import { timer } from '../lib/timer.js';
-import context from '../context.js';
+import { BlickCss } from '../blick.js';
+import sendError from '../helpers/send-error.js';
+// import context from '../context.js';
+
+let ctx = new BlickCss()
 
 try {
-    const ctx = context.set(BLICK);
     const DIR = path.dirname(url.fileURLToPath(import.meta.url));
     const CWD = process.cwd();
 
@@ -33,11 +34,7 @@ try {
     const CONFIG_FILE_PATH = path.resolve(CONFIG_FILE_NAME)
     const CONFIG_FILE_PATH_REL = path.relative(DIR, CONFIG_FILE_PATH);
 
-    ctx._COLOR_ = COLOR;
-    ctx._CLI_ = true;
-
     let user_config = {}
-    let config_changed = false;
 
     async function filesUpdate(updatedFile) {
         let tmr = timer()
@@ -49,9 +46,9 @@ try {
             filesText += fs.readFileSync(file, "utf-8")
         }
         
-        let CSS = ctx.html(filesText, config_changed ? user_config : null)
+        let CSS = ctx.html(filesText)
         
-        if (user_config.beautify) {
+        if (ctx.beautify) {
             CSS = cssbeautify(CSS);
         }
 
@@ -59,12 +56,10 @@ try {
 
         fs.writeFile(user_config.output, CSS, (err) => {
             if (err) {
-                return console.error(`BlickCss: Error writing file`, err);
+                return sendError(`Error writing file`, err);
             }
             showMsg(updatedFile, user_config, tmr.getFormated())
         });
-
-        config_changed = false
     }
 
     let watching_files
@@ -73,23 +68,28 @@ try {
         watching_files?.close()
 
         const PATH = `./${CONFIG_FILE_PATH_REL}?update=${Date.now()}`
-        await new Promise((resolve, reject) => {
-            import(PATH).then(CONFIG => {
 
+        await new Promise((resolve, reject) => {
+            import(PATH)
+            .then(CONFIG => {
                 user_config = CONFIG.default
-                config_changed = true;
+                ctx = new BlickCss()
+                ctx.config(user_config)
                 filesUpdate();
                 resolve()
     
-            }).catch(e => createError([
-                ["red", e + " in "+ CONFIG_FILE_NAME],
-                ["red", "Please check your config file"]
-            ]));
+            })
+            .catch(e => sendError([
+                e + " in "+ CONFIG_FILE_NAME,
+                "Please check your config file"
+            ].join("\n")));
         });
 
 
         if (user_config.watch) {
-            watching_files = chokidar.watch(user_config.input).on('change', (filePath) => {
+            watching_files = chokidar
+            .watch(user_config.input)
+            .on('change', (filePath) => {
                 filesUpdate(filePath);
             })
         }
@@ -101,10 +101,16 @@ try {
         
         await handleConfigUpdate();
     
-        chokidar.watch(CONFIG_FILE_PATH).on('change', handleConfigUpdate);
+        chokidar
+        .watch(CONFIG_FILE_PATH)
+        .on('change', handleConfigUpdate);
     }
     main();
 }
 catch (error) {
     console.log(error);
 }
+
+// let blick = ctx
+
+// export default blick

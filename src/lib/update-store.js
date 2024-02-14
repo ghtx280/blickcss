@@ -1,7 +1,7 @@
-import context from "../context.js";
+// import context from "../context.js";
 
-export function updateStore(token, attr) {
-    const ctx = context.get();
+export function updateStore(ctx, token, attr) {
+    // const ctx = context.get();
 
     const AS = ctx._STORE_.ATTRS_STORE;
     const SS = ctx._STORE_.STYLE_STORE;
@@ -17,14 +17,21 @@ export function updateStore(token, attr) {
 
     AS[attr][token] = true;
 
-    const [MEDIA, RULE] = ctx.createRule(token, attr) || [[], ''];
+    const STRUCT = ctx.parse(token, attr)?.create()
+
+    if (!STRUCT) return false
+
+    const MEDIA = STRUCT.media
+    const RULE = STRUCT.css()
+
+    // const [MEDIA, RULE] = ctx.parse(token, attr) || [[], ''];
 
     if (!RULE) {
         SS[attr][token] = null;
         return false;
     }
 
-    if (MEDIA.length) {
+    if (MEDIA) {
         for (const m of MEDIA) {
             if (!(m.raw in MS)) MS[m.raw] = Object.create(null);
             if (!(m.val in CS.MEDIA)) CS.MEDIA[m.val] = '';

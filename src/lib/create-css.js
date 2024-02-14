@@ -1,8 +1,8 @@
-import context from '../context.js';
+// import context from '../context.js';
 import createRoot from './create-root.js';
 
-export default function() {
-    const ctx = context.get()
+export default function(ctx) {
+    // const ctx = context.get()
     const STORE = ctx._STORE_.CSS_STORE
     
     let media_str = '';
@@ -26,7 +26,7 @@ export default function() {
         result_css += ctx.reset
     }
     if (ctx.root) {
-        result_css += createRoot()
+        result_css += createRoot(ctx)
     }
     if (ctx.wrapper) {
         result_css += `${ctx.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}`

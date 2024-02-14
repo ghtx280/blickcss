@@ -1,8 +1,8 @@
-import context from '../context.js';
+// import context from '../context.js';
 import { is } from './check-type.js';
 
-export default function () {
-    const ctx = context.get()
+export default function(ctx) {
+    // const ctx = context.get()
 
     let fonts = '';
     let colors = '';

@@ -1,11 +1,12 @@
 import fs from 'fs';
 import { createAttrRegexp } from "./create-attr-regexp.js";
+import sendError from '../../helpers/send-error.js';
 
 export function processFile(file, attrs) {
     const html = fs.readFileSync(file, 'utf-8');
 
     if (!file) {
-        return console.error('BlickCss: File error');
+        return sendError('File error');
     }
 
     const NODE = {

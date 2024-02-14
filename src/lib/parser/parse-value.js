@@ -1,104 +1,188 @@
-import context from '../../context.js';
-import { getHexAlpha, getVarColor, getHex } from '../../theme/funcs.js';
+// import context from '../../context.js';
+import createColor from '../../helpers/create-color.js';
 import { is } from '../check-type.js';
 
-function createColor(color, opacity) {
-    const ctx = context.get()
+export class ValueParser {
+    constructor(ctx) {
+        this.ctx = ctx   
+    }
+
+
+    getItem(item = '', source = {}, index = 0) {
+        const [first, second] = item.replaceAll('\\', '').split('/');
+        const UNIT = source?._unit || '';
     
-    try {
-        if (ctx._COLOR_) {
-            return ctx._COLOR_(color, opacity);
+        if (!first) return;
+
+        if (+second) {
+            if (+first) {
+                return +(first / second * 100).toFixed(2) + '%';
+            }
+            else {
+                return createColor(this.ctx, first, second)
+            }
         }
-        return getHex(color) + getHexAlpha(opacity);
-    } catch (error) {
-        console.log(error + "");
-        return null
-    }
     
-}
-
-function createVar(variable, opacity = '') {
-    if (is.var(variable)) {
-        variable = variable.slice(1);
-    }
-    if (opacity) {
-        opacity = `;opacity:${opacity}`;
-    }
-
-    return `var(--${variable})${opacity}`;
-}
-
-function calcOpacity(number) {
-    if (+number) {
-        return number > 1 ? number / 100 : number;
-    }
-}
-
-function getItem(item = '', source = {}, index = 0) {
-    const [first, second] = item.replaceAll('\\', '').split('/');
-    const UNIT = source?._unit || '';
-
-    if (!first) return;
-
-    if (second && +second) {
-        if (+first) {
-            return +((first / second) * 100).toFixed(2) + '%';
-        }
-
         if (is.var(first)) {
-            const COLOR = getVarColor(first);
+            return createColor(this.ctx, first)
+        }
+    
+        if (is.arr(UNIT)) {
+            return +item ? item + (UNIT[index] || "") : item;
+        }
+        
+        return +item ? item + UNIT : item;
+    }
+    
+    /*
+      (num/num) 1/2 = 50%
+      (var/num) $foo/50 = foo in blick.colors ? getVarColor(foo) : var(--foo);opacity:0.5 
+      (str/num) red/50 = #ff000080
+    
+      (num) 15 = 15 + (unit || "")
+      (var) $foo = var(--foo)
+      (str) 5em = 5em
+    */
+    
+    parse(value = '', source = {}) {
+        if (!value) return null;
+    
+        if (!is.arr(value)) {
+            let s = this.ctx.divisionSymbol
+            value = value.split(
+                new RegExp(
+                    `(?<!\\\\)(?<!\\${s})\\${s}(?=\\${s}?)`, "g"
+                )
+            )
+        }
 
-            if (COLOR) {
-                return createColor(COLOR, second);
+    
+    
+        let values = value.map((item, index) => {
+            const STATIC = source._vals?.[item]
+
+            if (STATIC) {
+                return { val: STATIC, raw: item };
             }
 
-            return createVar(first, calcOpacity(second));
+            const DYNAMIC = this.getItem(item, source, index)
+
+            if (DYNAMIC) {
+                return { val: DYNAMIC.replace(/\\/g, ''), raw: item };
+            }
+            
+        });
+    
+        if (values.filter(e => e).length) {
+            return values
         }
-
-        return createColor(first, second);
-    }
-
-    if (is.var(first)) {
-        return createVar(first);
-    }
-
-    if (Array.isArray(UNIT)) {
-        return +item ? item + (UNIT[index] || "") : item;
-    }
     
-    return +item ? item + UNIT : item;
+        return null
+        
+    }
 }
 
-/*
-  (num/num) 1/2 = 50%
-  (var/num) $foo/50 = foo in blick.colors ? getVarColor(foo) : var(--foo);opacity:0.5 
-  (str/num) red/50 = #ff000080
+// export function CreateValueParser(ctx) {
 
-  (num) 15 = 15 + (unit || "")
-  (str) 5em = 5em
-*/
-
-export function parseValue(value = '', source = {}) {
-    if (!value) return null;
-
-    if (!is.arr(value)) {
-        value = value.split(/(?<!\\)\+/g)
-    }
+//     function createColor(color, opacity) {
+        
+//         try {
+//             if (ctx._COLOR_) {
+//                 return ctx._COLOR_(color, opacity);
+//             }
+//             // return getHex(color) + getHexAlpha(opacity);
+//             return "hui"
+//         } catch (error) {
+//             console.log(error + "");
+//             return null
+//         }
+        
+//     }
     
-
-    let fff = value.map((item, index) => {
-        return {
-            val:
-                source._vals?.[item] ??
-                getItem(item, source, index)?.replace(/\\/g, ''),
-            raw: item,
-        };
-    });
-
-    if (fff.filter(e => e.val).length) {
-        return fff
-    }
-
-    return null
+//     function createVar(variable, opacity = '') {
+//         if (is.var(variable)) {
+//             variable = variable.slice(1);
+//         }
+//         if (opacity) {
+//             opacity = `;opacity:${opacity}`;
+//         }
     
-}
+//         return `var(--${variable})${opacity}`;
+//     }
+    
+//     function calcOpacity(number) {
+//         if (+number) {
+//             return number > 1 ? number / 100 : number;
+//         }
+//     }
+    
+//     function getItem(item = '', source = {}, index = 0) {
+//         const [first, second] = item.replaceAll('\\', '').split('/');
+//         const UNIT = source?._unit || '';
+    
+//         if (!first) return;
+    
+//         if (second && +second) {
+//             if (+first) {
+//                 return +((first / second) * 100).toFixed(2) + '%';
+//             }
+    
+//             if (is.var(first)) {
+//                 const COLOR = getVarColor(first);
+    
+//                 if (COLOR) {
+//                     return createColor(COLOR, second);
+//                 }
+    
+//                 return createVar(first, calcOpacity(second));
+//             }
+    
+//             return createColor(first, second);
+//         }
+    
+//         if (is.var(first)) {
+//             return createVar(first);
+//         }
+    
+//         if (Array.isArray(UNIT)) {
+//             return +item ? item + (UNIT[index] || "") : item;
+//         }
+        
+//         return +item ? item + UNIT : item;
+//     }
+    
+//     /*
+//       (num/num) 1/2 = 50%
+//       (var/num) $foo/50 = foo in blick.colors ? getVarColor(foo) : var(--foo);opacity:0.5 
+//       (str/num) red/50 = #ff000080
+    
+//       (num) 15 = 15 + (unit || "")
+//       (var) $foo = var(--foo)
+//       (str) 5em = 5em
+//     */
+    
+//     return function(value = '', source = {}) {
+//         if (!value) return null;
+    
+//         if (!is.arr(value)) {
+//             value = value.split(/(?<!\\)\+/g)
+//         }
+        
+    
+//         let fff = value.map((item, index) => {
+//             return {
+//                 val:
+//                     source._vals?.[item] ??
+//                     getItem(item, source, index)?.replace(/\\/g, ''),
+//                 raw: item,
+//             };
+//         });
+    
+//         if (fff.filter(e => e.val).length) {
+//             return fff
+//         }
+    
+//         return null
+        
+//     }
+// }

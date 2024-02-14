@@ -1,9 +1,9 @@
-import context from '../context.js';
+// import context from '../context.js';
 import { is } from './check-type.js';
-import { parseMedia } from './parser/parse-media.js';
+import { MediaParser } from './parser/parse-media.js';
 
-export default function() {
-    const ctx = context.get()
+export default function(ctx) {
+    // const ctx = context.get()
    
     if (!ctx.dark) {
         ctx.dark = ctx.states.dark('').trim();
@@ -25,10 +25,12 @@ export default function() {
     }
 
     if (ctx.wrapper) {
+        const parseMedia = new MediaParser(ctx)
+
         for (const scr in ctx.screen) {
             let size = ctx.screen[scr];
 
-            ctx._STORE_.CSS_STORE.MEDIA[parseMedia(scr)] =
+            ctx._STORE_.CSS_STORE.MEDIA[parseMedia.parse(scr)] =
                 ctx.wrapper + `{max-width:${is.num(size) ? size : size[0]}px}`;
         }
     }
