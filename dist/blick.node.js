@@ -11,10 +11,8 @@ import chokidar from "chokidar";
 var default_config_default = (
   /*js*/
   `
-import { BlickCss } from "blickcss"
-
-/** @type {BlickCss} */
-export default {
+/** @type {import('blickcss').config} */
+export default (b) => ({
     input: './src/**/*.html', // Your input files by glob pattern
     output: './src/output.css', // File in which css will be generated
 
@@ -31,8 +29,7 @@ export default {
     // root: false,
     // wrapper: false,
     // autoFlex: false,
-}
-`
+})`
 );
 
 // src/node/funcs/is-module.js
