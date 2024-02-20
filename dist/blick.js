@@ -40,7 +40,7 @@
   };
 
   // version.js
-  var version_default = "2.1.4";
+  var version_default = "2.1.5";
 
   // src/lib/check-type.js
   function isElement(element) {
@@ -326,7 +326,7 @@
         return execRegexp(replacement);
       },
       split() {
-        return execRegexp().split();
+        return execRegexp().split("\n");
       }
     };
   }

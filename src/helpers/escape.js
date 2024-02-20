@@ -17,7 +17,7 @@ export function escape(str = "", symbol = "") {
         },
 
         split(){
-            return execRegexp().split()
+            return execRegexp().split("\n")
         }
     }
 }
