@@ -1,4 +1,62 @@
 #!/usr/bin/env node
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __publicField = (obj, key, value) => {
+  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
+};
+var __accessCheck = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet = (obj, member, getter) => {
+  __accessCheck(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateSet = (obj, member, value, setter) => {
+  __accessCheck(obj, member, "write to private field");
+  setter ? setter.call(obj, value) : member.set(obj, value);
+  return value;
+};
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve2, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve2(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 
 // src/node/index.js
 import fs2 from "fs";
@@ -390,11 +448,11 @@ function showMsg(file, params, time) {
   );
   console.log(`-------------------`);
   if (file) {
-    let upd_file = file.replaceAll("\\", "/");
+    let upd_file = file.replace(/\\/g, "");
     console.log(chalk.green.bold(`'${upd_file}' was changed.`));
   }
   if (params.output) {
-    let out_file = params.output.replaceAll(/\.+\//g, "");
+    let out_file = params.output.replace(/\.+\//g, "");
     console.log(chalk.green.bold(`'${out_file}' updated successfully.`));
   }
   console.log(`-------------------`);
@@ -438,7 +496,7 @@ function timer(label) {
 }
 
 // version.js
-var version_default = "2.1";
+var version_default = "2.1.4";
 
 // src/lib/check-type.js
 function isElement(element) {
@@ -461,27 +519,16 @@ var TYPES = {
   undef: (e) => e === void 0,
   element: (e) => isElement(e)
 };
-var is = {
-  ...TYPES
-  // not: new Proxy(TYPES, {
-  //     get(obj, key) {
-  //         if (key in obj) {
-  //             return (val) => !obj[key](val);
-  //         } else {
-  //             throw new Error(`BlickCss: type '${key}' don't exist`);
-  //         }
-  //     },
-  // }),
-};
+var is = __spreadValues({}, TYPES);
 
 // src/lib/create-root.js
 function create_root_default(ctx2) {
   let fonts = "";
   let colors = "";
-  for (const type in ctx2?.font) {
+  for (const type in ctx2 == null ? void 0 : ctx2.font) {
     fonts += `--font-${type}:${ctx2.font[type]};`;
   }
-  for (const color in ctx2?.colors) {
+  for (const color in ctx2 == null ? void 0 : ctx2.colors) {
     if (is.str(ctx2.colors[color])) {
       colors += `--${color}:${ctx2.colors[color]};`;
       continue;
@@ -495,6 +542,7 @@ function create_root_default(ctx2) {
 
 // src/lib/create-css.js
 function create_css_default(ctx2) {
+  var _a;
   const STORE = ctx2._STORE_.CSS_STORE;
   let media_str = "";
   let css_str = "";
@@ -521,7 +569,7 @@ function create_css_default(ctx2) {
     result_css += `${ctx2.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}`;
   }
   for (const key in ctx2.attr) {
-    if (ctx2.attr[key]?._using && key in STORE) {
+    if (((_a = ctx2.attr[key]) == null ? void 0 : _a._using) && key in STORE) {
       result_css += `[${key}]{${ctx2.attr[key]._using}}`;
     }
   }
@@ -611,6 +659,7 @@ function prerender_default(ctx2) {
 
 // src/lib/update-store.js
 function updateStore(ctx2, token, attr) {
+  var _a;
   const AS = ctx2._STORE_.ATTRS_STORE;
   const SS = ctx2._STORE_.STYLE_STORE;
   const MS = ctx2._STORE_.MEDIA_STORE;
@@ -626,7 +675,7 @@ function updateStore(ctx2, token, attr) {
   if (token in AS[attr])
     return false;
   AS[attr][token] = true;
-  const STRUCT = ctx2.parse(token, attr)?.create();
+  const STRUCT = (_a = ctx2.parse(token, attr)) == null ? void 0 : _a.create();
   if (!STRUCT)
     return false;
   const MEDIA = STRUCT.media;
@@ -700,6 +749,27 @@ function format_selector_default(token, attr = "class") {
   return `[${attr}~="${token}"]`;
 }
 
+// src/helpers/escape.js
+function escape(str = "", symbol = "") {
+  const RE = new RegExp(`(\\\\)?\\${symbol}`, "g");
+  function execRegexp(replacement) {
+    return str.replace(RE, (_, esc) => {
+      if (esc) {
+        return _;
+      }
+      return replacement || "\n";
+    });
+  }
+  return {
+    replace(replacement) {
+      return execRegexp(replacement);
+    },
+    split() {
+      return execRegexp().split();
+    }
+  };
+}
+
 // src/lib/parser/parse-states.js
 var StatesParser = class {
   constructor(ctx2) {
@@ -723,7 +793,7 @@ var StatesParser = class {
         val = this.ctx.states[raw] || ":" + raw;
       }
       if (is.str(val)) {
-        val = val.replace(/(?<!\\)_/g, " ");
+        val = escape(val, "_").replace(" ");
       }
       type = "pseudo";
     }
@@ -737,7 +807,9 @@ var RuleParser = class {
     this.ctx = ctx2;
   }
   parse(path2, object) {
-    const PARTS = path2.split(/(?<!\\)-/g);
+    const SPLIT_SYMBOL = "-";
+    const RE_PATH = new RegExp(`(\\\\)?\\${SPLIT_SYMBOL}`, "g");
+    const PARTS = path2.replace(RE_PATH, (_, esc) => esc ? SPLIT_SYMBOL : "\n").split("\n");
     let array_path = [];
     let value_string = null;
     for (const i in PARTS) {
@@ -934,6 +1006,7 @@ function hex_alpha_default(num) {
 
 // src/helpers/color/var-color.js
 function var_color_default(ctx2, str) {
+  var _a, _b;
   const colors = ctx2.colors;
   if (!colors)
     return;
@@ -953,7 +1026,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       );
     }
   }
-  return colors[colorName]?.def || colors[colorName]?.DEFAULT || colors[colorName];
+  return ((_a = colors[colorName]) == null ? void 0 : _a.def) || ((_b = colors[colorName]) == null ? void 0 : _b.DEFAULT) || colors[colorName];
 }
 
 // src/helpers/color/create-var.js
@@ -1011,8 +1084,8 @@ var ValueParser = class {
     this.ctx = ctx2;
   }
   getItem(item = "", source = {}, index = 0) {
-    const [first, second] = item.replaceAll("\\", "").split("/");
-    const UNIT = source?._unit || "";
+    const [first, second] = item.replace(/\\/g, "").split("/");
+    const UNIT = source ? source._unit : "";
     if (!first)
       return;
     if (+second) {
@@ -1042,17 +1115,13 @@ var ValueParser = class {
   parse(value = "", source = {}) {
     if (!value)
       return null;
+    const S = this.ctx.divisionSymbol;
+    const RE_SPLIT = new RegExp(`([^${S}\\\\])\\${S}`, "g");
     if (!is.arr(value)) {
-      let s = this.ctx.divisionSymbol;
-      value = value.split(
-        new RegExp(
-          `(?<!\\\\)(?<!\\${s})\\${s}(?=\\${s}?)`,
-          "g"
-        )
-      );
+      value = value.replace(RE_SPLIT, "$1\n").split("\n");
     }
     let values = value.map((item, index) => {
-      const STATIC = source._vals?.[item];
+      const STATIC = source._vals ? source._vals[item] : null;
       if (STATIC) {
         return { val: STATIC, raw: item };
       }
@@ -1136,7 +1205,7 @@ var StylesParser = class {
       prop: declaration,
       values,
       rawVal: value,
-      val: values?.map((e) => e.val).join(source._join || " ") || null,
+      val: values ? values.map((e) => e.val).join(source._join || " ") : null,
       unit: source._unit || "",
       join: source._join || " ",
       important
@@ -1146,6 +1215,7 @@ var StylesParser = class {
 
 // src/lib/create-rule.js
 function createRule(STRUCT) {
+  var _a;
   let IS_MEDIA = false;
   if (!STRUCT)
     return null;
@@ -1157,7 +1227,7 @@ function createRule(STRUCT) {
       if (state.type === "pseudo") {
         if (is.func(state.val)) {
           STRUCT.selector = state.val(STRUCT.selector);
-        } else if (state.val?.includes("$")) {
+        } else if ((_a = state.val) == null ? void 0 : _a.includes("$")) {
           STRUCT.selector = state.val.replace("$", STRUCT.selector);
         } else {
           STRUCT.selector += state.val;
@@ -1173,10 +1243,11 @@ function createRule(STRUCT) {
   }
   for (let rule of STRUCT.styles) {
     let replaceDynamic2 = function(_, group) {
+      var _a2, _b, _c, _d, _e;
       if (!group)
         return rule.val || rule.rawVal || rule.prop;
-      let vals = rule.values[group - 1] ?? rule.values[0];
-      let unit = rule.unit?.[group - 1] ?? rule.unit?.[0] ?? rule.unit;
+      let vals = (_a2 = rule.values[group - 1]) != null ? _a2 : rule.values[0];
+      let unit = (_e = (_d = (_b = rule.unit) == null ? void 0 : _b[group - 1]) != null ? _d : (_c = rule.unit) == null ? void 0 : _c[0]) != null ? _e : rule.unit;
       return vals.val || vals.raw || (+vals ? vals + (unit || "") : vals);
     };
     var replaceDynamic = replaceDynamic2;
@@ -1220,7 +1291,7 @@ function createRule(STRUCT) {
         return `${prop}:${val}${_ ? " !important" : ""};`;
       }
     ).slice(0, -1);
-    DECLARED.push(style.replace(/(?<!\\)_/g, " "));
+    DECLARED.push(escape(style, "_").replace(" "));
   }
   return {
     media: MEDIA.length ? MEDIA : null,
@@ -1240,18 +1311,18 @@ var Parser = class {
     this.parseStyles = new StylesParser(ctx2);
   }
   parse(token = "", attr = "class") {
-    let [styles, ...states] = token.split(/(?<!\\):/g).reverse();
+    let [styles, ...states] = escape(token, ":").split().reverse();
     let selector = format_selector_default(token, attr);
     let rawSelector = selector;
     states = states.map((e) => this.parseStates.parse(e, attr, token));
-    styles = styles.split(/(?<!\\);/g);
+    styles = escape(styles, ";").split();
     styles = styles.map((e) => this.parseStyles.parse(e, attr, token, states));
     styles = styles.filter((e) => e);
     if (!states.length) {
       states = null;
     }
     if (styles.length) {
-      const EXTRA_SELECTOR = styles[0].src?._selector;
+      const EXTRA_SELECTOR = (styles[0].src || 0)._selector || null;
       return {
         states,
         styles,
@@ -2375,7 +2446,7 @@ function CreateClasses() {
       _prop: "stroke-width: $",
       _unit: "px"
     },
-    text: {
+    text: __spreadValues({
       _prop: function({ rawVal }) {
         console.log(rawVal);
         let [v1, v2, v3] = rawVal.split("/");
@@ -2400,9 +2471,8 @@ function CreateClasses() {
         }
         return "color:$";
       },
-      _unit: ["px", "", "px"],
-      ...CreateAttrText()
-    }
+      _unit: ["px", "", "px"]
+    }, CreateAttrText())
   };
   classes.object = classes.fit;
   classes.overflow = classes.over;
@@ -2515,38 +2585,40 @@ var HTMLProcessor = class {
 };
 
 // src/blick.js
+var _parser, _html;
 var BlickCss = class {
-  #parser;
-  #html;
   constructor(params = {}) {
+    __privateAdd(this, _parser, void 0);
+    __privateAdd(this, _html, void 0);
+    __publicField(this, "class", CreateClasses());
+    __publicField(this, "attr", CreateAttrs());
+    __publicField(this, "screen", CreateScreens());
+    __publicField(this, "states", CreateStates());
+    __publicField(this, "colors", CreateColors());
+    __publicField(this, "font", CreateFonts());
+    __publicField(this, "reset", CreateReset());
+    __publicField(this, "autoTheme", false);
+    __publicField(this, "beautify", false);
+    __publicField(this, "autoFlex", true);
+    __publicField(this, "useAttr", true);
+    __publicField(this, "time", false);
+    __publicField(this, "root", true);
+    __publicField(this, "wrapper", ".wrapper");
+    __publicField(this, "maxPrefix", "m-");
+    __publicField(this, "divisionSymbol", "+");
+    __publicField(this, "beautifyOption", null);
+    __publicField(this, "version", version_default);
+    __publicField(this, "element", null);
+    __publicField(this, "_STORE_", CreateStore());
     this.env = params.env;
-    this.#parser = new Parser(this);
-    this.#html = new HTMLProcessor(this);
+    __privateSet(this, _parser, new Parser(this));
+    __privateSet(this, _html, new HTMLProcessor(this));
   }
-  class = CreateClasses();
-  attr = CreateAttrs();
-  screen = CreateScreens();
-  states = CreateStates();
-  colors = CreateColors();
-  font = CreateFonts();
-  reset = CreateReset();
-  autoTheme = false;
-  beautify = false;
-  autoFlex = true;
-  useAttr = true;
-  time = false;
-  root = true;
-  wrapper = ".wrapper";
-  maxPrefix = "m-";
-  divisionSymbol = "+";
-  beautifyOption = null;
-  version = version_default;
-  element = null;
   parse(token = "", attr = "class") {
-    return this.#parser.parse(token, attr);
+    return __privateGet(this, _parser).parse(token, attr);
   }
   html(code = "") {
-    return this.#html.css(code);
+    return __privateGet(this, _html).css(code);
   }
   config(updates = this, source = this, isFirstCall = true) {
     if (updates === source)
@@ -2584,65 +2656,73 @@ var BlickCss = class {
   render() {
     return render_default(this);
   }
-  _STORE_ = CreateStore();
 };
+_parser = new WeakMap();
+_html = new WeakMap();
 
 // src/node/index.js
+var import_meta = {};
 console.log("\n================BlickCss================\n");
 var ctx = new BlickCss();
 try {
-  const DIR = path.dirname(url.fileURLToPath(import.meta.url));
+  const DIR = path.dirname(url.fileURLToPath(import_meta.url));
   const CWD = process.cwd();
   const CONFIG_FILE_NAME = `blick.config.${!isModule() ? "m" : ""}js`;
   const CONFIG_FILE_PATH = path.resolve(CONFIG_FILE_NAME);
   const CONFIG_FILE_PATH_REL = path.relative(DIR, CONFIG_FILE_PATH);
   let user_config = {};
-  async function filesUpdate(updatedFile) {
-    let tmr = timer();
-    const FILES = fg.sync(user_config.input);
-    let filesText = "";
-    for (const file of FILES) {
-      filesText += fs2.readFileSync(file, "utf-8");
-    }
-    let CSS = ctx.html(filesText);
-    if (ctx.beautify) {
-      CSS = cssbeautify(CSS);
-    }
-    mkdirIfNotExist(path.dirname(user_config.output));
-    fs2.writeFile(user_config.output, CSS, (err) => {
-      if (err) {
-        return send_error_default(`Error writing file`, err);
+  function filesUpdate(updatedFile) {
+    return __async(this, null, function* () {
+      let tmr = timer();
+      const FILES = fg.sync(user_config.input);
+      let filesText = "";
+      for (const file of FILES) {
+        filesText += fs2.readFileSync(file, "utf-8");
       }
-      showMsg(updatedFile, user_config, tmr.getFormated());
+      let CSS = ctx.html(filesText);
+      if (ctx.beautify) {
+        CSS = cssbeautify(CSS);
+      }
+      mkdirIfNotExist(path.dirname(user_config.output));
+      fs2.writeFile(user_config.output, CSS, (err) => {
+        if (err) {
+          return send_error_default(`Error writing file`, err);
+        }
+        showMsg(updatedFile, user_config, tmr.getFormated());
+      });
     });
   }
   let watching_files;
-  async function handleConfigUpdate() {
-    watching_files?.close();
-    const PATH = `./${CONFIG_FILE_PATH_REL}?update=${Date.now()}`;
-    await new Promise((resolve2, reject) => {
-      import(PATH).then((CONFIG) => {
-        ctx = new BlickCss();
-        user_config = CONFIG.default(ctx);
-        ctx.config(user_config);
-        filesUpdate();
-        resolve2();
-      }).catch((e) => send_error_default([
-        e + " in " + CONFIG_FILE_NAME,
-        "Please check your config file"
-      ].join("\n")));
-    });
-    if (user_config.watch) {
-      watching_files = chokidar.watch(user_config.input).on("change", (filePath) => {
-        filesUpdate(filePath);
+  function handleConfigUpdate() {
+    return __async(this, null, function* () {
+      watching_files == null ? void 0 : watching_files.close();
+      const PATH = `./${CONFIG_FILE_PATH_REL}?update=${Date.now()}`;
+      yield new Promise((resolve2, reject) => {
+        import(PATH).then((CONFIG) => {
+          ctx = new BlickCss();
+          user_config = CONFIG.default(ctx);
+          ctx.config(user_config);
+          filesUpdate();
+          resolve2();
+        }).catch((e) => send_error_default([
+          e + " in " + CONFIG_FILE_NAME,
+          "Please check your config file"
+        ].join("\n")));
       });
-    }
+      if (user_config.watch) {
+        watching_files = chokidar.watch(user_config.input).on("change", (filePath) => {
+          filesUpdate(filePath);
+        });
+      }
+    });
   }
   ;
-  async function main() {
-    writeFileIfNotExist(CONFIG_FILE_PATH, default_config_default);
-    await handleConfigUpdate();
-    chokidar.watch(CONFIG_FILE_PATH).on("change", handleConfigUpdate);
+  function main() {
+    return __async(this, null, function* () {
+      writeFileIfNotExist(CONFIG_FILE_PATH, default_config_default);
+      yield handleConfigUpdate();
+      chokidar.watch(CONFIG_FILE_PATH).on("change", handleConfigUpdate);
+    });
   }
   main();
 } catch (error) {

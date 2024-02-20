@@ -1,4 +1,5 @@
 // import context from '../../context.js';
+import { escape } from '../../helpers/escape.js';
 import { is } from '../check-type.js';
 import { MediaParser } from './parse-media.js';
 
@@ -27,7 +28,8 @@ export class StatesParser {
                 val = this.ctx.states[raw] || ':' + raw;
             }
             if (is.str(val)) {
-                val = val.replace(/(?<!\\)_/g, ' ');
+                // val = val.replace(/(?<!\\)_/g, ' ');
+                val = escape(val, "_").replace(" ")
             }
 
             type = 'pseudo';

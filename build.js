@@ -8,6 +8,7 @@ esbuild.buildSync({
     format: 'iife',
     outfile: `./dist/${lib_name}.js`,
     sourcemap: true,
+    target: "es6"
 });
 
 esbuild.buildSync({
@@ -16,6 +17,7 @@ esbuild.buildSync({
     minify: true,
     outfile: `./dist/${lib_name}.min.js`,
     sourcemap: true,
+    target: "es6"
 });
 
 esbuild.buildSync({
@@ -25,6 +27,7 @@ esbuild.buildSync({
     packages: 'external',
     format: 'esm',
     outfile: `./dist/${lib_name}.node.js`,
+    target: "es6"
 });
 
 console.log('\nBuilding complete!\n');

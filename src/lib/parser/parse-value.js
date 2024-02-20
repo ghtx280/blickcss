@@ -9,8 +9,8 @@ export class ValueParser {
 
 
     getItem(item = '', source = {}, index = 0) {
-        const [first, second] = item.replaceAll('\\', '').split('/');
-        const UNIT = source?._unit || '';
+        const [first, second] = item.replace(/\\/g, '').split('/');
+        const UNIT = source ? source._unit : '';
     
         if (!first) return;
 
@@ -46,20 +46,16 @@ export class ValueParser {
     
     parse(value = '', source = {}) {
         if (!value) return null;
+        const S = this.ctx.divisionSymbol
+        const RE_SPLIT = new RegExp(`([^${S}\\\\])\\${S}`, 'g')
     
-        if (!is.arr(value)) {
-            let s = this.ctx.divisionSymbol
-            value = value.split(
-                new RegExp(
-                    `(?<!\\\\)(?<!\\${s})\\${s}(?=\\${s}?)`, "g"
-                )
-            )
+        if (!is.arr(value)) {  
+            value = value.replace(RE_SPLIT, "$1\n").split("\n")
         }
 
-    
-    
+
         let values = value.map((item, index) => {
-            const STATIC = source._vals?.[item]
+            const STATIC = source._vals ? source._vals[item] : null
 
             if (STATIC) {
                 return { val: STATIC, raw: item };

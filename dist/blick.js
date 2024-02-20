@@ -1,7 +1,46 @@
 "use strict";
 (() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  var __spreadValues = (a, b) => {
+    for (var prop in b || (b = {}))
+      if (__hasOwnProp.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    if (__getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(b)) {
+        if (__propIsEnum.call(b, prop))
+          __defNormalProp(a, prop, b[prop]);
+      }
+    return a;
+  };
+  var __publicField = (obj, key, value) => {
+    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    return value;
+  };
+  var __accessCheck = (obj, member, msg) => {
+    if (!member.has(obj))
+      throw TypeError("Cannot " + msg);
+  };
+  var __privateGet = (obj, member, getter) => {
+    __accessCheck(obj, member, "read from private field");
+    return getter ? getter.call(obj) : member.get(obj);
+  };
+  var __privateAdd = (obj, member, value) => {
+    if (member.has(obj))
+      throw TypeError("Cannot add the same private member more than once");
+    member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+  };
+  var __privateSet = (obj, member, value, setter) => {
+    __accessCheck(obj, member, "write to private field");
+    setter ? setter.call(obj, value) : member.set(obj, value);
+    return value;
+  };
+
   // version.js
-  var version_default = "2.1";
+  var version_default = "2.1.4";
 
   // src/lib/check-type.js
   function isElement(element) {
@@ -24,27 +63,16 @@
     undef: (e) => e === void 0,
     element: (e) => isElement(e)
   };
-  var is = {
-    ...TYPES
-    // not: new Proxy(TYPES, {
-    //     get(obj, key) {
-    //         if (key in obj) {
-    //             return (val) => !obj[key](val);
-    //         } else {
-    //             throw new Error(`BlickCss: type '${key}' don't exist`);
-    //         }
-    //     },
-    // }),
-  };
+  var is = __spreadValues({}, TYPES);
 
   // src/lib/create-root.js
   function create_root_default(ctx) {
     let fonts = "";
     let colors = "";
-    for (const type in ctx?.font) {
+    for (const type in ctx == null ? void 0 : ctx.font) {
       fonts += `--font-${type}:${ctx.font[type]};`;
     }
-    for (const color in ctx?.colors) {
+    for (const color in ctx == null ? void 0 : ctx.colors) {
       if (is.str(ctx.colors[color])) {
         colors += `--${color}:${ctx.colors[color]};`;
         continue;
@@ -58,6 +86,7 @@
 
   // src/lib/create-css.js
   function create_css_default(ctx) {
+    var _a;
     const STORE = ctx._STORE_.CSS_STORE;
     let media_str = "";
     let css_str = "";
@@ -84,7 +113,7 @@
       result_css += `${ctx.wrapper}{display:block;width:100%;margin:0 auto;padding-left:var(--wrapper-padding,15px);padding-right:var(--wrapper-padding,15px)}`;
     }
     for (const key in ctx.attr) {
-      if (ctx.attr[key]?._using && key in STORE) {
+      if (((_a = ctx.attr[key]) == null ? void 0 : _a._using) && key in STORE) {
         result_css += `[${key}]{${ctx.attr[key]._using}}`;
       }
     }
@@ -191,6 +220,7 @@
 
   // src/lib/update-store.js
   function updateStore(ctx, token, attr) {
+    var _a;
     const AS = ctx._STORE_.ATTRS_STORE;
     const SS = ctx._STORE_.STYLE_STORE;
     const MS = ctx._STORE_.MEDIA_STORE;
@@ -206,7 +236,7 @@
     if (token in AS[attr])
       return false;
     AS[attr][token] = true;
-    const STRUCT = ctx.parse(token, attr)?.create();
+    const STRUCT = (_a = ctx.parse(token, attr)) == null ? void 0 : _a.create();
     if (!STRUCT)
       return false;
     const MEDIA = STRUCT.media;
@@ -280,6 +310,27 @@
     return `[${attr}~="${token}"]`;
   }
 
+  // src/helpers/escape.js
+  function escape(str = "", symbol = "") {
+    const RE = new RegExp(`(\\\\)?\\${symbol}`, "g");
+    function execRegexp(replacement) {
+      return str.replace(RE, (_, esc) => {
+        if (esc) {
+          return _;
+        }
+        return replacement || "\n";
+      });
+    }
+    return {
+      replace(replacement) {
+        return execRegexp(replacement);
+      },
+      split() {
+        return execRegexp().split();
+      }
+    };
+  }
+
   // src/lib/parser/parse-states.js
   var StatesParser = class {
     constructor(ctx) {
@@ -303,7 +354,7 @@
           val = this.ctx.states[raw] || ":" + raw;
         }
         if (is.str(val)) {
-          val = val.replace(/(?<!\\)_/g, " ");
+          val = escape(val, "_").replace(" ");
         }
         type = "pseudo";
       }
@@ -317,7 +368,9 @@
       this.ctx = ctx;
     }
     parse(path, object) {
-      const PARTS = path.split(/(?<!\\)-/g);
+      const SPLIT_SYMBOL = "-";
+      const RE_PATH = new RegExp(`(\\\\)?\\${SPLIT_SYMBOL}`, "g");
+      const PARTS = path.replace(RE_PATH, (_, esc) => esc ? SPLIT_SYMBOL : "\n").split("\n");
       let array_path = [];
       let value_string = null;
       for (const i in PARTS) {
@@ -514,6 +567,7 @@
 
   // src/helpers/color/var-color.js
   function var_color_default(ctx, str) {
+    var _a, _b;
     const colors = ctx.colors;
     if (!colors)
       return;
@@ -533,7 +587,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         );
       }
     }
-    return colors[colorName]?.def || colors[colorName]?.DEFAULT || colors[colorName];
+    return ((_a = colors[colorName]) == null ? void 0 : _a.def) || ((_b = colors[colorName]) == null ? void 0 : _b.DEFAULT) || colors[colorName];
   }
 
   // src/helpers/color/create-var.js
@@ -591,8 +645,8 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       this.ctx = ctx;
     }
     getItem(item = "", source = {}, index = 0) {
-      const [first, second] = item.replaceAll("\\", "").split("/");
-      const UNIT = source?._unit || "";
+      const [first, second] = item.replace(/\\/g, "").split("/");
+      const UNIT = source ? source._unit : "";
       if (!first)
         return;
       if (+second) {
@@ -622,17 +676,13 @@ Available shades: ${Object.keys(colors[colorName]).filter(
     parse(value = "", source = {}) {
       if (!value)
         return null;
+      const S = this.ctx.divisionSymbol;
+      const RE_SPLIT = new RegExp(`([^${S}\\\\])\\${S}`, "g");
       if (!is.arr(value)) {
-        let s = this.ctx.divisionSymbol;
-        value = value.split(
-          new RegExp(
-            `(?<!\\\\)(?<!\\${s})\\${s}(?=\\${s}?)`,
-            "g"
-          )
-        );
+        value = value.replace(RE_SPLIT, "$1\n").split("\n");
       }
       let values = value.map((item, index) => {
-        const STATIC = source._vals?.[item];
+        const STATIC = source._vals ? source._vals[item] : null;
         if (STATIC) {
           return { val: STATIC, raw: item };
         }
@@ -716,7 +766,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         prop: declaration,
         values,
         rawVal: value,
-        val: values?.map((e) => e.val).join(source._join || " ") || null,
+        val: values ? values.map((e) => e.val).join(source._join || " ") : null,
         unit: source._unit || "",
         join: source._join || " ",
         important
@@ -726,6 +776,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
 
   // src/lib/create-rule.js
   function createRule(STRUCT) {
+    var _a;
     let IS_MEDIA = false;
     if (!STRUCT)
       return null;
@@ -737,7 +788,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         if (state.type === "pseudo") {
           if (is.func(state.val)) {
             STRUCT.selector = state.val(STRUCT.selector);
-          } else if (state.val?.includes("$")) {
+          } else if ((_a = state.val) == null ? void 0 : _a.includes("$")) {
             STRUCT.selector = state.val.replace("$", STRUCT.selector);
           } else {
             STRUCT.selector += state.val;
@@ -753,10 +804,11 @@ Available shades: ${Object.keys(colors[colorName]).filter(
     }
     for (let rule of STRUCT.styles) {
       let replaceDynamic2 = function(_, group) {
+        var _a2, _b, _c, _d, _e;
         if (!group)
           return rule.val || rule.rawVal || rule.prop;
-        let vals = rule.values[group - 1] ?? rule.values[0];
-        let unit = rule.unit?.[group - 1] ?? rule.unit?.[0] ?? rule.unit;
+        let vals = (_a2 = rule.values[group - 1]) != null ? _a2 : rule.values[0];
+        let unit = (_e = (_d = (_b = rule.unit) == null ? void 0 : _b[group - 1]) != null ? _d : (_c = rule.unit) == null ? void 0 : _c[0]) != null ? _e : rule.unit;
         return vals.val || vals.raw || (+vals ? vals + (unit || "") : vals);
       };
       var replaceDynamic = replaceDynamic2;
@@ -800,7 +852,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
           return `${prop}:${val}${_ ? " !important" : ""};`;
         }
       ).slice(0, -1);
-      DECLARED.push(style.replace(/(?<!\\)_/g, " "));
+      DECLARED.push(escape(style, "_").replace(" "));
     }
     return {
       media: MEDIA.length ? MEDIA : null,
@@ -820,18 +872,18 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       this.parseStyles = new StylesParser(ctx);
     }
     parse(token = "", attr = "class") {
-      let [styles, ...states] = token.split(/(?<!\\):/g).reverse();
+      let [styles, ...states] = escape(token, ":").split().reverse();
       let selector = format_selector_default(token, attr);
       let rawSelector = selector;
       states = states.map((e) => this.parseStates.parse(e, attr, token));
-      styles = styles.split(/(?<!\\);/g);
+      styles = escape(styles, ";").split();
       styles = styles.map((e) => this.parseStyles.parse(e, attr, token, states));
       styles = styles.filter((e) => e);
       if (!states.length) {
         states = null;
       }
       if (styles.length) {
-        const EXTRA_SELECTOR = styles[0].src?._selector;
+        const EXTRA_SELECTOR = (styles[0].src || 0)._selector || null;
         return {
           states,
           styles,
@@ -1955,7 +2007,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         _prop: "stroke-width: $",
         _unit: "px"
       },
-      text: {
+      text: __spreadValues({
         _prop: function({ rawVal }) {
           console.log(rawVal);
           let [v1, v2, v3] = rawVal.split("/");
@@ -1980,9 +2032,8 @@ Available shades: ${Object.keys(colors[colorName]).filter(
           }
           return "color:$";
         },
-        _unit: ["px", "", "px"],
-        ...CreateAttrText()
-      }
+        _unit: ["px", "", "px"]
+      }, CreateAttrText())
     };
     classes.object = classes.fit;
     classes.overflow = classes.over;
@@ -2095,38 +2146,40 @@ Available shades: ${Object.keys(colors[colorName]).filter(
   };
 
   // src/blick.js
+  var _parser, _html;
   var BlickCss = class {
-    #parser;
-    #html;
     constructor(params = {}) {
+      __privateAdd(this, _parser, void 0);
+      __privateAdd(this, _html, void 0);
+      __publicField(this, "class", CreateClasses());
+      __publicField(this, "attr", CreateAttrs());
+      __publicField(this, "screen", CreateScreens());
+      __publicField(this, "states", CreateStates());
+      __publicField(this, "colors", CreateColors());
+      __publicField(this, "font", CreateFonts());
+      __publicField(this, "reset", CreateReset());
+      __publicField(this, "autoTheme", false);
+      __publicField(this, "beautify", false);
+      __publicField(this, "autoFlex", true);
+      __publicField(this, "useAttr", true);
+      __publicField(this, "time", false);
+      __publicField(this, "root", true);
+      __publicField(this, "wrapper", ".wrapper");
+      __publicField(this, "maxPrefix", "m-");
+      __publicField(this, "divisionSymbol", "+");
+      __publicField(this, "beautifyOption", null);
+      __publicField(this, "version", version_default);
+      __publicField(this, "element", null);
+      __publicField(this, "_STORE_", CreateStore());
       this.env = params.env;
-      this.#parser = new Parser(this);
-      this.#html = new HTMLProcessor(this);
+      __privateSet(this, _parser, new Parser(this));
+      __privateSet(this, _html, new HTMLProcessor(this));
     }
-    class = CreateClasses();
-    attr = CreateAttrs();
-    screen = CreateScreens();
-    states = CreateStates();
-    colors = CreateColors();
-    font = CreateFonts();
-    reset = CreateReset();
-    autoTheme = false;
-    beautify = false;
-    autoFlex = true;
-    useAttr = true;
-    time = false;
-    root = true;
-    wrapper = ".wrapper";
-    maxPrefix = "m-";
-    divisionSymbol = "+";
-    beautifyOption = null;
-    version = version_default;
-    element = null;
     parse(token = "", attr = "class") {
-      return this.#parser.parse(token, attr);
+      return __privateGet(this, _parser).parse(token, attr);
     }
     html(code = "") {
-      return this.#html.css(code);
+      return __privateGet(this, _html).css(code);
     }
     config(updates = this, source = this, isFirstCall = true) {
       if (updates === source)
@@ -2164,8 +2217,9 @@ Available shades: ${Object.keys(colors[colorName]).filter(
     render() {
       return render_default(this);
     }
-    _STORE_ = CreateStore();
   };
+  _parser = new WeakMap();
+  _html = new WeakMap();
 
   // src/browser.js
   var BLICK = new BlickCss({ env: "browser" });

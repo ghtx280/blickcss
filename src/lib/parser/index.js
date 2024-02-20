@@ -4,6 +4,7 @@ import { is } from '../check-type.js';
 import { StatesParser } from './parse-states.js';
 import { StylesParser } from './parse-styles.js';
 import { createRule   } from '../create-rule.js';
+import { escape } from '../../helpers/escape.js';
 
 
 export class Parser {
@@ -14,12 +15,14 @@ export class Parser {
     }
 
     parse(token = '', attr = 'class') {
-        let [styles, ...states] = token.split(/(?<!\\):/g).reverse();
+        // let [styles, ...states] = token.split(/(?<!\\):/g).reverse();
+        let [styles, ...states] = escape(token, ":").split().reverse()
         let selector = formatSelector(token, attr);
         let rawSelector = selector;
 
         states = states.map((e) => this.parseStates.parse(e, attr, token));
-        styles = styles.split(/(?<!\\);/g);
+        // styles = styles.split(/(?<!\\);/g);
+        styles = escape(styles, ";").split()
         styles = styles.map((e) => this.parseStyles.parse(e, attr, token, states));
         styles = styles.filter((e) => e);
 
@@ -28,7 +31,7 @@ export class Parser {
         }
 
         if (styles.length) {
-            const EXTRA_SELECTOR = styles[0].src?._selector;
+            const EXTRA_SELECTOR = (styles[0].src || 0)._selector || null;
 
             // if (EXTRA_SELECTOR && is.str(EXTRA_SELECTOR)) {
             //     selector = EXTRA_SELECTOR.replace(/\$/g, selector);

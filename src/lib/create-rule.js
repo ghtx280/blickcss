@@ -1,4 +1,5 @@
 import { is } from './check-type.js';
+import { escape } from '../helpers/escape.js'
 // import { parser } from './parser/index.js';
 
 
@@ -107,7 +108,8 @@ export function createRule(STRUCT) {
             )
             .slice(0, -1)
            
-        DECLARED.push(style.replace(/(?<!\\)_/g, ' '));
+        // DECLARED.push(style.replace(/(?<!\\)_/g, ' '));
+        DECLARED.push(escape(style, "_").replace(" "));
     }
 
 

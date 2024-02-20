@@ -100,7 +100,7 @@ export class StylesParser {
             prop:   declaration,
             values: values,
             rawVal: value,
-            val:    values?.map((e) => e.val).join(source._join || ' ') || null,
+            val:    values ? values.map((e) => e.val).join(source._join || ' ') : null,
             unit:   source._unit || '',
             join:   source._join || ' ',
             important,

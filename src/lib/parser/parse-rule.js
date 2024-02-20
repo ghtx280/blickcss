@@ -29,9 +29,13 @@ export class RuleParser {
     }
 
     parse(path, object){
-        const PARTS = path.split(/(?<!\\)-/g);
+        const SPLIT_SYMBOL = "-"
+        const RE_PATH = new RegExp(`(\\\\)?\\${SPLIT_SYMBOL}`, "g");
+
+        const PARTS = path.replace(RE_PATH, (_, esc) => esc ? SPLIT_SYMBOL : "\n" ).split("\n")
         let array_path = [];
         let value_string = null;
+
     
         for (const i in PARTS) {
             if (!object[PARTS[i]]) {

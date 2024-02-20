@@ -21,11 +21,11 @@ export function showMsg(file, params, time) {
     console.log(`-------------------`)
 
     if (file) {
-        let upd_file = file.replaceAll('\\', '/');
+        let upd_file = file.replace(/\\/g, '');
         console.log(chalk.green.bold(`'${upd_file}' was changed.`));
     }
     if (params.output) {
-        let out_file = params.output.replaceAll(/\.+\//g, '');
+        let out_file = params.output.replace(/\.+\//g, '');
         console.log(chalk.green.bold(`'${out_file}' updated successfully.`))
     }
 
