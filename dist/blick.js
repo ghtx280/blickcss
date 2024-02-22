@@ -40,7 +40,7 @@
   };
 
   // version.js
-  var version_default = "2.1.6";
+  var version_default = "2.1.7";
 
   // src/lib/check-type.js
   function isElement(element) {

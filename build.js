@@ -28,7 +28,7 @@ export function build() {
         packages: 'external',
         format: 'esm',
         outfile: `./dist/${lib_name}.node.js`,
-        target: "es6"
+        // target: "es6"
     });
 
     console.log('\nBuilding complete!\n');
