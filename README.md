@@ -5,7 +5,7 @@
 ### Installation
 
 ```html
-<script src="https://unpkg.com/blickcss@2.0"></script>
+<script src="https://unpkg.com/blickcss@2.1"></script>
 ```
 
 OR
@@ -14,7 +14,7 @@ OR
 npm i blickcss
 ```
 ```shell
-npx blickcss
+npx blick
 ```
 ***
 
