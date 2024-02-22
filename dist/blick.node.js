@@ -438,7 +438,7 @@ function timer(label) {
 }
 
 // version.js
-var version_default = "2.1.7";
+var version_default = "2.1.8";
 
 // src/lib/check-type.js
 function isElement(element) {
@@ -1384,7 +1384,7 @@ function CreateAttrGrid() {
     _using: "display:grid",
     _else: function(e) {
       if (+e.style[0]) {
-        return [{ _prop: "gap:$", _unit: "px" }];
+        return { _prop: "gap:$", _unit: "px" };
       }
     },
     cols: {

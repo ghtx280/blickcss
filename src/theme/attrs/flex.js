@@ -21,7 +21,7 @@ export function CreateAttrFlex() {
         _using: "display:flex",
     
         _else: function (e) {
-            if (!isNaN(+e.style[0])) {
+            if (+e.style[0]) {
                 return { _prop: 'gap:$', _unit: 'px' };
             }
         },

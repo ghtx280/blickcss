@@ -237,6 +237,12 @@ export function test2() {
     eq("ratio-1/1",  { sel: '.ratio-1\\/1', style: "aspect-ratio:1 / 1" })
     eq("ratio-vid",  { sel: '.ratio-vid', style: "aspect-ratio:16 / 9" })
 
+    // attr flex
+    eq("20",   { sel: '[grid~="20"]',   style: "gap:20px" }, "grid")
+    eq("2em",  { sel: '[grid~="2em"]',  style: "gap:2em", }, "grid")
+    eq("jc-c", { sel: '[grid~="jc-c"]', style: "justify-content:center" }, "grid")
+    eq("cols-3", { sel: '[grid~="cols-3"]', style: "grid-template-columns:repeat(3,1fr)" }, "grid")
+
 
 
     if (!err_stack.length) {

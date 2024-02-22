@@ -22,7 +22,7 @@ export function CreateAttrGrid() {
     
         _else: function (e) {
             if (+e.style[0]) {
-                return [{ _prop: 'gap:$', _unit: 'px' }];
+                return { _prop: 'gap:$', _unit: 'px' }
             }
         },
         cols: {
