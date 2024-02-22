@@ -40,7 +40,7 @@
   };
 
   // version.js
-  var version_default = "2.1.5";
+  var version_default = "2.1.6";
 
   // src/lib/check-type.js
   function isElement(element) {
@@ -662,11 +662,11 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       if (is.arr(UNIT)) {
         return +item ? item + (UNIT[index] || "") : item;
       }
-      return +item ? item + UNIT : item;
+      return +item && UNIT ? item + UNIT : item;
     }
     /*
       (num/num) 1/2 = 50%
-      (var/num) $foo/50 = foo in blick.colors ? getVarColor(foo) : var(--foo);opacity:0.5 
+      (var/num) $foo/50 = foo in blick.colors ? #xxxxxxaa : var(--foo);opacity:0.5 
       (str/num) red/50 = #ff000080
     
       (num) 15 = 15 + (unit || "")
@@ -682,6 +682,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         value = value.replace(RE_SPLIT, "$1\n").split("\n");
       }
       let values = value.map((item, index) => {
+        item = item.toString();
         const STATIC = source._vals ? source._vals[item] : null;
         if (STATIC) {
           return { val: STATIC, raw: item };
@@ -706,60 +707,62 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       this.parseRule = new RuleParser(ctx);
     }
     parse(style, attr, token, states) {
-      let target;
+      let target = null;
       let declaration = null;
       let values = null;
       let important = false;
+      let parsed_value = null;
       if (attr == "class") {
         target = this.ctx.class;
       } else {
         target = this.ctx.attr[attr];
       }
-      if (style.includes("!")) {
-        style = style.replace(/!/g, "");
+      style = style.replace(/!/g, () => {
         important = true;
-      }
+        return "";
+      });
       let { source, path, value } = this.parseRule.parse(style, target);
+      const params = {
+        token,
+        style,
+        path,
+        value,
+        source,
+        attr,
+        important,
+        parseValue: (src) => this.parseValue.parse(value, src)
+      };
       if (!source && attr !== "class") {
-        const attrElseFunc = target._else;
-        if (!is.func(attrElseFunc))
-          return;
-        let result = attrElseFunc({ style, token, states });
-        if (is.arr(result)) {
-          let [src, val] = result;
-          if (is.obj(src)) {
-            source = src;
-          } else {
-            source = { _prop: src };
-          }
-          value = val || style;
-        } else if (is.obj(result)) {
-          source = result;
-          value = style;
-        } else {
-          source = { _prop: result };
-          value = style;
-        }
+        if (!is.func(target._else))
+          return null;
+        source = target._else(params);
       }
       if (!source)
         return;
-      if (value) {
-        if (is.func(source)) {
-          declaration = source;
-        } else {
-          declaration = source._prop;
+      if (is.func(source)) {
+        source = source(params);
+        if (!source)
+          return;
+        if (value) {
+          let rule = this.parseRule.parse(value, source);
+          if (rule.source) {
+            value = rule.value;
+            source = rule.source;
+            path.push(...rule.path);
+          }
         }
-        values = this.parseValue.parse(value, source);
+      }
+      if (value) {
+        declaration = source._prop || source;
+        values = this.parseValue.parse(source._values || value, source);
         if (!values)
           return null;
       } else {
         declaration = source._one || source;
       }
-      if (!declaration || is.obj(declaration))
+      if (!is.str(declaration))
         return null;
-      if (is.str(declaration)) {
-        declaration = declaration.trim();
-      }
+      declaration = declaration.toString().trim();
       return {
         src: source,
         path,
@@ -775,9 +778,13 @@ Available shades: ${Object.keys(colors[colorName]).filter(
   };
 
   // src/lib/create-rule.js
+  var re = {
+    group: /\$(\d+)?/g,
+    space: /^\s*(.+?):\s*/,
+    rule: /([^:]+):([^;]+);?/g
+  };
   function createRule(STRUCT) {
     var _a;
-    let IS_MEDIA = false;
     if (!STRUCT)
       return null;
     const MEDIA = [];
@@ -795,7 +802,6 @@ Available shades: ${Object.keys(colors[colorName]).filter(
           }
         } else if (state.type === "media") {
           MEDIA.push(state);
-          IS_MEDIA = true;
         }
       }
     }
@@ -803,55 +809,30 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       STRUCT.selector = STRUCT.extra.replace(/\$/g, STRUCT.selector);
     }
     for (let rule of STRUCT.styles) {
-      let replaceDynamic2 = function(_, group) {
-        var _a2, _b, _c, _d, _e;
-        if (!group)
-          return rule.val || rule.rawVal || rule.prop;
-        let vals = (_a2 = rule.values[group - 1]) != null ? _a2 : rule.values[0];
-        let unit = (_e = (_d = (_b = rule.unit) == null ? void 0 : _b[group - 1]) != null ? _d : (_c = rule.unit) == null ? void 0 : _c[0]) != null ? _e : rule.unit;
-        return vals.val || vals.raw || (+vals ? vals + (unit || "") : vals);
-      };
-      var replaceDynamic = replaceDynamic2;
       let style = rule.prop;
-      let imp = rule.important ? "!important" : "";
-      if (is.func(rule.prop)) {
-        style = rule.prop(rule) || "";
-        if (!style)
-          return;
-        if (is.arr(style)) {
-          rule.values = style[1];
-          style = style[0];
-        }
-        if (is.obj(style)) {
-          for (const key in style) {
-            if (key[0] == "_") {
-              rule[key.slice(1)] = style[key];
-            }
-          }
-        } else {
-          rule.prop = style;
-        }
-      }
-      const re = {
-        group: /\$(\d+)?/g,
-        space: /^\s*(.+?):\s*/
-      };
+      let important = rule.important ? "!important" : "";
       if (rule.values) {
-        style = rule.prop.replace(re.group, replaceDynamic2);
+        style = rule.prop.replace(re.group, (_, group) => {
+          var _a2, _b, _c, _d, _e;
+          if (!group) {
+            return rule.val || rule.rawVal;
+          }
+          let vals = (_a2 = rule.values[group - 1]) != null ? _a2 : rule.values[0];
+          let unit = (_e = (_d = (_b = rule.unit) == null ? void 0 : _b[group - 1]) != null ? _d : (_c = rule.unit) == null ? void 0 : _c[0]) != null ? _e : rule.unit;
+          return vals.val || vals.raw || (+vals ? vals + (unit || "") : vals);
+        });
       } else {
         style = style._one || style;
       }
-      if (!style || !is.str(style))
-        return;
-      style = style.replace(
-        /([^:]+):([^;]+);?/g,
-        (_, prop, val) => {
-          _ = imp;
-          prop = prop.trim();
-          val = val.trim();
-          return `${prop}:${val}${_ ? " !important" : ""};`;
-        }
-      ).slice(0, -1);
+      if (!style || !is.str(style)) {
+        return null;
+      }
+      style = style.replace(re.rule, (_, prop, val) => {
+        return `${prop.trim()}:${val.trim()}${important ? " !important" : ""};`;
+      });
+      if (style[style.length - 1] == ";") {
+        style = style.slice(0, -1);
+      }
       DECLARED.push(escape(style, "_").replace(" "));
     }
     return {
@@ -882,6 +863,7 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       if (!states.length) {
         states = null;
       }
+      ;
       if (styles.length) {
         const EXTRA_SELECTOR = (styles[0].src || 0)._selector || null;
         return {
@@ -889,7 +871,6 @@ Available shades: ${Object.keys(colors[colorName]).filter(
           styles,
           attr,
           selector,
-          rawSelector,
           token,
           extra: EXTRA_SELECTOR,
           create() {
@@ -1052,29 +1033,28 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         if (style.includes("/")) {
           let [v1, v2, v3] = style.split("/");
           if (+v1[0] && v3) {
-            return [
-              {
-                _prop: `font-size:$1;font-weight:$2;line-height:$3`,
-                _unit: ["px", "", "px"]
-              },
-              [v1, v2, v3]
-            ];
+            return {
+              _prop: `font-size:$1;font-weight:$2;line-height:$3`,
+              _unit: ["px", "", "px"],
+              _values: [v1, v2, v3]
+            };
           }
           if (+v1[0]) {
-            return [
-              {
-                _prop: `font-size:$;font-weight:${v2}`,
-                _unit: "px"
-              },
-              [v1]
-            ];
+            return {
+              _prop: `font-size:$;font-weight:${v2}`,
+              _unit: "px",
+              _values: [v1]
+            };
           }
         } else {
           if (+style[0]) {
-            return { _prop: "font-size:$", _unit: "px" };
+            return {
+              _prop: "font-size:$",
+              _unit: "px"
+            };
           }
         }
-        return "color:$";
+        return { _prop: "color:$" };
       },
       100: "font-weight:100",
       200: "font-weight:200",
@@ -1681,14 +1661,14 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         _prop: "left:$",
         _unit: "px"
       },
-      ratio: {
-        _prop({ src, rawVal, val }) {
-          return `aspect-ratio:${+rawVal[0] ? rawVal.split("/").join(" / ") : val}`;
-        },
-        _vals: {
+      ratio: (e) => {
+        if (!e.value)
+          return;
+        let _vals = {
           sqr: "1 / 1",
           vid: "16 / 9"
-        }
+        };
+        return `aspect-ratio:${_vals[e.value] || e.value.replace("/", " / ")}`;
       },
       box: {
         _prop: "box-sizing:$",
@@ -1714,8 +1694,9 @@ Available shades: ${Object.keys(colors[colorName]).filter(
       visible: "visibility:visible",
       invisible: "visibility:hidden",
       collapse: "visibility:collapse",
-      opacity: {
-        _prop: ({ val }) => `opacity:${val > 1 ? val / 100 : val}`
+      opacity: ({ value }) => {
+        return "opacity:0.5";
+        return `opacity:${value > 1 ? value / 100 : value}`;
       },
       blend: {
         _prop: "mix-blend-mode:$"
@@ -1834,62 +1815,60 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         _join: ","
       },
       fullscreen: "position:absolute;left:0;top:0;width:100%;height:100%",
-      flex: {
-        _one: "display:flex",
-        _prop({ val, rawVal, src }) {
-          if (rawVal in src._vals) {
-            return "flex:" + val;
-          }
-          return "gap:" + val;
-        },
-        _vals: {
+      flex: (e) => {
+        let _vals = {
           1: "1 1 0%",
           auto: "1 1 auto",
           initial: "0 1 auto"
-        },
-        _unit: "px",
-        center: "justify-content:center;align-items:center",
-        col: {
-          _one: "flex-direction:column",
-          rev: "flex-direction:column-reverse"
-        },
-        row: {
-          _one: "flex-direction:row",
-          rev: "flex-direction:row-reverse"
-        },
-        space: "justify-content:space-between;align-items:center",
-        evenly: "justify-content:space-evenly;align-items:center",
-        around: "justify-content:space-around;align-items:center",
-        wrap: {
-          _one: "flex-wrap:wrap",
-          rev: "flex-wrap:wrap-reverse"
-        },
-        nowrap: "flex-wrap:nowrap",
-        stretch: "align-items:stretch",
-        start: {
-          _one: "justify-content:flex-start",
-          top: "justify-content:flex-start;align-items:flex-start",
-          center: "justify-content:flex-start;align-items:center",
-          bottom: "justify-content:flex-start;align-items:flex-end"
-        },
-        end: {
-          _one: "justify-content:flex-end",
-          top: "justify-content:flex-end;align-items:flex-start",
-          center: "justify-content:flex-end;align-items:center",
-          bottom: "justify-content:flex-end;align-items:flex-end"
-        },
-        top: {
-          _one: "align-items:flex-start",
-          start: "justify-content:flex-start;align-items:flex-start",
-          center: "justify-content:center;align-items:flex-start",
-          end: "justify-content:flex-end;align-items:flex-start"
-        },
-        bottom: {
-          _one: "align-items:flex-end",
-          start: "justify-content:flex-start;align-items:flex-end",
-          center: "justify-content:center;align-items:flex-end",
-          end: "justify-content:flex-end;align-items:flex-end"
-        }
+        };
+        return {
+          _one: "display:flex",
+          _prop: `${e.value in _vals || e.value && !+e.value[0] ? "flex" : "gap"}:$`,
+          _vals,
+          _unit: "px",
+          center: "justify-content:center;align-items:center",
+          col: {
+            _one: "flex-direction:column",
+            rev: "flex-direction:column-reverse"
+          },
+          row: {
+            _one: "flex-direction:row",
+            rev: "flex-direction:row-reverse"
+          },
+          space: "justify-content:space-between;align-items:center",
+          evenly: "justify-content:space-evenly;align-items:center",
+          around: "justify-content:space-around;align-items:center",
+          wrap: {
+            _one: "flex-wrap:wrap",
+            rev: "flex-wrap:wrap-reverse"
+          },
+          nowrap: "flex-wrap:nowrap",
+          stretch: "align-items:stretch",
+          start: {
+            _one: "justify-content:flex-start",
+            top: "justify-content:flex-start;align-items:flex-start",
+            center: "justify-content:flex-start;align-items:center",
+            bottom: "justify-content:flex-start;align-items:flex-end"
+          },
+          end: {
+            _one: "justify-content:flex-end",
+            top: "justify-content:flex-end;align-items:flex-start",
+            center: "justify-content:flex-end;align-items:center",
+            bottom: "justify-content:flex-end;align-items:flex-end"
+          },
+          top: {
+            _one: "align-items:flex-start",
+            start: "justify-content:flex-start;align-items:flex-start",
+            center: "justify-content:center;align-items:flex-start",
+            end: "justify-content:flex-end;align-items:flex-start"
+          },
+          bottom: {
+            _one: "align-items:flex-end",
+            start: "justify-content:flex-start;align-items:flex-end",
+            center: "justify-content:center;align-items:flex-end",
+            end: "justify-content:flex-end;align-items:flex-end"
+          }
+        };
       },
       col: {
         _one: "flex-direction:column",
@@ -2007,33 +1986,30 @@ Available shades: ${Object.keys(colors[colorName]).filter(
         _prop: "stroke-width: $",
         _unit: "px"
       },
-      text: __spreadValues({
-        _prop: function({ rawVal }) {
-          console.log(rawVal);
-          let [v1, v2, v3] = rawVal.split("/");
-          if (+v1[0] && v3) {
-            return [
-              {
-                _prop: `font-size:$1;font-weight:$2;line-height:$3`
-              },
-              [v1, v2, v3]
-            ];
-          }
-          if (+v1[0] && v2) {
-            return [
-              {
-                _prop: `font-size:$1;font-weight:$2`
-              },
-              [v1, v2]
-            ];
-          }
-          if (+v1[0]) {
-            return "font-size:$1";
-          }
-          return "color:$";
-        },
-        _unit: ["px", "", "px"]
-      }, CreateAttrText())
+      text: (e) => {
+        if (!e.value)
+          return;
+        let data = __spreadValues({
+          _unit: ["px", "", "px"]
+        }, CreateAttrText());
+        let [v1, v2, v3] = e.value.split("/");
+        if (+v1[0] && v3) {
+          data._prop = `font-size:$1;font-weight:$2;line-height:$3`;
+          data._values = [v1, v2, v3];
+          return data;
+        }
+        if (+v1[0] && v2) {
+          data._prop = `font-size:$1;font-weight:$2`;
+          data._values = [v1, v2];
+          return data;
+        }
+        if (+v1[0]) {
+          data._prop = "font-size:$1";
+          return data;
+        }
+        data._prop = "color:$";
+        return data;
+      }
     };
     classes.object = classes.fit;
     classes.overflow = classes.over;

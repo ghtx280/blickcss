@@ -28,7 +28,7 @@ export class Parser {
 
         if (!states.length) {
             states = null;
-        }
+        };
 
         if (styles.length) {
             const EXTRA_SELECTOR = (styles[0].src || 0)._selector || null;
@@ -42,7 +42,6 @@ export class Parser {
                 styles,
                 attr,
                 selector,
-                rawSelector,
                 token,
                 extra: EXTRA_SELECTOR,
 

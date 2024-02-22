@@ -8,7 +8,7 @@ BlickCss provides access to certain of its functions.
 ### Parser
 
 ```js
-blick.parser("h:m-20", "class")
+blick.parse("h:m-20", "class")
 ```
 
 The first parameter is a token (one class), the second parameter is which attribute the first parameter refers to. The result should be a structure like this
@@ -41,7 +41,7 @@ More info [here](./parser.md)
 
 
 ---
-### CreateRule
+### CreateRule (DELETED!!!)
 
 A function that uses a parser, but it outputs ready-made css code.
 
@@ -107,7 +107,7 @@ Read more [here](./config.md)
 
 
 ---
-### GetStyleTag
+### GetStyleTag (DELETED!!!)
 
 ```js
 blick.getStyleTag()
@@ -116,7 +116,7 @@ Returns the element that contains all generated styles.
 *Works only in the CDN version
 
 ---
-### GetHex
+### GetHex (DELETED!!!)
 
 ```js
 blick.getHex("red") // "#ff0000"

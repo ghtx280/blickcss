@@ -540,16 +540,17 @@ export function CreateClasses(){
             _prop: 'left:$',
             _unit: 'px',
         },
-        ratio: {
-            _prop({ src, rawVal, val }) {
-                return `aspect-ratio:${
-                    +rawVal[0] ? rawVal.split("/").join(" / ") : val
-                }`;
-            },
-            _vals: {
+        ratio: e => {
+            if (!e.value) return
+
+            let _vals = {
                 sqr: '1 / 1',
                 vid: '16 / 9',
-            },
+            }
+
+            return `aspect-ratio:${
+                _vals[e.value] || e.value.replace("/", " / ")
+            }`
         },
         box: {
             _prop: 'box-sizing:$',
@@ -576,8 +577,9 @@ export function CreateClasses(){
         visible: 'visibility:visible',
         invisible: 'visibility:hidden',
         collapse: 'visibility:collapse',
-        opacity: {
-            _prop: ({ val }) => `opacity:${val > 1 ? val / 100 : val}`,
+        opacity: ({ value }) => {
+            return "opacity:0.5"
+            return `opacity:${value > 1 ? value / 100 : value}`
         },
         blend: {
             _prop: 'mix-blend-mode:$',
@@ -696,62 +698,66 @@ export function CreateClasses(){
             _join: ',',
         },
         fullscreen: 'position:absolute;left:0;top:0;width:100%;height:100%',
-        flex: {
-            _one: 'display:flex',
-            _prop({ val, rawVal, src }) {
-                if (rawVal in src._vals) {
-                    return "flex:" + val
-                }
-                return "gap:" + val;
-            },
-            _vals: {
+        flex: (e) => {
+            let _vals = {
                 1: '1 1 0%',
                 auto: '1 1 auto',
                 initial: '0 1 auto',
-            },
-            _unit: 'px',
-            center: 'justify-content:center;align-items:center',
-            col: {
-                _one: 'flex-direction:column',
-                rev: 'flex-direction:column-reverse',
-            },
-            row: {
-                _one: 'flex-direction:row',
-                rev: 'flex-direction:row-reverse',
-            },
-            space: 'justify-content:space-between;align-items:center',
-            evenly: 'justify-content:space-evenly;align-items:center',
-            around: 'justify-content:space-around;align-items:center',
-            wrap: {
-                _one: 'flex-wrap:wrap',
-                rev: 'flex-wrap:wrap-reverse',
-            },
-            nowrap: 'flex-wrap:nowrap',
-            stretch: 'align-items:stretch',
-            start: {
-                _one: "justify-content:flex-start",
-                top: "justify-content:flex-start;align-items:flex-start",
-                center: "justify-content:flex-start;align-items:center",
-                bottom: "justify-content:flex-start;align-items:flex-end",
-            },
-            end: {
-                _one: "justify-content:flex-end",
-                top: "justify-content:flex-end;align-items:flex-start",
-                center: "justify-content:flex-end;align-items:center",
-                bottom: "justify-content:flex-end;align-items:flex-end",
-            },
-            top: {
-                _one:   "align-items:flex-start",
-                start: "justify-content:flex-start;align-items:flex-start",
-                center: "justify-content:center;align-items:flex-start",
-                end: "justify-content:flex-end;align-items:flex-start",
-            },
-            bottom: {
-                _one:   "align-items:flex-end",
-                start: "justify-content:flex-start;align-items:flex-end",
-                center: "justify-content:center;align-items:flex-end",
-                end: "justify-content:flex-end;align-items:flex-end",
-            },
+            } 
+            return {
+                _one: 'display:flex',
+                _prop: 
+                    `${
+                        e.value in _vals || (e.value && !+e.value[0]) 
+                            ? 'flex' 
+                            : 'gap'
+                    }:$`
+                ,
+                _vals,
+                _unit: 'px',
+                center: 'justify-content:center;align-items:center',
+                col: {
+                    _one: 'flex-direction:column',
+                    rev: 'flex-direction:column-reverse',
+                },
+                row: {
+                    _one: 'flex-direction:row',
+                    rev: 'flex-direction:row-reverse',
+                },
+                space: 'justify-content:space-between;align-items:center',
+                evenly: 'justify-content:space-evenly;align-items:center',
+                around: 'justify-content:space-around;align-items:center',
+                wrap: {
+                    _one: 'flex-wrap:wrap',
+                    rev: 'flex-wrap:wrap-reverse',
+                },
+                nowrap: 'flex-wrap:nowrap',
+                stretch: 'align-items:stretch',
+                start: {
+                    _one: "justify-content:flex-start",
+                    top: "justify-content:flex-start;align-items:flex-start",
+                    center: "justify-content:flex-start;align-items:center",
+                    bottom: "justify-content:flex-start;align-items:flex-end",
+                },
+                end: {
+                    _one: "justify-content:flex-end",
+                    top: "justify-content:flex-end;align-items:flex-start",
+                    center: "justify-content:flex-end;align-items:center",
+                    bottom: "justify-content:flex-end;align-items:flex-end",
+                },
+                top: {
+                    _one:   "align-items:flex-start",
+                    start: "justify-content:flex-start;align-items:flex-start",
+                    center: "justify-content:center;align-items:flex-start",
+                    end: "justify-content:flex-end;align-items:flex-start",
+                },
+                bottom: {
+                    _one:   "align-items:flex-end",
+                    start: "justify-content:flex-start;align-items:flex-end",
+                    center: "justify-content:center;align-items:flex-end",
+                    end: "justify-content:flex-end;align-items:flex-end",
+                },
+            }
         },
         col: {
             _one: 'flex-direction:column',
@@ -869,38 +875,39 @@ export function CreateClasses(){
             _prop: 'stroke-width: $',
             _unit: 'px',
         },
-        text: {
-            _prop: function({rawVal}){
-                console.log(rawVal);
-               
-                let [v1, v2, v3] = rawVal.split('/');
-    
-                if (+v1[0] && v3) {
-                        return [
-                            {
-                                _prop: `font-size:$1;font-weight:$2;line-height:$3`,
-                            },
-                            [v1, v2, v3]
-                        ];
-                }
-                if (+v1[0] && v2) {
-                    return [
-                        {
-                            _prop: `font-size:$1;font-weight:$2`,
-                        },
-                        [v1, v2]
-                    ];
-                }
-                if (+v1[0]) {
-                    return 'font-size:$1'
-                }
-                
         
-                return 'color:$'
-            },
-            _unit: ["px", "", "px"],
-            ...CreateAttrText()
+        text: e => {
+            if (!e.value) return 
+
+            let data = {
+                _unit: ["px", "", "px"],
+                ...CreateAttrText()
+            }
+            
+            let [v1, v2, v3] = e.value.split('/');
+
+            if (+v1[0] && v3) {
+                data._prop = `font-size:$1;font-weight:$2;line-height:$3`
+                data._values = [v1, v2, v3]
+                return data
+            }
+            if (+v1[0] && v2) {
+                data._prop = `font-size:$1;font-weight:$2`
+                data._values = [v1, v2]
+                return data
+           
+            }
+            if (+v1[0]) {
+                data._prop = 'font-size:$1'
+                return data
+            }
+        
+            data._prop = 'color:$'
+            return data
+
+            
         }
+
     };
     
     classes.object = classes.fit;

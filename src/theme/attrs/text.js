@@ -4,33 +4,33 @@ export function CreateAttrText() {
         _else: function ({ style, states, token }) {
             if (style.includes('/')) {
                 let [v1, v2, v3] = style.split('/');
+
                 if (+v1[0] && v3) {
-                    return [
-                        {
-                            _prop: `font-size:$1;font-weight:$2;line-height:$3`,
-                            _unit: ['px', "", "px"]
-                        },
-                        [v1, v2, v3],
-                    ];
+                    return {
+                        _prop: `font-size:$1;font-weight:$2;line-height:$3`,
+                        _unit: ['px', '', 'px'],
+                        _values: [v1, v2, v3]
+                    }
                 }
                 if (+v1[0]) {
-                    return [
-                        {
-                            _prop: `font-size:$;font-weight:${v2}`,
-                            _unit: 'px'
-                        },
-                        [v1],
-                    ];
+                    return {
+                        _prop: `font-size:$;font-weight:${v2}`,
+                        _unit: 'px',
+                        _values: [v1]
+                    }
                 }
             } else {
                 if (+style[0]) {
-                    return { _prop: 'font-size:$', _unit: 'px' }
+                    return {
+                        _prop: 'font-size:$',
+                        _unit: 'px'
+                    }
                 }
             }
     
-            return 'color:$'
+            return { _prop: 'color:$' }
         },
-    
+
         100: 'font-weight:100',
         200: 'font-weight:200',
         300: 'font-weight:300',

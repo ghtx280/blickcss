@@ -11,10 +11,11 @@ export class StylesParser {
     }
 
     parse(style, attr, token, states) {
-        let target;
+        let target = null;
         let declaration = null;
         let values = null;
         let important = false;
+        let parsed_value = null
 
         if (attr == "class") {
             target = this.ctx.class
@@ -23,63 +24,57 @@ export class StylesParser {
             target = this.ctx.attr[attr]
         }
 
-        if (style.includes('!')) {
-            style = style.replace(/!/g, '');
-            important = true;
-        }
-
+        style = style.replace(/!/g, () => {
+            important = true
+            return ""
+        })
+            
         let { source, path, value } = this.parseRule.parse(style, target);
+
+        const params = {
+            token,
+            style,
+            path,
+            value,
+            source,
+            attr,
+            important,
+            parseValue: (src) => this.parseValue.parse(value, src)
+        }
 
         /* _else func for attr where no data (flex="20" or text="red") */
         if (!source && attr !== 'class') {
             /* 
-                variants _else func returning:
-                [{sourse}, [values]] -> [{_prop:"color:$"}, ["red"]]
-                [prop, [values]]     -> ["color:$", ["red"]]
-                [{sourse}, value]    -> [{_prop:"color:$"}, "red"]
-                [prop, value]        -> ["color:$", "red"]
-                prop                 ->  "color:$"
+                { sourse } -> { _prop: "color:$" } 
+                one -> "color: red" 
             */
-
-            const attrElseFunc = target._else
-
-            if (!is.func(attrElseFunc)) return
-
-            let result = attrElseFunc({ style, token, states });
-
-            if (is.arr(result)) {
-                let [src, val] = result
-
-                if (is.obj(src)) {
-                    source = src
-                }
-                else {
-                    source = { _prop: src };
-                }
-                value = val || style;
-            }
-            else if (is.obj(result)) {
-                source = result;
-                value = style;
-            }
-            else {
-                source = { _prop: result };
-                value = style;
-            }
+            if (!is.func(target._else)) return null
+            source = target._else(params);
         }
-        
 
         if (!source) return;
 
-        if (value) {
-            if (is.func(source)) {
-                declaration = source
-            }
-            else {
-                declaration = source._prop
-            }
+        
+        // convert function to source
+        if (is.func(source)) {
+            source = source(params)
+            
+            if (!source) return;
 
-            values = this.parseValue.parse(value, source);
+            if (value) {
+                let rule = this.parseRule.parse(value, source)
+            
+                if (rule.source) {
+                    value = rule.value
+                    source = rule.source
+                    path.push(...rule.path)
+                }
+            }
+        }
+        
+        if (value) {
+            declaration = source._prop || source
+            values = this.parseValue.parse(source._values || value, source);
 
             if (!values) return null;
         }
@@ -87,12 +82,9 @@ export class StylesParser {
             declaration = source._one || source;
         }
 
-        if (!declaration || is.obj(declaration)) return null
+        if (!is.str(declaration)) return null
 
-        
-        if (is.str(declaration)) {
-            declaration = declaration.trim()
-        }
+        declaration = declaration.toString().trim()
 
         return {
             src:    source,

@@ -4,8 +4,8 @@ These are CSS properties such as `margin`, `padding`, `color`, `background`, etc
 ```
 bg-red max-w-24 c-white flex
 ```
-В данному випадку `bg`, `max-w`, `c` та `flex` це властивості
-Вони можуть мати заначення як `bg` або не мати як `flex`
+In this case, `bg`, `max-w`, `c` and `flex` are properties
+It can have a value like `bg` or not have like `flex`.
 
 Properties can also be in the form of a chain, such as `max-w'
 
