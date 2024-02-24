@@ -142,19 +142,16 @@ tf-scale-1+2 => transform: scale(1, 2)
 ### Function
 
 ```javascript
-text: {
-    _prop: function({ val }){
-        if (parseFloat(val)) {
-            return "font-size:" + val
-        }
-        return "color:" + val
-    },
-    _unit: "px",
-    ...
+text: ({ value }) => {
+    return {
+        _prop: +value[0] ? "font-size: $" : "color: $",
+        _unit: "px",
+        ...
+    }
 }
 ```
 
-In general, you can make `_prop` or `_one` a function, this will give you unlimited freedom to generate styles
+instead of an object with the above parameters, you can use a function that will return the same object, which gives you unlimited freedom in creating styles
 
 ```
 text-24 => font-sise: 24px
