@@ -24,41 +24,40 @@ export class BlickCss {
         this.#html   = new HTMLProcessor(this)   
     }
 
-    class  = CreateClasses()
-    attr   = CreateAttrs()
-    screen = CreateScreens()
-    states = CreateStates()
-    colors = CreateColors()
-    font   = CreateFonts()
-    reset  = CreateReset()
+    class  = CreateClasses() // classes
+    attr   = CreateAttrs()   // attributes (text, flex, grid)
+    screen = CreateScreens() // screens variables (sm, md, lg, xl)
+    states = CreateStates()  // states variable (h, f, c, ... --> :hover, :focus, :checked, ... )
+    colors = CreateColors()  // colors css variables ($red --> #ef4444)
+    font   = CreateFonts()   // fonts css variables ($font-mono --> monospace)
+    reset  = CreateReset()   // css reset and normalize string
 
 
-    autoTheme = false
-    beautify  = false
-    autoFlex  = true
-    useAttr   = true
-    time      = false
-    root      = true
+    autoTheme = false // use system theme (work only in CDN version)
+    beautify  = false // makes css code pretty (work in npm version)
+    autoFlex  = true  // [class*="flex-"], [class*="gap-"], ... {display:flex}
+    useAttr   = true  // enables/disables the use of attributes
+    time      = false // shows the time of style generation in the console (work only in CDN version)
+    root      = true  // enables/disables the creation of :root { ... } with variables
 
-    wrapper = '.wrapper'
-    maxPrefix = 'm-'
-    divisionSymbol = "+"
+    wrapper = '.wrapper' // wrapper selector or false to disable
+    maxPrefix = 'm-'     // prefix that converts min to max-width in @media (m-md:bg-red, m-500:flex-center)
+    divisionSymbol = "+" // NEW! a symbol to separate values (m-20+30 --> margin:20px 30px)
 
-    beautifyOption = null
-    version = version
-    element = null
+    version = version // lib version
+    element = null    // element <style> in which the generated styles are located (need use setup method)
 
-
+    // parsing a single piece of a class or attribute
     parse(token = '', attr = 'class') {
         return this.#parser.parse(token, attr)
     }
 
-
+    // converts html code to css (this is the method used in the npm version)
     html(code = "") {
         return this.#html.css(code)
     }
 
-
+    // configures everything written above
     config(updates = this, source = this, isFirstCall = true) {
         if (updates === source) return source
     
@@ -88,7 +87,7 @@ export class BlickCss {
         return source;
     }
 
-
+    // creates a <style> and binds it to this context, that is, all the generated styles will be there
     setup(params) {
         const { element, id } = params || {}
 
@@ -105,11 +104,11 @@ export class BlickCss {
         return this
     }
 
-
+    // used to update styles (only in the cdn version)
     render() {
         return render(this)
     }
 
-
+    // all processed classes and attributes are stored here to avoid re-processing
     _STORE_ = CreateStore()
 }
