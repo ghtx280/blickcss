@@ -578,7 +578,6 @@ export function CreateClasses(){
         invisible: 'visibility:hidden',
         collapse: 'visibility:collapse',
         opacity: ({ value }) => {
-            return "opacity:0.5"
             return `opacity:${value > 1 ? value / 100 : value}`
         },
         blend: {
