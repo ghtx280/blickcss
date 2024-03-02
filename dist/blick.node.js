@@ -438,7 +438,7 @@ function timer(label) {
 }
 
 // version.js
-var version_default = "2.1.9";
+var version_default = "2.1.10";
 
 // src/lib/check-type.js
 function isElement(element) {
@@ -2108,7 +2108,6 @@ function CreateClasses() {
     invisible: "visibility:hidden",
     collapse: "visibility:collapse",
     opacity: ({ value }) => {
-      return "opacity:0.5";
       return `opacity:${value > 1 ? value / 100 : value}`;
     },
     blend: {
