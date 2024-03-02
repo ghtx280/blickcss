@@ -594,17 +594,7 @@ export function CreateClasses(): {
         _prop: string;
         _unit: string;
     };
-    ratio: {
-        _prop({ src, rawVal, val }: {
-            src: any;
-            rawVal: any;
-            val: any;
-        }): string;
-        _vals: {
-            sqr: string;
-            vid: string;
-        };
-    };
+    ratio: (e: any) => string | undefined;
     box: {
         _prop: string;
         _vals: {
@@ -631,11 +621,9 @@ export function CreateClasses(): {
     visible: string;
     invisible: string;
     collapse: string;
-    opacity: {
-        _prop: ({ val }: {
-            val: any;
-        }) => string;
-    };
+    opacity: ({ value }: {
+        value: any;
+    }) => string;
     blend: {
         _prop: string;
     };
@@ -761,13 +749,9 @@ export function CreateClasses(): {
         _join: string;
     };
     fullscreen: string;
-    flex: {
+    flex: (e: any) => {
         _one: string;
-        _prop({ val, rawVal, src }: {
-            val: any;
-            rawVal: any;
-            src: any;
-        }): string;
+        _prop: string;
         _vals: {
             1: string;
             auto: string;
@@ -981,21 +965,28 @@ export function CreateClasses(): {
         _prop: string;
         _unit: string;
     };
-    text: {
+    text: (e: any) => {
         _name: string;
         _else: ({ style, states, token }: {
             style: any;
             states: any;
             token: any;
-        }) => "color:$" | (any[] | {
+        }) => {
             _prop: string;
             _unit: string[];
-        })[] | (any[] | {
+            _values: any[];
+        } | {
             _prop: string;
             _unit: string;
-        })[] | {
+            _values: any[];
+        } | {
             _prop: string;
             _unit: string;
+            _values?: undefined;
+        } | {
+            _prop: string;
+            _unit?: undefined;
+            _values?: undefined;
         };
         100: string;
         200: string;
@@ -1019,11 +1010,16 @@ export function CreateClasses(): {
         bolder: string;
         italic: string;
         delete: string;
+        deleted: string;
         line: string;
+        underline: string;
         overline: string;
         up: string;
+        upper: string;
         low: string;
+        lower: string;
         cap: string;
+        capit: string;
         center: string;
         left: string;
         right: string;
@@ -1068,11 +1064,6 @@ export function CreateClasses(): {
                 keep: string;
             };
         };
-        _prop: ({ rawVal }: {
-            rawVal: any;
-        }) => "color:$" | "font-size:$1" | (any[] | {
-            _prop: string;
-        })[];
         _unit: string[];
-    };
+    } | undefined;
 };

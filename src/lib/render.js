@@ -46,6 +46,7 @@ export default function(ctx) {
     if (is_style_updated) {
         ctx.element.textContent = createCss(ctx);
         if (ctx.time) TIMER.stop(); // debugging the script execution time
+        ctx.onUpdate();
     }
 
     return ctx.element.textContent;

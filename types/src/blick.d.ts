@@ -597,17 +597,7 @@ export class BlickCss {
             _prop: string;
             _unit: string;
         };
-        ratio: {
-            _prop({ src, rawVal, val }: {
-                src: any;
-                rawVal: any;
-                val: any;
-            }): string;
-            _vals: {
-                sqr: string;
-                vid: string;
-            };
-        };
+        ratio: (e: any) => string | undefined;
         box: {
             _prop: string;
             _vals: {
@@ -634,11 +624,9 @@ export class BlickCss {
         visible: string;
         invisible: string;
         collapse: string;
-        opacity: {
-            _prop: ({ val }: {
-                val: any;
-            }) => string;
-        };
+        opacity: ({ value }: {
+            value: any;
+        }) => string;
         blend: {
             _prop: string;
         };
@@ -764,13 +752,9 @@ export class BlickCss {
             _join: string;
         };
         fullscreen: string;
-        flex: {
+        flex: (e: any) => {
             _one: string;
-            _prop({ val, rawVal, src }: {
-                val: any;
-                rawVal: any;
-                src: any;
-            }): string;
+            _prop: string;
             _vals: {
                 1: string;
                 auto: string;
@@ -984,21 +968,28 @@ export class BlickCss {
             _prop: string;
             _unit: string;
         };
-        text: {
+        text: (e: any) => {
             _name: string;
             _else: ({ style, states, token }: {
                 style: any;
                 states: any;
                 token: any;
-            }) => "color:$" | (any[] | {
+            }) => {
                 _prop: string;
                 _unit: string[];
-            })[] | (any[] | {
+                _values: any[];
+            } | {
                 _prop: string;
                 _unit: string;
-            })[] | {
+                _values: any[];
+            } | {
                 _prop: string;
                 _unit: string;
+                _values?: undefined;
+            } | {
+                _prop: string;
+                _unit?: undefined;
+                _values?: undefined;
             };
             100: string;
             200: string;
@@ -1022,11 +1013,16 @@ export class BlickCss {
             bolder: string;
             italic: string;
             delete: string;
+            deleted: string;
             line: string;
+            underline: string;
             overline: string;
             up: string;
+            upper: string;
             low: string;
+            lower: string;
             cap: string;
+            capit: string;
             center: string;
             left: string;
             right: string;
@@ -1071,13 +1067,8 @@ export class BlickCss {
                     keep: string;
                 };
             };
-            _prop: ({ rawVal }: {
-                rawVal: any;
-            }) => "color:$" | "font-size:$1" | (any[] | {
-                _prop: string;
-            })[];
             _unit: string[];
-        };
+        } | undefined;
     };
     attr: {
         flex: {
@@ -1182,7 +1173,7 @@ export class BlickCss {
             _else: (e: any) => {
                 _prop: string;
                 _unit: string;
-            }[] | undefined;
+            } | undefined;
             cols: {
                 _prop: string;
             };
@@ -1240,15 +1231,22 @@ export class BlickCss {
                 style: any;
                 states: any;
                 token: any;
-            }) => "color:$" | (any[] | {
+            }) => {
                 _prop: string;
                 _unit: string[];
-            })[] | (any[] | {
+                _values: any[];
+            } | {
                 _prop: string;
                 _unit: string;
-            })[] | {
+                _values: any[];
+            } | {
                 _prop: string;
                 _unit: string;
+                _values?: undefined;
+            } | {
+                _prop: string;
+                _unit?: undefined;
+                _values?: undefined;
             };
             100: string;
             200: string;
@@ -1272,11 +1270,16 @@ export class BlickCss {
             bolder: string;
             italic: string;
             delete: string;
+            deleted: string;
             line: string;
+            underline: string;
             overline: string;
             up: string;
+            upper: string;
             low: string;
+            lower: string;
             cap: string;
+            capit: string;
             center: string;
             left: string;
             right: string;
@@ -1448,7 +1451,6 @@ export class BlickCss {
     wrapper: string;
     maxPrefix: string;
     divisionSymbol: string;
-    beautifyOption: null;
     version: string;
     element: null;
     parse(token?: string, attr?: string): {
@@ -1456,20 +1458,20 @@ export class BlickCss {
         styles: string;
         attr: string;
         selector: any;
-        rawSelector: any;
         token: string;
         extra: any;
         create(): {
             media: any[] | null;
             selector: any;
-            styles: any[];
+            styles: string[];
             css(): string;
-        } | null | undefined;
+        } | null;
     } | null;
     html(code?: string): string;
     config(updates?: this, source?: this, isFirstCall?: boolean): void | this;
     setup(params: any): this;
     render(): any;
+    onUpdate(): void;
     _STORE_: {
         STYLE_STORE: any;
         ATTRS_STORE: any;

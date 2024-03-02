@@ -33,12 +33,29 @@ export function updateStore(ctx, token, attr) {
 
     if (MEDIA) {
         for (const m of MEDIA) {
+            const [ min, max ] = m.val
+
+            if (min && !max) {
+                if (!(min in CS.MEDIA.MIN)) CS.MEDIA.MIN[min] = ""
+
+                CS.MEDIA.MIN[min] += RULE 
+            }
+            else if (!min && max) {
+                if (!(max in CS.MEDIA.MAX)) CS.MEDIA.MAX[max] = ""
+
+                CS.MEDIA.MAX[max] += RULE 
+            }
+            else if (min && max) {
+                if (!(min in CS.MEDIA.RANGE)) CS.MEDIA.RANGE[min] = {}
+                if (!(max in CS.MEDIA.RANGE[min])) CS.MEDIA.RANGE[min][max] = ""
+
+                CS.MEDIA.RANGE[min][max] += RULE 
+            }
+
             if (!(m.raw in MS)) MS[m.raw] = Object.create(null);
-            if (!(m.val in CS.MEDIA)) CS.MEDIA[m.val] = '';
             if (token in MS[m.raw]) return false;
 
             MS[m.raw][token] = RULE;
-            CS.MEDIA[m.val] += RULE;
         }
     }
     else {

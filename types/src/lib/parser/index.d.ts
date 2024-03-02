@@ -8,15 +8,14 @@ export class Parser {
         styles: string;
         attr: string;
         selector: any;
-        rawSelector: any;
         token: string;
         extra: any;
         create(): {
             media: any[] | null;
             selector: any;
-            styles: any[];
+            styles: string[];
             css(): string;
-        } | null | undefined;
+        } | null;
     } | null;
 }
 import { StatesParser } from './parse-states.js';

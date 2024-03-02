@@ -1,5 +1,6 @@
 // import context from '../../context.js';
 import sendError from '../../helpers/send-error.js';
+import { is } from '../check-type.js';
 import { createMediaWidth } from '../create-media-width.js';
 
 export class MediaParser {
@@ -9,13 +10,29 @@ export class MediaParser {
 
     parse(str) {
         if (!str) return sendError(`value is required, (${str})`);
-    
+
+
         if (str.startsWith(this.ctx.maxPrefix)) {
             str = str.slice(this.ctx.maxPrefix.length);
-            return createMediaWidth([null, this.ctx.screen[str] || str]);
+            const val = this.ctx.screen[str] || str
+            return [null, is.arr(val) ? val[1] : val]
         }
+
+        const sizes = this.ctx.screen[str] || str
+
+        if (!is.arr(sizes)) {
+            return [this.ctx.screen[str] || str, null]
+        }
+        
+        return sizes
+        
     
-        return createMediaWidth(this.ctx.screen[str] || str);
+        // if (str.startsWith(this.ctx.maxPrefix)) {
+        //     str = str.slice(this.ctx.maxPrefix.length);
+        //     return createMediaWidth([null, this.ctx.screen[str] || str]);
+        // }
+    
+        // return createMediaWidth(this.ctx.screen[str] || str);
     }
 }
 

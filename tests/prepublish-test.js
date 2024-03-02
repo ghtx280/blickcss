@@ -75,10 +75,10 @@ export function test2() {
         
         let sel = res.selector || "-"
         let stl = res.styles?.join(";") || "-"
-        let mda = res.media?.[0].val
+        let mda = res.media?.[0].val.join()
         let eq_sel = val.sel
         let eq_stl = val.style
-        let eq_mda = val.media
+        let eq_mda = val.media?.join?.()
 
         console.log(
             [
@@ -194,10 +194,10 @@ export function test2() {
     eq('dark:flex',  { sel: '.dark .dark\\:flex',style: 'display:flex' })
 
     // media
-    eq("md:flex",    { sel: ".md\\:flex", style: "display:flex", media: "(min-width:768px)" })
-    eq("m-md:flex",  { sel: ".m-md\\:flex", style: "display:flex", media: "(max-width:768px)" })
-    eq("500:flex",   { sel: ".\\35 00\\:flex", style: "display:flex", media: "(min-width:500px)" })
-    eq("m-500:flex", { sel: ".m-500\\:flex", style: "display:flex", media: "(max-width:500px)" })
+    eq("md:flex",    { sel: ".md\\:flex", style: "display:flex", media: [768, null] })
+    eq("m-md:flex",  { sel: ".m-md\\:flex", style: "display:flex", media: [null, 768] })
+    eq("500:flex",   { sel: ".\\35 00\\:flex", style: "display:flex", media: [500, null] })
+    eq("m-500:flex", { sel: ".m-500\\:flex", style: "display:flex", media: [null, 500] })
 
     // attr text
     eq("20",      { sel: '[text~="20"]', style: "font-size:20px", }, "text")
@@ -209,8 +209,8 @@ export function test2() {
     eq("$red/50", { sel: '[text~="$red/50"]', style: "color:#ef444480", }, "text")
     eq("center",  { sel: '[text~="center"]', style: "text-align:center", }, "text")
     eq("h:20",    { sel: '[text~="h:20"]:hover', style: "font-size:20px", }, "text")
-    eq("md:20",   { sel: '[text~="md:20"]', style: "font-size:20px", media: "(min-width:768px)" }, "text")
-    eq("md:h:20", { sel: '[text~="md:h:20"]:hover', style: "font-size:20px", media: "(min-width:768px)" }, "text")
+    eq("md:20",   { sel: '[text~="md:20"]', style: "font-size:20px", media: [768, null] }, "text")
+    eq("md:h:20", { sel: '[text~="md:h:20"]:hover', style: "font-size:20px", media: [768, null] }, "text")
     eq("cols-2", { sel: '[text~="cols-2"]', style: "columns:2" }, "text")
 
     // attr flex
@@ -229,7 +229,7 @@ export function test2() {
     eq("text-red/50+20", { sel: '.text-red\\/50\\+20', style: "color:#ff000080 20" })
     eq("text-center", { sel: '.text-center', style: "text-align:center" })
     eq("h:text-20",    { sel: '.h\\:text-20:hover', style: "font-size:20px" })
-    eq("md:text-20",    { sel: '.md\\:text-20', style: "font-size:20px", media: "(min-width:768px)" })
+    eq("md:text-20",    { sel: '.md\\:text-20', style: "font-size:20px", media: [768, null] })
 
     eq("op-50",  { sel: '.op-50', style: "opacity:0.5" })
     eq("op-0.5", { sel: '.op-0\\.5', style: "opacity:0.5" })

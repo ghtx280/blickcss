@@ -34,6 +34,10 @@ function input(text) {
 
     fs.writeFileSync("./version.js", `export default "${new_version}"`)
 
+    spawn("npx", ["tsc"], {
+        stdio: "inherit"
+    })
+
     build()
 
     test2()

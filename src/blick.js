@@ -54,7 +54,7 @@ export class BlickCss {
 
     // converts html code to css (this is the method used in the npm version)
     html(code = "") {
-        return this.#html.css(code)
+        return this.#html.css(" " + code)
     }
 
     // configures everything written above
@@ -107,6 +107,10 @@ export class BlickCss {
     // used to update styles (only in the cdn version)
     render() {
         return render(this)
+    }
+
+    onUpdate() {
+        // code after updating styles
     }
 
     // all processed classes and attributes are stored here to avoid re-processing

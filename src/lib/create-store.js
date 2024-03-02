@@ -4,7 +4,11 @@ export function CreateStore() {
     let MEDIA_STORE = Object.create(null);
     let CSS_STORE   = Object.create(null);
 
-    CSS_STORE.MEDIA = {};
+    CSS_STORE.MEDIA = {
+        MIN: Object.create(null),
+        MAX: Object.create(null),
+        RANGE: Object.create(null)
+    };
 
     return {
         STYLE_STORE,

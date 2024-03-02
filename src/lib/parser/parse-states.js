@@ -21,12 +21,16 @@ export class StatesParser {
         if (IS_IN_ARR || IS_NUMBER || IS_MAX_WD) {
             val = this.parseMedia.parse(state);
             type = 'media';
-        } else {
+            // sizes = this.ctx.screen[state] || +state
+        } 
+        else {
             if (raw.startsWith('&')) {
                 val = raw.slice(1);
-            } else {
+            } 
+            else {
                 val = this.ctx.states[raw] || ':' + raw;
             }
+
             if (is.str(val)) {
                 // val = val.replace(/(?<!\\)_/g, ' ');
                 val = escape(val, "_").replace(" ")

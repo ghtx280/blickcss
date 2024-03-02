@@ -4,7 +4,7 @@ export function CreateAttrGrid(): {
     _else: (e: any) => {
         _prop: string;
         _unit: string;
-    }[] | undefined;
+    } | undefined;
     cols: {
         _prop: string;
     };

@@ -438,7 +438,7 @@ function timer(label) {
 }
 
 // version.js
-var version_default = "2.1.8";
+var version_default = "2.1.9";
 
 // src/lib/check-type.js
 function isElement(element) {
@@ -500,8 +500,18 @@ function create_css_default(ctx2) {
   let css_str = "";
   for (const attr in STORE) {
     if (attr === "MEDIA") {
-      for (const md in STORE.MEDIA) {
-        media_str += `@media${md}{${STORE.MEDIA[md]}}`;
+      for (const size in STORE.MEDIA.MIN) {
+        media_str += `@media (min-width:${size}px){${STORE.MEDIA.MIN[size]}}`;
+      }
+      let max_keys = Object.keys(STORE.MEDIA.MAX);
+      for (let i = max_keys.length - 1; i >= 0; i--) {
+        let size = max_keys[i];
+        media_str += `@media (max-width:${is.arr(size) ? size[1] : size}px){${STORE.MEDIA.MAX[size]}}`;
+      }
+      for (const size_min in STORE.MEDIA.RANGE) {
+        for (const size_max in STORE.MEDIA.RANGE[size_min]) {
+          media_str += `@media (min-width:${size_min}px) and (max-width:${size_max}px){${STORE.MEDIA.RANGE[size_min][size_max]}}`;
+        }
       }
       continue;
     }
@@ -531,6 +541,16 @@ function create_css_default(ctx2) {
   return result_css + css_str + media_str;
 }
 
+// src/theme/screen.js
+function CreateScreens() {
+  return {
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200
+  };
+}
+
 // src/helpers/is-browser.js
 function is_browser_default() {
   return typeof window !== "undefined";
@@ -547,27 +567,6 @@ function send_error_default(text) {
   }
 }
 
-// src/lib/create-media-width.js
-function createMediaWidth(sizes) {
-  if (!is.obj(sizes))
-    sizes = [sizes];
-  const WIDTHS = [];
-  for (const index in sizes) {
-    let size = sizes[index];
-    if (!size)
-      continue;
-    size = size.toString().replace(/\(|\)/g, "");
-    if (+size[0]) {
-      let type = +index === 0 ? "min" : "max";
-      let unit = +size ? "px" : "";
-      WIDTHS.push(`(${type}-width:${size}${unit})`);
-    } else {
-      WIDTHS.push(`(${size})`);
-    }
-  }
-  return WIDTHS.join(" and ");
-}
-
 // src/lib/parser/parse-media.js
 var MediaParser = class {
   constructor(ctx2) {
@@ -578,9 +577,14 @@ var MediaParser = class {
       return send_error_default(`value is required, (${str})`);
     if (str.startsWith(this.ctx.maxPrefix)) {
       str = str.slice(this.ctx.maxPrefix.length);
-      return createMediaWidth([null, this.ctx.screen[str] || str]);
+      const val = this.ctx.screen[str] || str;
+      return [null, is.arr(val) ? val[1] : val];
     }
-    return createMediaWidth(this.ctx.screen[str] || str);
+    const sizes = this.ctx.screen[str] || str;
+    if (!is.arr(sizes)) {
+      return [this.ctx.screen[str] || str, null];
+    }
+    return sizes;
   }
 };
 
@@ -601,10 +605,9 @@ function prerender_default(ctx2) {
     }
   }
   if (ctx2.wrapper) {
-    const parseMedia = new MediaParser(ctx2);
-    for (const scr in ctx2.screen) {
+    for (const scr in CreateScreens()) {
       let size = ctx2.screen[scr];
-      ctx2._STORE_.CSS_STORE.MEDIA[parseMedia.parse(scr)] = ctx2.wrapper + `{max-width:${is.num(size) ? size : size[0]}px}`;
+      ctx2._STORE_.CSS_STORE.MEDIA.MIN[size] = ctx2.wrapper + `{max-width:${is.num(size) ? size : size[0]}px}`;
     }
   }
 }
@@ -637,14 +640,27 @@ function updateStore(ctx2, token, attr) {
   }
   if (MEDIA) {
     for (const m of MEDIA) {
+      const [min, max] = m.val;
+      if (min && !max) {
+        if (!(min in CS.MEDIA.MIN))
+          CS.MEDIA.MIN[min] = "";
+        CS.MEDIA.MIN[min] += RULE;
+      } else if (!min && max) {
+        if (!(max in CS.MEDIA.MAX))
+          CS.MEDIA.MAX[max] = "";
+        CS.MEDIA.MAX[max] += RULE;
+      } else if (min && max) {
+        if (!(min in CS.MEDIA.RANGE))
+          CS.MEDIA.RANGE[min] = {};
+        if (!(max in CS.MEDIA.RANGE[min]))
+          CS.MEDIA.RANGE[min][max] = "";
+        CS.MEDIA.RANGE[min][max] += RULE;
+      }
       if (!(m.raw in MS))
         MS[m.raw] = /* @__PURE__ */ Object.create(null);
-      if (!(m.val in CS.MEDIA))
-        CS.MEDIA[m.val] = "";
       if (token in MS[m.raw])
         return false;
       MS[m.raw][token] = RULE;
-      CS.MEDIA[m.val] += RULE;
     }
   } else {
     SS[attr][token] = RULE;
@@ -683,6 +699,7 @@ function render_default(ctx2) {
     ctx2.element.textContent = create_css_default(ctx2);
     if (ctx2.time)
       TIMER.stop();
+    ctx2.onUpdate();
   }
   return ctx2.element.textContent;
 }
@@ -1275,7 +1292,11 @@ function CreateStore() {
   let ATTRS_STORE = /* @__PURE__ */ Object.create(null);
   let MEDIA_STORE = /* @__PURE__ */ Object.create(null);
   let CSS_STORE = /* @__PURE__ */ Object.create(null);
-  CSS_STORE.MEDIA = {};
+  CSS_STORE.MEDIA = {
+    MIN: /* @__PURE__ */ Object.create(null),
+    MAX: /* @__PURE__ */ Object.create(null),
+    RANGE: /* @__PURE__ */ Object.create(null)
+  };
   return {
     STYLE_STORE,
     ATTRS_STORE,
@@ -1306,7 +1327,7 @@ function CreateAttrFlex() {
     _name: "flex",
     _using: "display:flex",
     _else: function(e) {
-      if (!isNaN(+e.style[0])) {
+      if (+e.style[0]) {
         return { _prop: "gap:$", _unit: "px" };
       }
     },
@@ -1465,11 +1486,16 @@ function CreateAttrText() {
     bolder: "font-weight:bolder",
     italic: "font-style: italic",
     delete: "text-decoration-line:line-through",
+    deleted: "text-decoration-line:line-through",
     line: "text-decoration-line:underline",
+    underline: "text-decoration-line:underline",
     overline: "text-decoration-line:overline",
     up: "text-transform:uppercase",
+    upper: "text-transform:uppercase",
     low: "text-transform:lowercase",
+    lower: "text-transform:lowercase",
     cap: "text-transform:capitalize",
+    capit: "text-transform:capitalize",
     center: "text-align:center",
     left: "text-align:left",
     right: "text-align:right",
@@ -2438,16 +2464,6 @@ function CreateReset() {
   return `*,::after,::before{box-sizing:border-box;object-fit:cover;-webkit-tap-highlight-color:transparent;font-feature-settings:"pnum" on,"lnum" on;outline:0;border:0;margin:0;padding:0;border-style:solid;color:inherit}h1,h2,h3,h4,h5,h6{font-size:var(--fsz);font-weight:700;line-height:1.2}h1{--fsz:2.5rem}h2{--fsz:2rem}h3{--fsz:1.75rem}h4{--fsz:1.5rem}h5{--fsz:1.25rem}h6{--fsz:1rem}a{text-decoration:none}hr{width:100%;margin:20px 0;border-top:1px solid #aaa}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{text-rendering:optimizeSpeed;font-family:var(--font-main)}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;vertical-align:middle}input,button,textarea,select{font:inherit}[hidden]{display:none}option{color:#000;background-color:#fff}.theme-dark{background-color:#222}.theme-dark *{color:#eee}`;
 }
 
-// src/theme/screen.js
-function CreateScreens() {
-  return {
-    sm: 576,
-    md: 768,
-    lg: 992,
-    xl: 1200
-  };
-}
-
 // src/theme/states.js
 function CreateStates() {
   return {
@@ -2519,30 +2535,50 @@ var BlickCss = class {
     this.#html = new HTMLProcessor(this);
   }
   class = CreateClasses();
+  // classes
   attr = CreateAttrs();
+  // attributes (text, flex, grid)
   screen = CreateScreens();
+  // screens variables (sm, md, lg, xl)
   states = CreateStates();
+  // states variable (h, f, c, ... --> :hover, :focus, :checked, ... )
   colors = CreateColors();
+  // colors css variables ($red --> #ef4444)
   font = CreateFonts();
+  // fonts css variables ($font-mono --> monospace)
   reset = CreateReset();
+  // css reset and normalize string
   autoTheme = false;
+  // use system theme (work only in CDN version)
   beautify = false;
+  // makes css code pretty (work in npm version)
   autoFlex = true;
+  // [class*="flex-"], [class*="gap-"], ... {display:flex}
   useAttr = true;
+  // enables/disables the use of attributes
   time = false;
+  // shows the time of style generation in the console (work only in CDN version)
   root = true;
+  // enables/disables the creation of :root { ... } with variables
   wrapper = ".wrapper";
+  // wrapper selector or false to disable
   maxPrefix = "m-";
+  // prefix that converts min to max-width in @media (m-md:bg-red, m-500:flex-center)
   divisionSymbol = "+";
-  beautifyOption = null;
+  // NEW! a symbol to separate values (m-20+30 --> margin:20px 30px)
   version = version_default;
+  // lib version
   element = null;
+  // element <style> in which the generated styles are located (need use setup method)
+  // parsing a single piece of a class or attribute
   parse(token = "", attr = "class") {
     return this.#parser.parse(token, attr);
   }
+  // converts html code to css (this is the method used in the npm version)
   html(code = "") {
-    return this.#html.css(code);
+    return this.#html.css(" " + code);
   }
+  // configures everything written above
   config(updates = this, source = this, isFirstCall = true) {
     if (updates === source)
       return source;
@@ -2565,6 +2601,7 @@ var BlickCss = class {
     }
     return source;
   }
+  // creates a <style> and binds it to this context, that is, all the generated styles will be there
   setup(params) {
     const { element, id } = params || {};
     if (typeof window == "undefined") {
@@ -2576,9 +2613,13 @@ var BlickCss = class {
     this.element = STYLE_TAG;
     return this;
   }
+  // used to update styles (only in the cdn version)
   render() {
     return render_default(this);
   }
+  onUpdate() {
+  }
+  // all processed classes and attributes are stored here to avoid re-processing
   _STORE_ = CreateStore();
 };
 

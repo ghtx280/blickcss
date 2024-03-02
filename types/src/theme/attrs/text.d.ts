@@ -4,15 +4,22 @@ export function CreateAttrText(): {
         style: any;
         states: any;
         token: any;
-    }) => "color:$" | (any[] | {
+    }) => {
         _prop: string;
         _unit: string[];
-    })[] | (any[] | {
+        _values: any[];
+    } | {
         _prop: string;
         _unit: string;
-    })[] | {
+        _values: any[];
+    } | {
         _prop: string;
         _unit: string;
+        _values?: undefined;
+    } | {
+        _prop: string;
+        _unit?: undefined;
+        _values?: undefined;
     };
     100: string;
     200: string;
@@ -36,11 +43,16 @@ export function CreateAttrText(): {
     bolder: string;
     italic: string;
     delete: string;
+    deleted: string;
     line: string;
+    underline: string;
     overline: string;
     up: string;
+    upper: string;
     low: string;
+    lower: string;
     cap: string;
+    capit: string;
     center: string;
     left: string;
     right: string;

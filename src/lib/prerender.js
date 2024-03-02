@@ -1,4 +1,5 @@
 // import context from '../context.js';
+import { CreateScreens } from '../theme/screen.js';
 import { is } from './check-type.js';
 import { MediaParser } from './parser/parse-media.js';
 
@@ -25,12 +26,12 @@ export default function(ctx) {
     }
 
     if (ctx.wrapper) {
-        const parseMedia = new MediaParser(ctx)
+        // const parseMedia = new MediaParser(ctx)
 
-        for (const scr in ctx.screen) {
+        for (const scr in CreateScreens()) {
             let size = ctx.screen[scr];
 
-            ctx._STORE_.CSS_STORE.MEDIA[parseMedia.parse(scr)] =
+            ctx._STORE_.CSS_STORE.MEDIA.MIN[size] =
                 ctx.wrapper + `{max-width:${is.num(size) ? size : size[0]}px}`;
         }
     }

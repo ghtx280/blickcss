@@ -1,5 +1,7 @@
 // import context from '../context.js';
+import { is } from './check-type.js';
 import createRoot from './create-root.js';
+
 
 export default function(ctx) {
     // const ctx = context.get()
@@ -10,8 +12,29 @@ export default function(ctx) {
 
     for (const attr in STORE) {
         if (attr === 'MEDIA') {
-            for (const md in STORE.MEDIA) {
-                media_str += `@media${md}{${STORE.MEDIA[md]}}`;
+            for (const size in STORE.MEDIA.MIN) {
+                media_str += `@media (min-width:${size}px){${
+                    STORE.MEDIA.MIN[size]
+                }}`;
+            }
+
+            let max_keys = Object.keys(STORE.MEDIA.MAX)
+            for (let i = max_keys.length - 1; i >= 0; i--) {
+                let size = max_keys[i];
+                media_str += `@media (max-width:${
+                    is.arr(size) ? size[1] : size 
+                }px){${
+                    STORE.MEDIA.MAX[size]
+                }}`;
+            }
+
+            for (const size_min in STORE.MEDIA.RANGE) {
+                for (const size_max in STORE.MEDIA.RANGE[size_min]) {
+                    media_str += 
+                    `@media (min-width:${size_min}px) and (max-width:${size_max}px){${
+                        STORE.MEDIA.RANGE[size_min][size_max]
+                    }}`;
+                }
             }
             continue;
         }
