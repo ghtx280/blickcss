@@ -243,6 +243,8 @@ export function test2() {
     eq("jc-c", { sel: '[grid~="jc-c"]', style: "justify-content:center" }, "grid")
     eq("cols-3", { sel: '[grid~="cols-3"]', style: "grid-template-columns:repeat(3,1fr)" }, "grid")
 
+    eq("m-20+", { sel: '.m-20\\+', style: "margin:20px" }, "class")
+
 
 
     if (!err_stack.length) {

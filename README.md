@@ -4,29 +4,33 @@
 
 ### Installation
 
+Just add the script to `<head>`, that's all you need
 ```html
-<script src="https://unpkg.com/blickcss@2.1"></script>
+<script src="https://unpkg.com/blickcss"></script>
 ```
 
 OR
 
+Just 2 commands to start using
 ```shell
 npm i blickcss
 ```
 ```shell
 npx blick
 ```
+
 ***
 
-## [Documentation](./docs/main.md)
 
-## PLAYGROUND & other
+### [WEBSITE](https://blick.netlify.app) - Visit the website for more information
 
-#### You can find a list of all available classes [here](https://blick.netlify.app/docs/classes/).
 
-#### Visit [this site](https://blick.netlify.app) for more info.
 
-#### Try it out [PLAYGROUND](https://playcode.io/1243248).
+### [DOCS](https://blick.netlify.app/docs) - Read the documentation to get started
+
+
+
+### [PLAYGROUND](https://blick.netlify.app/play) - Try it right now
 
 ---
 
@@ -42,60 +46,53 @@ npx blick
 ## BlickCss vs Tailwind
 
 ```html
-tailwind: m-[25px]
+tailwind: <div class="m-[25px]">
 
-blickcss: m-25
-
-
-
-tailwind: text-[2em]
-
-blickcss: fs-2em
+blickcss: <div class="m-25">
 
 
 
-tailwind: text-[#629fea]
+tailwind: <div class="text-[2em]">
 
-blickcss: c-#629fea
-
-
-
-tailwind: py-[30px] px-[10px]
-
-blickcss: p-30+10
+blickcss: <div class="fs-2em or text-2em">
 
 
 
-tailwind: bg-[var(--foo)]
+tailwind: <div class="text-[#ff0000]">
 
-blickcss: bg-$foo
-
-
-
-tailwind: w-[calc(23_/_85_*_100%)]
-
-blickcss: w-23/85
+blickcss: <div class="c-#ff0000 or text-#ff0000">
 
 
 
-tailwind: bg-gradient-to-r from-[#54bd59] to-[#629fea]
+tailwind: <div class="py-[10px] px-[30px]">
 
-blickcss: grad-0+#54bd59+#629fea
-
-
-
-
----: using attributes :---
-
-tailwind: class="text-[23px] text-[#629fea] font-bold text-center"
-
-blickcss: text="23 #f2d5b6 bold center"
+blickcss: <div class="p-10+30">
 
 
 
-tailwind: class="flex flex-col md:flex-row justify-center align-center gap-[15px]"
+tailwind: <div class="bg-[--foo]">
 
-blickcss: flex="col md:row jc-c ai-c 15"
+blickcss: <div class="bg-$foo">
+
+
+
+tailwind: <div class="w-[calc(23_/_85_*_100%)]">
+
+blickcss: <div class="w-23/85">
+
+
+
+WITH USING ATTRIBUTES:
+
+tailwind: <div class="text-[23px] text-[#ff0000] font-bold text-center">
+
+blickcss: <div text="23 #ff0000 bold center">
+
+
+
+tailwind: <div class="flex gap-[15px] flex-col md:flex-row justify-center align-center">
+
+blickcss: <div flex="15 col md:row center">
 ```
 
 ## Conclusion
@@ -110,7 +107,7 @@ BlickCSS is released under the [MIT License](https://github.com/ghtx280/blickcss
 
 ## Contact
 
-If you have any questions, suggestions, or feedback, please feel free to reach out to us at [telegram](https://t.me/eeqq25) or [e-mail](mailto:antkor.yt.s@gmail.com).
+If you have any questions, suggestions, or feedback, please feel free to reach out to us at [telegram](https://t.me/eeqq25) or [e-mail](mailto:ghtx280@gmail.com).
 
 Happy styling with BlickCSS!
 

@@ -76,6 +76,7 @@ export class StylesParser {
             declaration = source._prop || source
             values = this.parseValue.parse(source._values || value, source);
 
+
             if (!values) return null;
         }
         else {

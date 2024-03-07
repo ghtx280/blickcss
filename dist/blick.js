@@ -40,7 +40,7 @@
   };
 
   // version.js
-  var version_default = "2.1.10";
+  var version_default = "2.1.11";
 
   // src/lib/check-type.js
   function isElement(element) {
@@ -709,7 +709,8 @@ Available shades: ${Object.keys(colors[colorName]).filter(
           return { val: DYNAMIC.replace(/\\/g, ""), raw: item };
         }
       });
-      if (values.filter((e) => e).length) {
+      values = values.filter(Boolean);
+      if (values.length) {
         return values;
       }
       return null;

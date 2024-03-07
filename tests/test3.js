@@ -31,7 +31,7 @@ console.log(
     cssbeautify(
         blick.html(
             // `class="lg:bg-blue lg:flex"`
-            `class="*:bg-red"`
+            `class="bg-red"`
         )
     )
 );

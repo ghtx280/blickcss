@@ -66,8 +66,10 @@ export class ValueParser {
             }
             
         })
+
+        values = values.filter(Boolean)
     
-        if (values.filter(e => e).length) {
+        if (values.length) {
             return values
         }
     
