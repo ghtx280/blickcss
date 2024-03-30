@@ -438,7 +438,7 @@ function timer(label) {
 }
 
 // version.js
-var version_default = "2.1.11";
+var version_default = "2.1.13";
 
 // src/lib/check-type.js
 function isElement(element) {
@@ -1150,7 +1150,7 @@ var StylesParser = class {
       source = source(params);
       if (!source)
         return;
-      if (value) {
+      if (value && typeof source !== "string") {
         let rule = this.parseRule.parse(value, source);
         if (rule.source) {
           value = rule.value;

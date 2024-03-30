@@ -31,6 +31,8 @@ export class StylesParser {
             
         let { source, path, value } = this.parseRule.parse(style, target);
 
+        
+
         const params = {
             token,
             style,
@@ -58,12 +60,12 @@ export class StylesParser {
         // convert function to source
         if (is.func(source)) {
             source = source(params)
-            
-            if (!source) return;
 
-            if (value) {
-                let rule = this.parseRule.parse(value, source)
+            if (!source) return;
             
+            if (value && typeof source !== "string") {
+                let rule = this.parseRule.parse(value, source)
+
                 if (rule.source) {
                     value = rule.value
                     source = rule.source

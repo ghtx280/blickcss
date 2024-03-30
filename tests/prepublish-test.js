@@ -245,6 +245,11 @@ export function test2() {
 
     eq("m-20+", { sel: '.m-20\\+', style: "margin:20px" }, "class")
 
+    eq("opacity-0", { sel: '.opacity-0', style: "opacity:0" }, "class")
+    eq("op-0", { sel: '.op-0', style: "opacity:0" }, "class")
+    eq("ratio-1/1", { sel: '.ratio-1\\/1', style: "aspect-ratio:1 / 1" }, "class")
+    eq("ratio-0", { sel: '.ratio-0', style: "aspect-ratio:0" }, "class")
+
 
 
     if (!err_stack.length) {
